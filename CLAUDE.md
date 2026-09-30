@@ -51,6 +51,35 @@ The Android and iOS apps share one UX: the same tabs, entry points, step order, 
 
 `claude/ux-spec.ru.md` is the platform-neutral source of truth (the same file lives in the Android repo's `claude/`). **Any UX change goes into the spec first, then into code.** A behaviour difference that is not recorded in the spec is a bug. Deliberate iOS-first changes that Android must adopt go into the spec's "Android backlog" section.
 
+## Configuration & secrets
+
+- `Green Passport/GoogleService-Info.plist` (committed, like Android's `google-services.json` — it is client config, not a secret). Without it the app builds and shows `FirebaseMissingScreen` instead of crashing (`FirebaseBootstrap.configure()` in `GreenPassportApp`).
+- Google sign-in needs the plist's `REVERSED_CLIENT_ID` as a URL scheme: set the `GOOGLE_REVERSED_CLIENT_ID` build setting in the target; `Config/Info.plist` substitutes it into `CFBundleURLTypes`. Until it is set, `GoogleSignInProvider` reports `googleUnavailable` instead of letting GoogleSignIn crash.
+- Sign in with Apple: entitlement in `Config/GreenPassport.entitlements`; the Apple provider must be enabled in Firebase Auth.
+- `Config/` holds files that must not be bundled (Info.plist, entitlements); it sits outside the synchronized `Green Passport/` group on purpose.
+
+## Architecture
+
+Three layers under `Green Passport/`, with a strict dependency direction `presentation → domain → data`:
+
+- **`data/`** — Firebase and local implementations. `remote/FirestoreCollections` is the single source of collection paths (everything lives under `apps/greenpassport/…`, like Android). Repositories map documents by hand with `private static let field…` keys; field names must match Android's `scripts/seed-firestore.js`. Timestamps are epoch millis (`EpochMillis`), enums are stored as their Android case names (`rawValue`). Realtime listeners are wrapped into `AsyncThrowingStream` by `FirestoreStream` (the listener is removed in `onTermination`). `auth/FirebaseAuthRepository` maps `AuthErrorCode` to `AuthFailure` exactly like Android's `FirebaseAuthRepository`. `local/` holds UserDefaults-backed settings (keys match Android's DataStore keys).
+- **`domain/`** — `models/` (one type per file, `nonisolated` value types), `repositories/` (protocols), `moderation/` (`WordListTextModerator`, a 1:1 port of Android's, word lists in `Resources/*.txt` — keep them in sync with `core/src/main/res/raw/`), `usecases/<feature>/` (one class per file with a single `execute` method).
+- **`presentation/`** — `components/` (the design system), `navigation/`, and one folder per feature with `ui/`, `viewmodels/`, `states/`.
+
+### Dependency injection
+
+`di/AppDIContainer.swift` is the single composition root: every Firebase client, repository and shared use case is a `private lazy var`, and the `extension AppDIContainer` exposes `buildXViewModel()` factories. There is no DI framework. The container is created in `GreenPassportApp` only when Firebase is configured and is passed down to routes explicitly.
+
+### Presentation pattern
+
+- ViewModels are `@Observable final class`, hold collaborators as `@ObservationIgnored private let`, and expose `private(set) var uiState`. Forms use a struct state (`AuthUiState`); data screens use an enum (`.loading` / `.success(data:)` / `.error`).
+- Work never starts in `init`. Streams are consumed in `func observe() async`, started from the route's `.task { await viewModel.observe() }`, so they are cancelled when the view goes away (the equivalent of Android's `WhileSubscribed`). Switching to a new inner stream per session is done by cancelling a stored `Task` (see `RootViewModel`).
+- Each screen has **two** views: `XRoute` owns the ViewModel (`@State`, built by the container) and `XScreen` is a pure view taking plain data plus closures or a `XUserAction` enum, with a `#Preview`. Screens take no ViewModel.
+
+### App start
+
+`RootRoute` switches on `RootViewModel.state` (`AppStartState`): loading → onboarding → auth → profile setup → `MainTabView`. Same rules as Android `MainViewModel`: anonymous users skip the profile wizard, a missing `profileCompletedAt` means the wizard is shown, a profile read error counts as complete. `ProfileSetupRoute(isEditing:)` is reused for "Edit profile".
+
 ## Build & run
 
 ```bash
@@ -61,6 +90,9 @@ xcodebuild -project "Green Passport.xcodeproj" -scheme "Green Passport" \
 The simulator is named `iPhone 17 Simulator` (not `iPhone 17`). There is **no test target and no linter configured**, so there is no `test` or `lint` command. Do not invent one; verify changes by building and by running the app on the simulator (`xcrun simctl install booted <app>`, `xcrun simctl launch booted com.smartcity.greenpassport`, `xcrun simctl io booted screenshot <file>`).
 
 ## Conventions
+
+- Theming: never hardcode colors, fonts or spacing. Colors are color sets in `Assets.xcassets` with the same names as Android's `theme/Color.kt` tokens (`Forest`, `Lime`, `MintSurface`, `SectionCommunity`, …) and are read through `Palette` / `SectionColor`; sizes come from `Spacing` and `CornerRadius`. Backgrounds are the system grouped colors, color comes only from accents. The app follows the system appearance; both light and dark are supported.
+- Strings: `Localizable.xcstrings` has `STRING_CATALOG_GENERATE_SYMBOLS` on, so every key is a typed `LocalizedStringResource` symbol (`Text(.completeTask)`, `Text(.level(3))`, `String(localized: .home)`). Add a key with ru, be and en values at once; format placeholders are positional (`%1$lld`, `%2$@`) like Android.
 
 - Swift concurrency: the target builds with `SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor` and `SWIFT_APPROACHABLE_CONCURRENCY = YES` (Swift 5 language mode). Background types are explicitly marked `nonisolated`, `actor`, or `Sendable`.
 - Files are added to the target automatically (Xcode file-system-synchronized group `Green Passport/`) — creating a file under it is enough, no `project.pbxproj` edit needed. Files that must **not** be bundled (Info.plist, entitlements) live in `Config/`, outside the synchronized group.
