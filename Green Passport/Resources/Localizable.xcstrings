@@ -1163,6 +1163,29 @@
         }
       }
     },
+    "dark_theme": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Цёмная"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тёмная"
+          }
+        }
+      }
+    },
     "date_time": {
       "extractionState": "manual",
       "localizations": {
@@ -3264,6 +3287,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Уровень %1$lld"
+          }
+        }
+      }
+    },
+    "light_theme": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Светлая"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Светлая"
           }
         }
       }
@@ -6500,6 +6546,29 @@
         }
       }
     },
+    "system_theme": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сістэмная"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "System"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Системная"
+          }
+        }
+      }
+    },
     "take_photo": {
       "extractionState": "manual",
       "localizations": {
@@ -6864,6 +6933,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Текст содержит недопустимые слова"
+          }
+        }
+      }
+    },
+    "theme": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тэма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Theme"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Тема"
           }
         }
       }

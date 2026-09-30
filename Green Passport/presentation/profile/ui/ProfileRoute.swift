@@ -36,6 +36,8 @@ struct ProfileRoute: View {
             isEditingProfile = true
         case .moderation:
             router.push(.moderation)
+        case .themeSelected(let theme):
+            viewModel.selectTheme(theme)
         case .notificationsToggled(let isEnabled):
             viewModel.toggleNotifications(isEnabled)
         case .language:

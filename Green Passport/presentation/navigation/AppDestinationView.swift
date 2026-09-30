@@ -7,6 +7,7 @@ struct AppDestinationView: View {
     var body: some View {
         content
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar(.visible, for: .navigationBar)
     }
 
     @ViewBuilder

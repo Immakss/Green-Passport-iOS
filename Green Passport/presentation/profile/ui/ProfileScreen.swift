@@ -31,15 +31,32 @@ struct ProfileScreen: View {
                 }
                 Toggle(isOn: Binding(get: { return uiState.notificationsEnabled }, set: { onAction(.notificationsToggled($0)) })) {
                     HStack(spacing: Spacing.small) {
-                        SymbolTile(systemImage: "bell.badge.fill", size: Self.tileSize)
+                        SymbolTile(systemImage: "bell.badge.fill", style: .prominent, size: Self.tileSize)
                         Text(.profileNotificationsLabel)
                     }
                 }
+                Picker(selection: Binding(get: { return uiState.theme }, set: { onAction(.themeSelected($0)) })) {
+                    ForEach(AppTheme.allCases, id: \.self) { theme in
+                        Label {
+                            Text(theme.title)
+                        } icon: {
+                            Image(systemName: theme.systemImage)
+                        }
+                        .tag(theme)
+                    }
+                } label: {
+                    HStack(spacing: Spacing.small) {
+                        SymbolTile(systemImage: uiState.theme.systemImage, style: .prominent, size: Self.tileSize)
+                        Text(.theme)
+                    }
+                }
+                .pickerStyle(.menu)
+                .tint(Palette.secondaryText)
                 Button {
                     onAction(.language)
                 } label: {
                     HStack(spacing: Spacing.small) {
-                        SymbolTile(systemImage: "character.bubble.fill", size: Self.tileSize)
+                        SymbolTile(systemImage: "character.bubble.fill", style: .prominent, size: Self.tileSize)
                         Text(.language)
                             .foregroundStyle(Color.primary)
                         Spacer()
@@ -115,7 +132,7 @@ struct ProfileScreen: View {
     ) -> some View {
         return Button(action: action) {
             HStack(spacing: Spacing.small) {
-                SymbolTile(systemImage: systemImage, size: Self.tileSize)
+                SymbolTile(systemImage: systemImage, style: .prominent, size: Self.tileSize)
                 Text(title)
                     .foregroundStyle(Color.primary)
                 Spacer()
