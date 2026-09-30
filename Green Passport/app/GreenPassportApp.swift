@@ -3,6 +3,8 @@ import SwiftUI
 
 @main
 struct GreenPassportApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+
     private let container: AppDIContainer?
 
     init() {

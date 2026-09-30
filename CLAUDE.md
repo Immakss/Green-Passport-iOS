@@ -82,6 +82,12 @@ Three layers under `Green Passport/`, with a strict dependency direction `presen
 
 The domain task model is `EcoTask` (not `Task`, which would shadow Swift Concurrency's `Task`).
 
+### Local data & notifications
+
+- UserDefaults (`data/local`): `onboarding_seen`, `notifications_enabled` (default true), `saved_map_point_ids` — same keys as Android's DataStore / `LocalSettingsStore`.
+- SwiftData (`LocalStore.makeContainer()`): `GameProgressRecord` (best score per game, like Android's Room `game_progress`) and `NotificationLogRecord` (the in-app notification log). Repositories use the container's `mainContext`.
+- Notifications are local only (`UNUserNotificationCenter`): `LocalRewardNotifier` fires after a reward callable returns points or XP, `LocalNotificationReminderScheduler` schedules `event_reminder_<eventId>` one hour before an event. Both write to the log and respect the `notifications_enabled` switch; permission is requested on first use, never at launch. `AppDelegate` shows banners while the app is in the foreground. Reminders are logged at scheduling time with their fire date; the Notifications screen shows only entries whose date has passed.
+
 ### App start
 
 `RootRoute` switches on `RootViewModel.state` (`AppStartState`): loading → onboarding → auth → profile setup → `MainTabView`. Same rules as Android `MainViewModel`: anonymous users skip the profile wizard, a missing `profileCompletedAt` means the wizard is shown, a profile read error counts as complete. `ProfileSetupRoute(isEditing:)` is reused for "Edit profile".
@@ -105,3 +111,9 @@ The simulator is named `iPhone 17 Simulator` (not `iPhone 17`). There is **no te
 - Naming: this is a port of an Android app, so avoid carrying Compose/Material vocabulary back in. No `Gp` prefix, no `Scaffold`, `Dimens`, `Chip`, `Widget` in type names; no `containerColor`/`contentColor`/`elevation` parameters; no `XxxDefaults` constant holders; no SCREAMING_SNAKE constants; no `get`-prefixed accessors.
 - Icons: SF Symbols only. The only imagesets are `mascot` (the character, same art as Android `mascot.webp`), `event_placeholder` and `AppIcon`.
 - Fonts: San Francisco through Dynamic Type text styles (`.largeTitle`, `.headline`, `.subheadline`, …). No custom fonts, no fixed point sizes.
+
+## Known limitations
+
+- No push: Android only stores an FCM token and handles no incoming pushes, so the iOS app does not integrate FCM/APNs.
+- The QR scanner (`DataScannerViewController`) and the camera do not work on the Simulator; the task sheet shows `qr_scanner_unavailable_msg` and hides "Take photo" there.
+- The language is chosen in the system Settings (per-app language); the profile row only opens them.

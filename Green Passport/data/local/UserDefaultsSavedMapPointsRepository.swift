@@ -12,7 +12,7 @@ final class UserDefaultsSavedMapPointsRepository: SavedMapPointsRepository {
 
     var savedPointIds: Set<String> {
         let raw = defaults.string(forKey: Self.savedIdsKey) ?? ""
-        return Set(raw.components(separatedBy: Self.separator).filter { !$0.isEmpty })
+        return Set(raw.components(separatedBy: Self.separator).filter { return !$0.isEmpty })
     }
 
     func setSaved(pointId: String, isSaved: Bool) {

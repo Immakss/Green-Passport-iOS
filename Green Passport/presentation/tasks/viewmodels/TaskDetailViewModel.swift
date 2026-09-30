@@ -112,7 +112,7 @@ final class TaskDetailViewModel {
     private func observeSubmissions(userId: String) async {
         do {
             for try await submissions in observeTaskSubmissions.execute(userId: userId) {
-                let submission = submissions.first { $0.taskId == taskId }
+                let submission = submissions.first { return $0.taskId == taskId }
                 uiState.submission = submission
                 uiState.isCompleted = uiState.isCompleted || submission?.status == .approved
             }
@@ -125,7 +125,7 @@ final class TaskDetailViewModel {
         uiState.isLoading = true
         uiState.hasError = false
         do {
-            let task = try await fetchTasks.execute().first { $0.id == taskId }
+            let task = try await fetchTasks.execute().first { return $0.id == taskId }
             var completedIds: Set<String> = []
             if let userId {
                 completedIds = try await fetchCompletedTaskIds.execute(userId: userId)

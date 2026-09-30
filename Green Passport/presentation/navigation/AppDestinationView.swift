@@ -35,7 +35,22 @@ struct AppDestinationView: View {
         case .feedback:
             FeedbackRoute(container: container)
         case .games:
-            StateView(kind: .loading)
+            GamesHubRoute(container: container)
+        case .game(let game):
+            switch game {
+            case .ecoPuzzle:
+                PuzzleRoute(container: container)
+            case .wasteSorting:
+                WasteSortingRoute(container: container)
+            case .ecoMaze:
+                MazeRoute(container: container)
+            case .ecoQuiz:
+                QuizRoute(container: container)
+            }
+        case .moderation:
+            ModerationRoute(container: container)
+        case .notifications:
+            NotificationsRoute(container: container)
         }
     }
 }

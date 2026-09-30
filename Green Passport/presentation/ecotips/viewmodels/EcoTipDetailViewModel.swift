@@ -35,7 +35,7 @@ final class EcoTipDetailViewModel {
     func load() async {
         uiState.hasError = false
         do {
-            let tip = try await fetchEcoTips.execute().first { $0.id == tipId }
+            let tip = try await fetchEcoTips.execute().first { return $0.id == tipId }
             var readIds: Set<String> = []
             if let userId {
                 readIds = try await fetchReadTipIds.execute(userId: userId)

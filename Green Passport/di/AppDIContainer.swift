@@ -2,6 +2,7 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFunctions
 import FirebaseStorage
+import SwiftData
 
 final class AppDIContainer {
     private static let functionsRegion = "europe-central2"
@@ -10,6 +11,7 @@ final class AppDIContainer {
     private lazy var auth = Auth.auth()
     private lazy var functions = Functions.functions(region: Self.functionsRegion)
     private lazy var storage = Storage.storage()
+    private lazy var localStore = LocalStore.makeContainer()
 
     private lazy var textModerator: TextModerator = WordListTextModerator()
     private lazy var authRepository: AuthRepository = FirebaseAuthRepository(
@@ -25,7 +27,10 @@ final class AppDIContainer {
     private lazy var ecoTipsRepository: EcoTipsRepository = FirestoreEcoTipsRepository(firestore: firestore)
     private lazy var communityRepository: CommunityRepository = FirestoreCommunityRepository(firestore: firestore)
     private lazy var favoritesRepository: FavoritesRepository = FirestoreFavoritesRepository(firestore: firestore)
-    private lazy var moderationRepository: ModerationRepository = FirebaseModerationRepository(firestore: firestore)
+    private lazy var moderationRepository: ModerationRepository = FirebaseModerationRepository(
+        firestore: firestore,
+        functions: functions
+    )
     private lazy var taskSubmissionsRepository: TaskSubmissionsRepository = FirebaseTaskSubmissionsRepository(
         firestore: firestore,
         storage: storage
@@ -33,12 +38,24 @@ final class AppDIContainer {
     private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
     private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
     private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
-    private lazy var rewardNotifier: RewardNotifier = SilentRewardNotifier()
+    private lazy var gameProgressRepository: GameProgressRepository = SwiftDataGameProgressRepository(container: localStore)
+    private lazy var notificationLogRepository: NotificationLogRepository = SwiftDataNotificationLogRepository(
+        container: localStore
+    )
+    private lazy var notificationPermission: NotificationPermission = UserNotificationPermission()
+    private lazy var rewardNotifier: RewardNotifier = LocalRewardNotifier(
+        settingsRepository: settingsRepository,
+        notificationLogRepository: notificationLogRepository
+    )
     private lazy var rewardsRepository: RewardsRepository = FirebaseRewardsRepository(
         functions: functions,
         rewardNotifier: rewardNotifier
     )
-    private lazy var reminderScheduler: ReminderScheduler = LocalNotificationReminderScheduler()
+    private lazy var reminderScheduler: ReminderScheduler = LocalNotificationReminderScheduler(
+        settingsRepository: settingsRepository,
+        notificationLogRepository: notificationLogRepository,
+        notificationPermission: notificationPermission
+    )
     private lazy var achievementsRepository: AchievementsRepository = DerivedAchievementsRepository(
         tasksRepository: tasksRepository,
         eventsRepository: eventsRepository,
@@ -164,7 +181,12 @@ extension AppDIContainer {
             observeIsModerator: observeIsModeratorUseCase,
             fetchPointsBalance: fetchPointsBalanceUseCase,
             fetchLevel: fetchLevelUseCase,
-            signOut: signOutUseCase
+            signOut: signOutUseCase,
+            isNotificationsEnabled: IsNotificationsEnabledUseCase(settingsRepository: settingsRepository),
+            setNotificationsEnabled: SetNotificationsEnabledUseCase(
+                settingsRepository: settingsRepository,
+                notificationPermission: notificationPermission
+            )
         )
     }
 
@@ -267,6 +289,57 @@ extension AppDIContainer {
             fetchActiveSurvey: FetchActiveSurveyUseCase(feedbackRepository: feedbackRepository),
             hasAnsweredSurvey: HasAnsweredSurveyUseCase(feedbackRepository: feedbackRepository),
             submitSurveyAnswer: SubmitSurveyAnswerUseCase(feedbackRepository: feedbackRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    private var gameSession: GameSession {
+        return GameSession(
+            observeSession: observeSessionUseCase,
+            submitGameResult: SubmitGameResultUseCase(
+                gameProgressRepository: gameProgressRepository,
+                rewardsRepository: rewardsRepository
+            )
+        )
+    }
+
+    func buildGamesHubViewModel() -> GamesHubViewModel {
+        return GamesHubViewModel(fetchBestScores: FetchBestScoresUseCase(gameProgressRepository: gameProgressRepository))
+    }
+
+    func buildPuzzleViewModel() -> PuzzleViewModel {
+        return PuzzleViewModel(gameSession: gameSession)
+    }
+
+    func buildWasteSortingViewModel() -> WasteSortingViewModel {
+        return WasteSortingViewModel(gameSession: gameSession)
+    }
+
+    func buildMazeViewModel() -> MazeViewModel {
+        return MazeViewModel(gameSession: gameSession)
+    }
+
+    func buildQuizViewModel() -> QuizViewModel {
+        return QuizViewModel(gameSession: gameSession)
+    }
+
+    func buildModerationViewModel() -> ModerationViewModel {
+        return ModerationViewModel(
+            observeSession: observeSessionUseCase,
+            observeIsModerator: observeIsModeratorUseCase,
+            observePendingSubmissions: ObservePendingSubmissionsUseCase(moderationRepository: moderationRepository),
+            observeFlaggedPosts: ObserveFlaggedPostsUseCase(moderationRepository: moderationRepository),
+            fetchTasks: fetchTasksUseCase,
+            fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase(taskSubmissionsRepository: taskSubmissionsRepository),
+            reviewSubmission: ReviewSubmissionUseCase(moderationRepository: moderationRepository),
+            moderatePost: ModeratePostUseCase(moderationRepository: moderationRepository)
+        )
+    }
+
+    func buildNotificationsViewModel() -> NotificationsViewModel {
+        return NotificationsViewModel(
+            fetchNotificationLog: FetchNotificationLogUseCase(notificationLogRepository: notificationLogRepository)
         )
     }
 }

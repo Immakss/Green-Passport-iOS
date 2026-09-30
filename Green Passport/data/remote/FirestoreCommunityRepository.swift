@@ -20,7 +20,7 @@ final class FirestoreCommunityRepository: CommunityRepository {
     func observeForumPosts() -> AsyncThrowingStream<[ForumPost], Error> {
         let query = FirestoreCollections.posts(firestore).order(by: Self.fieldCreatedAt, descending: true)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.post(from:)).filter { !$0.isHidden }
+            return snapshot.documents.compactMap(Self.post(from:)).filter { return !$0.isHidden }
         }
     }
 

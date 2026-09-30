@@ -6,6 +6,6 @@ final class FetchPurchasesUseCase {
     }
 
     func execute(userId: String) async throws -> [Coupon] {
-        return try await shopRepository.fetchPurchases(userId: userId).sorted { $0.redeemedAt > $1.redeemedAt }
+        return try await shopRepository.fetchPurchases(userId: userId).sorted { return $0.redeemedAt > $1.redeemedAt }
     }
 }

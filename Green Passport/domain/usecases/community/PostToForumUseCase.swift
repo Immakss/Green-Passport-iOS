@@ -22,7 +22,7 @@ final class PostToForumUseCase {
         let profile = await firstProfile(userId: authorId)
         try await communityRepository.postToForum(
             authorId: authorId,
-            authorName: profile.map { "\($0.firstName) \($0.lastName)".trimmingCharacters(in: .whitespaces) },
+            authorName: profile.map { return "\($0.firstName) \($0.lastName)".trimmingCharacters(in: .whitespaces) },
             authorAvatar: profile?.avatar,
             text: text
         )

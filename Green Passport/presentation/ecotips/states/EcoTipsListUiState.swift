@@ -7,7 +7,7 @@ struct EcoTipsListUiState {
     var hasError = false
 
     var dailyTip: EcoTip? {
-        return tips.first { $0.isDailyTip }
+        return tips.first { return $0.isDailyTip }
     }
 
     var visibleTips: [EcoTip] {
@@ -15,7 +15,7 @@ struct EcoTipsListUiState {
         case .all:
             return tips
         case .category(let category):
-            return tips.filter { $0.category == category }
+            return tips.filter { return $0.category == category }
         }
     }
 }

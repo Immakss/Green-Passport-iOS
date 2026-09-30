@@ -40,14 +40,14 @@ final class GoogleSignInProvider {
             .reversed()
             .joined(separator: Self.clientIdSeparator)
         let urlTypes = Bundle.main.object(forInfoDictionaryKey: Self.urlTypesKey) as? [[String: Any]] ?? []
-        let schemes = urlTypes.flatMap { $0[Self.urlSchemesKey] as? [String] ?? [] }
+        let schemes = urlTypes.flatMap { return $0[Self.urlSchemesKey] as? [String] ?? [] }
         return schemes.contains(reversedClientId)
     }
 
     private static func topViewController() -> UIViewController? {
         let scene = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first { $0.activationState == .foregroundActive }
+            .compactMap { return $0 as? UIWindowScene }
+            .first { return $0.activationState == .foregroundActive }
         var controller = scene?.keyWindow?.rootViewController
         while let presented = controller?.presentedViewController {
             controller = presented

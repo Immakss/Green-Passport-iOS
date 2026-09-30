@@ -15,6 +15,6 @@ nonisolated struct AppleNonce: Sendable {
         })
         let digest = SHA256.hash(data: Data(raw.utf8))
         self.raw = raw
-        self.hashed = digest.map { String(format: "%02x", $0) }.joined()
+        self.hashed = digest.map { return String(format: "%02x", $0) }.joined()
     }
 }

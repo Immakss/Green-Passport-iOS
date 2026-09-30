@@ -6,6 +6,6 @@ final class FetchEventsUseCase {
     }
 
     func execute() async throws -> [EcoEvent] {
-        return try await eventsRepository.fetchEvents().sorted { $0.startAt < $1.startAt }
+        return try await eventsRepository.fetchEvents().sorted { return $0.startAt < $1.startAt }
     }
 }

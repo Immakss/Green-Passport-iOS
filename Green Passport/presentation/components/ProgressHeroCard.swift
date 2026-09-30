@@ -14,7 +14,7 @@ struct ProgressHeroCard: View {
     var body: some View {
         HStack(alignment: .center, spacing: Spacing.small) {
             VStack(alignment: .leading, spacing: Spacing.xxSmall) {
-                Text(level.map { .level($0.number) } ?? .yourBalance)
+                Text(level.map { return .level($0.number) } ?? .yourBalance)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
                 Label {

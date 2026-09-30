@@ -56,7 +56,7 @@ final class EventDetailViewModel {
         uiState.isLoading = true
         uiState.hasError = false
         do {
-            let event = try await fetchEvents.execute().first { $0.id == eventId }
+            let event = try await fetchEvents.execute().first { return $0.id == eventId }
             var registeredIds: Set<String> = []
             if let userId {
                 registeredIds = try await fetchRegisteredEventIds.execute(userId: userId)

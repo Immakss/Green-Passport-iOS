@@ -74,6 +74,6 @@ final class FirestoreHistoryRepository: HistoryRepository {
                 timestamp: coupon.redeemedAt
             )
         }
-        return (taskEntries + eventEntries + rewardEntries).sorted { $0.timestamp > $1.timestamp }
+        return (taskEntries + eventEntries + rewardEntries).sorted { return $0.timestamp > $1.timestamp }
     }
 }
