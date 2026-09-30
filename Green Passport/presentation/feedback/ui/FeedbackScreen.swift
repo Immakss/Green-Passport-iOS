@@ -25,6 +25,7 @@ struct FeedbackScreen: View {
             }
             supportSection
         }
+        .dismissesKeyboardOnScroll()
         .overlay {
             if uiState.isLoading {
                 StateView(kind: .loading)

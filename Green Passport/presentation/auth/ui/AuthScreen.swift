@@ -42,6 +42,7 @@ struct AuthScreen: View {
             .animation(.snappy, value: uiState.mode)
         }
         .scrollDismissesKeyboard(.interactively)
+        .dismissesKeyboardOnBackgroundTap()
         .background(Palette.screenBackground)
     }
 

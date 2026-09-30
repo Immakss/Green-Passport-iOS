@@ -36,6 +36,7 @@ struct ProfileSetupScreen: View {
                 ))
             }
             .scrollDismissesKeyboard(.interactively)
+            .dismissesKeyboardOnBackgroundTap()
             bottomBar
         }
         .animation(.snappy, value: uiState.step)

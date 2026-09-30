@@ -15,6 +15,7 @@ struct ForumScreen: View {
             postRow(post)
         }
         .listStyle(.insetGrouped)
+        .dismissesKeyboardOnScroll()
         .overlay {
             if uiState.isLoading {
                 StateView(kind: .loading)

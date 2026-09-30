@@ -26,6 +26,7 @@ struct MapScreen: View {
                 .tag(point.id)
             }
         }
+        .simultaneousGesture(TapGesture().onEnded(Keyboard.dismiss))
         .mapControls {
             MapCompass()
             MapScaleView()

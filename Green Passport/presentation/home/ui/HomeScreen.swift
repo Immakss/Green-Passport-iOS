@@ -40,6 +40,7 @@ struct HomeScreen: View {
         }
         .background(Palette.screenBackground)
         .navigationTitle(Text(.home))
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .navigationBar)
     }
 
