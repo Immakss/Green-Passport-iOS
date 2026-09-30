@@ -5,6 +5,12 @@ struct AppDestinationView: View {
     let container: AppDIContainer
 
     var body: some View {
+        content
+            .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private var content: some View {
         switch destination {
         case .tasks:
             TasksListRoute(container: container)
