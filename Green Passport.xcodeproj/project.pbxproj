@@ -281,6 +281,7 @@
 				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				GAMES_BASE_URL = "https://chatroom-85fb8.web.app";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc";
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";
@@ -318,6 +319,7 @@
 				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				GAMES_BASE_URL = "https://chatroom-85fb8.web.app";
 				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc";
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";

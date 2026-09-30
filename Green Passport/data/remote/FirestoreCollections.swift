@@ -87,6 +87,10 @@ enum FirestoreCollections {
         return firestore.collection("\(root)/reports")
     }
 
+    static func games(_ firestore: Firestore) -> CollectionReference {
+        return firestore.collection("\(root)/games")
+    }
+
     static func admins(_ firestore: Firestore) -> CollectionReference {
         return firestore.collection("\(root)/admins")
     }

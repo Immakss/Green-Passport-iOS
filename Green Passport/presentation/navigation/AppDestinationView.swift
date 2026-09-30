@@ -44,16 +44,7 @@ struct AppDestinationView: View {
         case .games:
             GamesHubRoute(container: container)
         case .game(let game):
-            switch game {
-            case .ecoPuzzle:
-                PuzzleRoute(container: container)
-            case .wasteSorting:
-                WasteSortingRoute(container: container)
-            case .ecoMaze:
-                MazeRoute(container: container)
-            case .ecoQuiz:
-                QuizRoute(container: container)
-            }
+            GameWebRoute(game: game, container: container)
         case .moderation:
             ModerationRoute(container: container)
         case .notifications:

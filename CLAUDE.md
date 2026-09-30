@@ -88,6 +88,10 @@ The domain task model is `EcoTask` (not `Task`, which would shadow Swift Concurr
 - SwiftData (`LocalStore.makeContainer()`): `GameProgressRecord` (best score per game, like Android's Room `game_progress`) and `NotificationLogRecord` (the in-app notification log). Repositories use the container's `mainContext`.
 - Notifications are local only (`UNUserNotificationCenter`): `LocalRewardNotifier` fires after a reward callable returns points or XP, `LocalNotificationReminderScheduler` schedules `event_reminder_<eventId>` one hour before an event. Both write to the log and respect the `notifications_enabled` switch; permission is requested on first use, never at launch. `AppDelegate` shows banners while the app is in the foreground. Reminders are logged at scheduling time with their fire date; the Notifications screen shows only entries whose date has passed.
 
+### Web games
+
+Games are HTML5 pages hosted on Firebase Hosting; their source lives in the Android repo (`games/`, see its CLAUDE.md). The app lists the Firestore catalog `games` (`FirestoreGamesRepository`, `Game`) and opens a game in `GameWebRoute` → `GameWebView` (`WKWebView`). The URL is `GAMES_BASE_URL` (build setting → `Config/Info.plist` `GamesBaseURL`) + the game `path` + `?lang=&theme=`. The page talks back through the `greenPassport` script message handler: `{type: "finish", score}` → `SubmitGameResultUseCase` (local best score in SwiftData + `recordGameResult`), `{type: "close"}` → dismiss. There are no native games any more.
+
 ### App start
 
 `RootRoute` switches on `RootViewModel.state` (`AppStartState`): loading → onboarding → auth → profile setup → `MainTabView`. Same rules as Android `MainViewModel`: anonymous users skip the profile wizard, a missing `profileCompletedAt` means the wizard is shown, a profile read error counts as complete. `ProfileSetupRoute(isEditing:)` is reused for "Edit profile".

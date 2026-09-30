@@ -5,10 +5,7 @@ final class FetchBestScoresUseCase {
         self.gameProgressRepository = gameProgressRepository
     }
 
-    func execute() -> [GameId: Int] {
-        let scores = gameProgressRepository.bestScores()
-        return Dictionary(uniqueKeysWithValues: GameId.allCases.compactMap { id in
-            return scores[id.rawValue].map { return (id, $0) }
-        })
+    func execute() -> [String: Int] {
+        return gameProgressRepository.bestScores()
     }
 }

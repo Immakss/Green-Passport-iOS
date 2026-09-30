@@ -9,9 +9,15 @@ struct GamesHubRoute: View {
     }
 
     var body: some View {
-        GamesHubScreen(bestScores: viewModel.bestScores) { game in
-            router.push(.game(game))
+        GamesHubScreen(
+            uiState: viewModel.uiState,
+            bestScores: viewModel.bestScores,
+            onGame: { router.push(.game($0)) },
+            onRetry: { Task { await viewModel.load() } }
+        )
+        .task {
+            await viewModel.load()
         }
-        .onAppear(perform: viewModel.load)
+        .onAppear(perform: viewModel.refreshScores)
     }
 }

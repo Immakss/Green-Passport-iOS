@@ -38,6 +38,7 @@ final class AppDIContainer {
     private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
     private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
     private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
+    private lazy var gamesRepository: GamesRepository = FirestoreGamesRepository(firestore: firestore)
     private lazy var gameProgressRepository: GameProgressRepository = SwiftDataGameProgressRepository(container: localStore)
     private lazy var notificationLogRepository: NotificationLogRepository = SwiftDataNotificationLogRepository(
         container: localStore
@@ -299,34 +300,23 @@ extension AppDIContainer {
 }
 
 extension AppDIContainer {
-    private var gameSession: GameSession {
-        return GameSession(
-            observeSession: observeSessionUseCase,
-            submitGameResult: SubmitGameResultUseCase(
-                gameProgressRepository: gameProgressRepository,
-                rewardsRepository: rewardsRepository
-            )
+    func buildGamesHubViewModel() -> GamesHubViewModel {
+        return GamesHubViewModel(
+            fetchGames: FetchGamesUseCase(gamesRepository: gamesRepository),
+            fetchBestScores: FetchBestScoresUseCase(gameProgressRepository: gameProgressRepository)
         )
     }
 
-    func buildGamesHubViewModel() -> GamesHubViewModel {
-        return GamesHubViewModel(fetchBestScores: FetchBestScoresUseCase(gameProgressRepository: gameProgressRepository))
-    }
-
-    func buildPuzzleViewModel() -> PuzzleViewModel {
-        return PuzzleViewModel(gameSession: gameSession)
-    }
-
-    func buildWasteSortingViewModel() -> WasteSortingViewModel {
-        return WasteSortingViewModel(gameSession: gameSession)
-    }
-
-    func buildMazeViewModel() -> MazeViewModel {
-        return MazeViewModel(gameSession: gameSession)
-    }
-
-    func buildQuizViewModel() -> QuizViewModel {
-        return QuizViewModel(gameSession: gameSession)
+    func buildGameWebViewModel(game: Game) -> GameWebViewModel {
+        return GameWebViewModel(
+            game: game,
+            submitGameResult: SubmitGameResultUseCase(
+                gameProgressRepository: gameProgressRepository,
+                rewardsRepository: rewardsRepository,
+                authRepository: authRepository
+            ),
+            gameUrl: GameUrlUseCase(gamesRepository: gamesRepository)
+        )
     }
 
     func buildModerationViewModel() -> ModerationViewModel {
