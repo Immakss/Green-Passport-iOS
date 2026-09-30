@@ -30,6 +30,13 @@ final class FirestoreEventsRepository: EventsRepository {
         return Set(snapshot.documents.compactMap { return $0.string(Self.fieldEventId) })
     }
 
+    func fetchAttendedEventIds(userId: String) async throws -> Set<String> {
+        let snapshot = try await FirestoreCollections.eventAttendance(firestore)
+            .whereField(Self.fieldUserId, isEqualTo: userId)
+            .getDocuments()
+        return Set(snapshot.documents.compactMap { return $0.string(Self.fieldEventId) })
+    }
+
     func registerForEvent(userId: String, eventId: String) async throws {
         let data: [String: Any] = [
             Self.fieldUserId: userId,

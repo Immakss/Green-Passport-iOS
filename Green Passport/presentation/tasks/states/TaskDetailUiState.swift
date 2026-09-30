@@ -6,5 +6,6 @@ struct TaskDetailUiState {
     var isSubmitting = false
     var hasError = false
     var earnedPoints: Int?
+    var streakBonus = 0
     var failure: RewardFailure?
 }

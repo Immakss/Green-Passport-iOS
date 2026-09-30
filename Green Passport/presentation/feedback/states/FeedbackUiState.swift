@@ -3,6 +3,7 @@ struct FeedbackUiState {
     var reviewMessage = ""
     var isSubmittingReview = false
     var reviewSubmitted = false
+    var earnedPoints = 0
     var isReviewRejected = false
     var suggestionMessage = ""
     var isSubmittingSuggestion = false

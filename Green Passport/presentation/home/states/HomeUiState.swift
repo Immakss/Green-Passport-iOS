@@ -5,6 +5,7 @@ struct HomeUiState {
     var avatar: AvatarStyle = .lime
     var points = 0
     var level: Level?
+    var streakDays = 0
     var upcomingEvent: EcoEvent?
     var tasks: [EcoTask] = []
 }

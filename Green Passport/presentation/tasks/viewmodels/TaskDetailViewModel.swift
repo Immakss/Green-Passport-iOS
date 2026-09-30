@@ -96,6 +96,7 @@ final class TaskDetailViewModel {
                 uiState.isSubmitting = false
                 uiState.isCompleted = true
                 uiState.earnedPoints = reward.points
+                uiState.streakBonus = reward.streakBonus
             } catch {
                 handleFailure(error)
             }

@@ -7,6 +7,8 @@ final class EventDetailViewModel {
     @ObservationIgnored private let fetchEvents: FetchEventsUseCase
     @ObservationIgnored private let fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase
     @ObservationIgnored private let registerForEvent: RegisterForEventUseCase
+    @ObservationIgnored private let fetchAttendedEventIds: FetchAttendedEventIdsUseCase
+    @ObservationIgnored private let checkInEvent: CheckInEventUseCase
     @ObservationIgnored private var userId: String?
 
     private(set) var uiState = EventDetailUiState()
@@ -16,13 +18,17 @@ final class EventDetailViewModel {
         observeSession: ObserveSessionUseCase,
         fetchEvents: FetchEventsUseCase,
         fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase,
-        registerForEvent: RegisterForEventUseCase
+        registerForEvent: RegisterForEventUseCase,
+        fetchAttendedEventIds: FetchAttendedEventIdsUseCase,
+        checkInEvent: CheckInEventUseCase
     ) {
         self.eventId = eventId
         self.observeSession = observeSession
         self.fetchEvents = fetchEvents
         self.fetchRegisteredEventIds = fetchRegisteredEventIds
         self.registerForEvent = registerForEvent
+        self.fetchAttendedEventIds = fetchAttendedEventIds
+        self.checkInEvent = checkInEvent
     }
 
     func observe() async {
@@ -52,17 +58,42 @@ final class EventDetailViewModel {
         }
     }
 
+    func checkIn(code: String) {
+        guard userId != nil, !uiState.isCheckedIn, !uiState.isCheckingIn else {
+            return
+        }
+        uiState.isCheckingIn = true
+        uiState.checkInFailure = nil
+        Task {
+            do {
+                let reward = try await checkInEvent.execute(code: code)
+                uiState.isCheckedIn = true
+                uiState.isRegistered = true
+                uiState.checkInPoints = reward.points
+                uiState.streakBonus = reward.streakBonus
+            } catch {
+                let failure = (error as? RewardFailureError)?.failure ?? .unknown
+                uiState.checkInFailure = failure
+                uiState.isCheckedIn = failure == .alreadyCompleted
+            }
+            uiState.isCheckingIn = false
+        }
+    }
+
     private func load() async {
         uiState.isLoading = true
         uiState.hasError = false
         do {
             let event = try await fetchEvents.execute().first { return $0.id == eventId }
             var registeredIds: Set<String> = []
+            var attendedIds: Set<String> = []
             if let userId {
                 registeredIds = try await fetchRegisteredEventIds.execute(userId: userId)
+                attendedIds = try await fetchAttendedEventIds.execute(userId: userId)
             }
             uiState.event = event
             uiState.isRegistered = registeredIds.contains(eventId)
+            uiState.isCheckedIn = attendedIds.contains(eventId)
             uiState.isLoading = false
             uiState.hasError = event == nil
         } catch {

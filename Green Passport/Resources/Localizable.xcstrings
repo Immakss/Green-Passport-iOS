@@ -841,6 +841,75 @@
         }
       }
     },
+    "check_in_on_site": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адзначыцца на месцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check in on site"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметиться на месте"
+          }
+        }
+      }
+    },
+    "check_in_window_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адзначыцца можна за 2 гадзіны да пачатку і на працягу 6 гадзін пасля"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check-in opens 2 hours before the start and closes 6 hours after"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отметиться можно за 2 часа до начала и в течение 6 часов после"
+          }
+        }
+      }
+    },
+    "checked_in_at_event": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы адзначыліся на падзеі"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You checked in at the event"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы отметились на событии"
+          }
+        }
+      }
+    },
     "choose_at_least_one": {
       "extractionState": "manual",
       "localizations": {
@@ -2022,6 +2091,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Не удалось загрузить данные. Проверьте соединение и попробуйте снова"
+          }
+        }
+      }
+    },
+    "event_code_does_not_match_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код не падыходзіць да гэтай падзеі"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The code does not match this event"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код не подходит к этому событию"
+          }
+        }
+      }
+    },
+    "event_points_earned": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы адзначыліся: +%1$lld ач."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checked in: +%1$lld pts"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вы отметились: +%1$lld оч."
           }
         }
       }
@@ -4901,6 +5016,29 @@
         }
       }
     },
+    "point_camera_at_event_qr_code_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Навядзі камеру на QR-код арганізатара"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point the camera at the organizer's QR code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наведи камеру на QR-код организатора"
+          }
+        }
+      }
+    },
     "point_camera_at_task_qr_code_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -6304,6 +6442,52 @@
         }
       }
     },
+    "reward_reason_streak_bonus": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серыя дзён працягваецца"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your streak goes on"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серия дней продолжается"
+          }
+        }
+      }
+    },
+    "reward_reason_survey_answered": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Дзякуй за адказ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thanks for your answer"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Спасибо за ответ"
+          }
+        }
+      }
+    },
     "reward_reason_task_completed": {
       "extractionState": "manual",
       "localizations": {
@@ -7232,6 +7416,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Шаг %1$lld из %2$lld"
+          }
+        }
+      }
+    },
+    "streak_bonus_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%1$lld ач. за серыю дзён"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%1$lld pts for your streak"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%1$lld оч. за серию дней"
+          }
+        }
+      }
+    },
+    "streak_days": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld дз. запар"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld-day streak"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld дн. подряд"
           }
         }
       }

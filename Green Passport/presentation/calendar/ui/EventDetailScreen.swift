@@ -5,6 +5,7 @@ struct EventDetailScreen: View {
 
     let uiState: EventDetailUiState
     let onSignUp: () -> Void
+    let onCheckIn: () -> Void
     let onRetry: () -> Void
 
     var body: some View {
@@ -20,6 +21,12 @@ struct EventDetailScreen: View {
         .background(Palette.screenBackground)
         .sensoryFeedback(.success, trigger: uiState.isRegistered) { _, isRegistered in
             return isRegistered
+        }
+        .sensoryFeedback(.success, trigger: uiState.isCheckedIn) { _, isCheckedIn in
+            return isCheckedIn
+        }
+        .sensoryFeedback(.success, trigger: uiState.isCheckedIn) { _, isCheckedIn in
+            return isCheckedIn
         }
     }
 
@@ -57,14 +64,33 @@ struct EventDetailScreen: View {
         }
         .safeAreaInset(edge: .bottom) {
             Group {
-                if uiState.isRegistered {
-                    Label {
-                        Text(.calendarRegisteredLabel)
-                    } icon: {
-                        Image(systemName: "checkmark.circle.fill")
+                if uiState.isCheckedIn {
+                    VStack(spacing: Spacing.xxSmall) {
+                        statusLabel(uiState.checkInPoints.map { return .eventPointsEarned($0) } ?? .checkedInAtEvent)
+                        if uiState.streakBonus > 0 {
+                            Text(.streakBonusMsg(uiState.streakBonus))
+                                .font(.subheadline)
+                                .foregroundStyle(Palette.forest)
+                        }
                     }
-                    .font(.headline)
-                    .foregroundStyle(Palette.forest)
+                } else if uiState.isRegistered {
+                    VStack(spacing: Spacing.small) {
+                        statusLabel(.calendarRegisteredLabel)
+                        if event.isCheckInOpen(at: Date()) {
+                            AppButton(title: .checkInOnSite, isLoading: uiState.isCheckingIn, action: onCheckIn)
+                        } else {
+                            Text(.checkInWindowMsg)
+                                .font(.footnote)
+                                .foregroundStyle(Palette.secondaryText)
+                                .multilineTextAlignment(.center)
+                        }
+                        if let failure = uiState.checkInFailure {
+                            Text(failure.checkInMessage)
+                                .font(.footnote)
+                                .foregroundStyle(Palette.error)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
                 } else {
                     AppButton(
                         title: event.rewardPoints > 0 ? .signUpPoints(event.rewardPoints) : .signUp,
@@ -77,4 +103,27 @@ struct EventDetailScreen: View {
             .padding(.bottom, Spacing.medium)
         }
     }
+
+    private func statusLabel(_ text: LocalizedStringResource) -> some View {
+        return Label {
+            Text(text)
+        } icon: {
+            Image(systemName: "checkmark.circle.fill")
+        }
+        .font(.headline)
+        .foregroundStyle(Palette.forest)
+    }
+}
+
+#Preview {
+    EventDetailScreen(
+        uiState: EventDetailUiState(
+            event: EcoEvent(id: "1", title: "Субботник в парке", description: "Уборка территории", location: "Парк Горького", city: "Минск", startAt: .now, imageUrl: nil, rewardPoints: 50),
+            isRegistered: true,
+            isLoading: false
+        ),
+        onSignUp: {},
+        onCheckIn: {},
+        onRetry: {}
+    )
 }

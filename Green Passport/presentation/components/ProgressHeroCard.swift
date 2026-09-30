@@ -10,13 +10,28 @@ struct ProgressHeroCard: View {
 
     let points: Int
     var level: Level?
+    var streakDays = 0
 
     var body: some View {
         HStack(alignment: .center, spacing: Spacing.small) {
             VStack(alignment: .leading, spacing: Spacing.xxSmall) {
-                Text(level.map { return .level($0.number) } ?? .yourBalance)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
+                HStack(spacing: Spacing.xSmall) {
+                    Text(level.map { return .level($0.number) } ?? .yourBalance)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
+                    if streakDays > 0 {
+                        Label {
+                            Text(.streakDays(streakDays))
+                        } icon: {
+                            Image(systemName: "flame.fill")
+                        }
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(Palette.onLime)
+                        .padding(.horizontal, Spacing.xSmall)
+                        .padding(.vertical, Spacing.hairline)
+                        .background(Palette.lime, in: .capsule)
+                    }
+                }
                 Label {
                     Text(.pointsCount(points))
                         .contentTransition(.numericText(value: Double(points)))
@@ -72,7 +87,7 @@ struct ProgressHeroCard: View {
 
 #Preview {
     VStack {
-        ProgressHeroCard(points: 500, level: Level(lifetimeXp: 2800))
+        ProgressHeroCard(points: 500, level: Level(lifetimeXp: 2800), streakDays: 5)
         ProgressHeroCard(points: 120)
     }
     .padding()

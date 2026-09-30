@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct QrScannerScreen: View {
+    var hint: LocalizedStringResource = .pointCameraAtTaskQrCodeMsg
     let onCode: (String) -> Void
     let onClose: () -> Void
 
@@ -9,7 +10,7 @@ struct QrScannerScreen: View {
             if QrScannerView.isAvailable {
                 QrScannerView(onCode: onCode)
                     .ignoresSafeArea()
-                Text(.pointCameraAtTaskQrCodeMsg)
+                Text(hint)
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding(Spacing.medium)

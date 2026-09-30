@@ -33,6 +33,14 @@ struct FeedbackScreen: View {
                     .background(Palette.screenBackground)
             }
         }
+        .safeAreaInset(edge: .bottom) {
+            if uiState.earnedPoints > 0 {
+                PointsBadge(points: uiState.earnedPoints)
+                    .padding(.bottom, Spacing.small)
+                    .transition(.scale.combined(with: .opacity))
+            }
+        }
+        .animation(.snappy, value: uiState.earnedPoints)
         .navigationTitle(Text(.feedback))
         .sensoryFeedback(.success, trigger: uiState.reviewSubmitted || uiState.suggestionSubmitted)
     }

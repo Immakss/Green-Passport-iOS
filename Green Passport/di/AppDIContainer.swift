@@ -129,7 +129,8 @@ extension AppDIContainer {
             fetchPendingTasks: FetchPendingTasksUseCase(tasksRepository: tasksRepository),
             fetchPointsBalance: fetchPointsBalanceUseCase,
             fetchLevel: fetchLevelUseCase,
-            fetchUpcomingEvent: FetchUpcomingEventUseCase(eventsRepository: eventsRepository)
+            fetchUpcomingEvent: FetchUpcomingEventUseCase(eventsRepository: eventsRepository),
+            fetchStreak: FetchStreakUseCase(pointsRepository: pointsRepository)
         )
     }
 
@@ -171,7 +172,9 @@ extension AppDIContainer {
             registerForEvent: RegisterForEventUseCase(
                 eventsRepository: eventsRepository,
                 reminderScheduler: reminderScheduler
-            )
+            ),
+            fetchAttendedEventIds: FetchAttendedEventIdsUseCase(eventsRepository: eventsRepository),
+            checkInEvent: CheckInEventUseCase(rewardsRepository: rewardsRepository)
         )
     }
 
@@ -287,10 +290,10 @@ extension AppDIContainer {
     func buildFeedbackViewModel() -> FeedbackViewModel {
         return FeedbackViewModel(
             observeSession: observeSessionUseCase,
-            submitFeedback: SubmitFeedbackUseCase(feedbackRepository: feedbackRepository, textModerator: textModerator),
+            submitFeedback: SubmitFeedbackUseCase(rewardsRepository: rewardsRepository, textModerator: textModerator),
             fetchActiveSurvey: FetchActiveSurveyUseCase(feedbackRepository: feedbackRepository),
             hasAnsweredSurvey: HasAnsweredSurveyUseCase(feedbackRepository: feedbackRepository),
-            submitSurveyAnswer: SubmitSurveyAnswerUseCase(feedbackRepository: feedbackRepository)
+            submitSurveyAnswer: SubmitSurveyAnswerUseCase(rewardsRepository: rewardsRepository)
         )
     }
 }

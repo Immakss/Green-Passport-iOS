@@ -20,7 +20,7 @@ struct HomeScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.large) {
                 header
-                ProgressHeroCard(points: uiState.points, level: uiState.level)
+                ProgressHeroCard(points: uiState.points, level: uiState.level, streakDays: uiState.streakDays)
                     .redacted(reason: uiState.isLoading ? .placeholder : [])
                 quickActions
                 if let event = uiState.upcomingEvent {

@@ -5,6 +5,9 @@ enum CloudFunctionName: String {
     case recordGameResult
     case redeemReward
     case markCouponUsed
+    case checkInEvent
+    case submitFeedback
+    case submitSurveyAnswer
     case reviewSubmission
     case moderateContent
 }

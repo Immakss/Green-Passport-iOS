@@ -64,6 +64,11 @@ struct TaskDetailScreen: View {
         VStack(spacing: Spacing.small) {
             if uiState.isCompleted {
                 statusText(uiState.earnedPoints.map { return .taskDonePointsEarned($0) } ?? .taskDetailCompletedLabel, color: Palette.forest)
+                if uiState.streakBonus > 0 {
+                    Text(.streakBonusMsg(uiState.streakBonus))
+                        .font(.subheadline)
+                        .foregroundStyle(Palette.forest)
+                }
             } else if task.verification == .photo && uiState.submission?.status == .pending {
                 statusText(.photoUnderReviewMsg, color: Palette.forest)
             } else {

@@ -1,11 +1,11 @@
 final class SubmitSurveyAnswerUseCase {
-    private let feedbackRepository: FeedbackRepository
+    private let rewardsRepository: RewardsRepository
 
-    init(feedbackRepository: FeedbackRepository) {
-        self.feedbackRepository = feedbackRepository
+    init(rewardsRepository: RewardsRepository) {
+        self.rewardsRepository = rewardsRepository
     }
 
-    func execute(userId: String, surveyId: String, optionIndex: Int) async throws {
-        try await feedbackRepository.submitSurveyAnswer(userId: userId, surveyId: surveyId, optionIndex: optionIndex)
+    func execute(surveyId: String, optionIndex: Int) async throws -> RewardResult {
+        return try await rewardsRepository.submitSurveyAnswer(surveyId: surveyId, optionIndex: optionIndex)
     }
 }

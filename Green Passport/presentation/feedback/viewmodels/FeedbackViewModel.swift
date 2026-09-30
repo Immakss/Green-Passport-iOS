@@ -50,7 +50,7 @@ final class FeedbackViewModel {
     }
 
     func submitReview() {
-        guard let userId, uiState.rating > 0, !uiState.isSubmittingReview else {
+        guard userId != nil, uiState.rating > 0, !uiState.isSubmittingReview else {
             return
         }
         uiState.isSubmittingReview = true
@@ -59,7 +59,8 @@ final class FeedbackViewModel {
         let rating = uiState.rating
         Task {
             do {
-                try await submitFeedback.execute(userId: userId, type: .review, message: message, rating: rating)
+                let reward = try await submitFeedback.execute(type: .review, message: message, rating: rating)
+                uiState.earnedPoints += reward.points + reward.streakBonus
                 uiState.reviewSubmitted = true
             } catch is ContentRejectedError {
                 uiState.isReviewRejected = true
@@ -72,14 +73,15 @@ final class FeedbackViewModel {
 
     func submitSuggestion() {
         let message = uiState.suggestionMessage.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let userId, !message.isEmpty, !uiState.isSubmittingSuggestion else {
+        guard userId != nil, !message.isEmpty, !uiState.isSubmittingSuggestion else {
             return
         }
         uiState.isSubmittingSuggestion = true
         uiState.isSuggestionRejected = false
         Task {
             do {
-                try await submitFeedback.execute(userId: userId, type: .suggestion, message: message, rating: nil)
+                let reward = try await submitFeedback.execute(type: .suggestion, message: message, rating: nil)
+                uiState.earnedPoints += reward.points + reward.streakBonus
                 uiState.suggestionSubmitted = true
             } catch is ContentRejectedError {
                 uiState.isSuggestionRejected = true
@@ -91,13 +93,14 @@ final class FeedbackViewModel {
     }
 
     func answerSurvey(optionIndex: Int) {
-        guard let userId, let survey = uiState.survey, !uiState.hasAnsweredSurvey, !uiState.isSubmittingSurveyAnswer else {
+        guard userId != nil, let survey = uiState.survey, !uiState.hasAnsweredSurvey, !uiState.isSubmittingSurveyAnswer else {
             return
         }
         uiState.isSubmittingSurveyAnswer = true
         Task {
             do {
-                try await submitSurveyAnswer.execute(userId: userId, surveyId: survey.id, optionIndex: optionIndex)
+                let reward = try await submitSurveyAnswer.execute(surveyId: survey.id, optionIndex: optionIndex)
+                uiState.earnedPoints += reward.points + reward.streakBonus
                 uiState.hasAnsweredSurvey = true
             } catch {
                 uiState.hasAnsweredSurvey = false

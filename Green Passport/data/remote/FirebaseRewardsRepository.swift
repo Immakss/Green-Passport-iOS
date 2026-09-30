@@ -16,6 +16,12 @@ final class FirebaseRewardsRepository: RewardsRepository {
     private static let resultExpiresAt = "expiresAtEpochMillis"
     private static let resultUsedAt = "usedAtEpochMillis"
     private static let paramCouponId = "couponId"
+    private static let paramType = "type"
+    private static let paramMessage = "message"
+    private static let paramRating = "rating"
+    private static let paramSurveyId = "surveyId"
+    private static let paramOptionIndex = "optionIndex"
+    private static let resultStreakBonus = "streakBonus"
 
     private let functions: Functions
     private let rewardNotifier: RewardNotifier
@@ -31,6 +37,26 @@ final class FirebaseRewardsRepository: RewardsRepository {
 
     func redeemTaskCode(_ code: String) async throws -> RewardResult {
         return try await callForReward(.redeemTaskCode, data: [Self.paramCode: code], reason: .taskCompleted)
+    }
+
+    func checkInEvent(code: String) async throws -> RewardResult {
+        return try await callForReward(.checkInEvent, data: [Self.paramCode: code], reason: .eventAttended)
+    }
+
+    func submitFeedback(type: FeedbackType, message: String, rating: Int?) async throws -> RewardResult {
+        var data: [String: Any] = [Self.paramType: type.rawValue, Self.paramMessage: message]
+        if let rating {
+            data[Self.paramRating] = rating
+        }
+        return try await callForReward(.submitFeedback, data: data, reason: .feedbackSubmitted)
+    }
+
+    func submitSurveyAnswer(surveyId: String, optionIndex: Int) async throws -> RewardResult {
+        return try await callForReward(
+            .submitSurveyAnswer,
+            data: [Self.paramSurveyId: surveyId, Self.paramOptionIndex: optionIndex],
+            reason: .surveyAnswered
+        )
     }
 
     func recordTipRead(tipId: String) async throws -> RewardResult {
@@ -73,10 +99,14 @@ final class FirebaseRewardsRepository: RewardsRepository {
         let result = try await call(name, data: data)
         let reward = RewardResult(
             points: (result[Self.resultPoints] as? NSNumber)?.intValue ?? 0,
-            xp: (result[Self.resultXp] as? NSNumber)?.intValue ?? 0
+            xp: (result[Self.resultXp] as? NSNumber)?.intValue ?? 0,
+            streakBonus: (result[Self.resultStreakBonus] as? NSNumber)?.intValue ?? 0
         )
         if reward.points > 0 || reward.xp > 0 {
             await rewardNotifier.notifyReward(reason: reason, points: reward.points, xp: reward.xp)
+        }
+        if reward.streakBonus > 0 {
+            await rewardNotifier.notifyReward(reason: .streakBonus, points: reward.streakBonus, xp: reward.streakBonus)
         }
         return reward
     }

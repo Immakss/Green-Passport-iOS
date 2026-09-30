@@ -8,6 +8,7 @@ final class HomeViewModel {
     @ObservationIgnored private let fetchPointsBalance: FetchPointsBalanceUseCase
     @ObservationIgnored private let fetchLevel: FetchLevelUseCase
     @ObservationIgnored private let fetchUpcomingEvent: FetchUpcomingEventUseCase
+    @ObservationIgnored private let fetchStreak: FetchStreakUseCase
     @ObservationIgnored private let profileTask = LatestTask()
     @ObservationIgnored private var session: AuthSession?
     @ObservationIgnored private var profile: UserProfile?
@@ -20,7 +21,8 @@ final class HomeViewModel {
         fetchPendingTasks: FetchPendingTasksUseCase,
         fetchPointsBalance: FetchPointsBalanceUseCase,
         fetchLevel: FetchLevelUseCase,
-        fetchUpcomingEvent: FetchUpcomingEventUseCase
+        fetchUpcomingEvent: FetchUpcomingEventUseCase,
+        fetchStreak: FetchStreakUseCase
     ) {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
@@ -28,6 +30,7 @@ final class HomeViewModel {
         self.fetchPointsBalance = fetchPointsBalance
         self.fetchLevel = fetchLevel
         self.fetchUpcomingEvent = fetchUpcomingEvent
+        self.fetchStreak = fetchStreak
     }
 
     func observe() async {
@@ -67,6 +70,7 @@ final class HomeViewModel {
         async let points = fetchPointsBalance.execute(userId: session.userId)
         async let level = fetchLevel.execute(userId: session.userId)
         async let upcomingEvent = fetchUpcomingEvent.execute()
+        async let streak = fetchStreak.execute(userId: session.userId)
         let loadedTasks: [EcoTask]?
         do {
             loadedTasks = try await tasks
@@ -76,6 +80,7 @@ final class HomeViewModel {
         let loadedPoints = try? await points
         let loadedLevel = try? await level
         let loadedEvent = try? await upcomingEvent
+        let loadedStreak = try? await streak
         guard !Task.isCancelled else {
             return
         }
@@ -86,6 +91,7 @@ final class HomeViewModel {
             avatar: profile?.avatar ?? .lime,
             points: loadedPoints ?? 0,
             level: loadedLevel,
+            streakDays: loadedStreak ?? 0,
             upcomingEvent: loadedEvent ?? nil,
             tasks: loadedTasks ?? []
         )

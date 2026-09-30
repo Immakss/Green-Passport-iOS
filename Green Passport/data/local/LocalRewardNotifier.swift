@@ -49,6 +49,10 @@ final class LocalRewardNotifier: RewardNotifier {
             return .rewardReasonEventAttended
         case .feedbackSubmitted:
             return .rewardReasonFeedbackSubmitted
+        case .streakBonus:
+            return .rewardReasonStreakBonus
+        case .surveyAnswered:
+            return .rewardReasonSurveyAnswered
         }
     }
 }

@@ -4,4 +4,6 @@ nonisolated enum PointsEarnReason: Int, Hashable, Sendable {
     case articleRead
     case eventAttended
     case feedbackSubmitted
+    case streakBonus
+    case surveyAnswered
 }

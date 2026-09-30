@@ -31,6 +31,10 @@ enum FirestoreCollections {
         return firestore.collection("\(root)/events")
     }
 
+    static func eventAttendance(_ firestore: Firestore) -> CollectionReference {
+        return firestore.collection("\(root)/eventAttendance")
+    }
+
     static func eventRegistrations(_ firestore: Firestore) -> CollectionReference {
         return firestore.collection("\(root)/eventRegistrations")
     }
