@@ -10,4 +10,6 @@ enum AppDestination: Hashable {
     case ecoTips
     case calendar
     case feedback
+    case favorites(FavoritesSegment)
+    case ecoTipDetail(tipId: String)
 }

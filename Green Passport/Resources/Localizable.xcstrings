@@ -588,6 +588,29 @@
         }
       }
     },
+    "build_route": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маршрут"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Directions"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Маршрут"
+          }
+        }
+      }
+    },
     "calendar": {
       "extractionState": "manual",
       "localizations": {
@@ -1631,6 +1654,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Скоро мероприятие"
+          }
+        }
+      }
+    },
+    "exchange_points_for_reward_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Абмяняць %1$lld балаў на «%2$@»?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exchange %1$lld points for “%2$@”?"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Обменять %1$lld баллов на «%2$@»?"
           }
         }
       }

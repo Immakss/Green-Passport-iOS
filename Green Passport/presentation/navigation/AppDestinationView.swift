@@ -18,7 +18,11 @@ struct AppDestinationView: View {
             HistoryRoute(container: container)
         case .exchange:
             ExchangeScreen()
-        case .community, .games, .ecoTips, .calendar, .feedback:
+        case .calendar:
+            CalendarRoute(container: container)
+        case .favorites(let segment):
+            FavoritesRoute(container: container, initialSegment: segment)
+        case .community, .games, .ecoTips, .feedback, .ecoTipDetail:
             StateView(kind: .loading)
         }
     }

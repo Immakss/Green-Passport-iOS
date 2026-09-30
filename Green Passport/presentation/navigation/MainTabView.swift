@@ -17,17 +17,17 @@ struct MainTabView: View {
             }
             Tab(String(localized: .shop), systemImage: "bag") {
                 TabStack(container: container, router: shopRouter) {
-                    StateView(kind: .loading)
+                    ShopRoute(container: container)
                 }
             }
             Tab(String(localized: .map), systemImage: "map") {
                 TabStack(container: container, router: mapRouter) {
-                    StateView(kind: .loading)
+                    MapRoute(container: container)
                 }
             }
             Tab(String(localized: .favorites), systemImage: "heart") {
                 TabStack(container: container, router: favoritesRouter) {
-                    StateView(kind: .loading)
+                    FavoritesRoute(container: container)
                 }
             }
         }
