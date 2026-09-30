@@ -9,20 +9,17 @@ struct TasksListScreen: View {
 
     var body: some View {
         List {
-            Section {
-                FilterBar(
-                    options: uiState.availableFilters,
-                    selected: uiState.effectiveFilter,
-                    title: { return $0.title },
-                    onSelect: { onAction(.filterSelected($0)) }
-                )
-                .listRowInsets(EdgeInsets())
-                .listRowBackground(Color.clear)
-            }
-            .listSectionMargins(.horizontal, 0)
             content
         }
         .listStyle(.insetGrouped)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            FilterBar(
+                options: uiState.availableFilters,
+                selected: uiState.effectiveFilter,
+                title: { return $0.title },
+                onSelect: { onAction(.filterSelected($0)) }
+            )
+        }
         .overlay {
             overlayState
         }
@@ -71,7 +68,7 @@ struct TasksListScreen: View {
                     onAction(.favoriteToggled(task))
                 } label: {
                     Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        .foregroundStyle(isFavorite ? SectionColor.feedback : Palette.secondaryText)
+                        .foregroundStyle(isFavorite ? Palette.forest : Palette.secondaryText)
                         .contentTransition(.symbolEffect(.replace))
                 }
                 .buttonStyle(.borderless)
@@ -86,7 +83,7 @@ struct TasksListScreen: View {
             } label: {
                 Image(systemName: isFavorite ? "heart.slash.fill" : "heart.fill")
             }
-            .tint(SectionColor.feedback)
+            .tint(Palette.forest)
         }
     }
 

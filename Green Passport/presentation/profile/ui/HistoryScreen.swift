@@ -24,7 +24,7 @@ struct HistoryScreen: View {
                             entry.timestamp.formatted(date: .abbreviated, time: .shortened)
                         ))
                     ) {
-                        SymbolTile(systemImage: entry.type.systemImage, color: entry.type.color, size: Self.tileSize)
+                        SymbolTile(systemImage: entry.type.systemImage, size: Self.tileSize)
                     } trailing: {
                         EmptyView()
                     }

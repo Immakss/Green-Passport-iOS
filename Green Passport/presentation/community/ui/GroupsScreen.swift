@@ -55,7 +55,7 @@ struct GroupsScreen: View {
     private func groupRow(_ group: CommunityGroup) -> some View {
         let isMember = uiState.currentUserId.map { return group.memberIds.contains($0) } ?? false
         return ListRow(title: group.name, subtitle: String(localized: .groupsMemberCountFormat(group.memberIds.count))) {
-            SymbolTile(systemImage: "person.3.fill", color: SectionColor.calendar)
+            SymbolTile(systemImage: "person.3.fill")
         } trailing: {
             if isMember {
                 Text(.groupsJoinedLabel)

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>395397163961-3isqogrl97ak2eo8e3c55gvmkuqssrqi.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAa9g3ubG9C3sGBMGCZTscS_jWJaXPnvyc</string>
+	<key>GCM_SENDER_ID</key>
+	<string>395397163961</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.smartcity.greenpassport</string>
+	<key>PROJECT_ID</key>
+	<string>chatroom-85fb8</string>
+	<key>STORAGE_BUCKET</key>
+	<string>chatroom-85fb8.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:395397163961:ios:fb96cbc2a6775bd118e468</string>
+	<key>DATABASE_URL</key>
+	<string>https://chatroom-85fb8-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

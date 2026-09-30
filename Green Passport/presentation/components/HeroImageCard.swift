@@ -15,7 +15,7 @@ struct HeroImageCard: View {
             .overlay {
                 LinearGradient(
                     colors: [.clear, .black.opacity(Self.gradientOpacity)],
-                    startPoint: .center,
+                    startPoint: .top,
                     endPoint: .bottom
                 )
             }
@@ -28,8 +28,11 @@ struct HeroImageCard: View {
                         .font(.subheadline)
                         .lineLimit(1)
                 }
+                .multilineTextAlignment(.leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(.white)
-                .padding(Spacing.medium)
+                .padding(.horizontal, Spacing.medium)
+                .padding(.bottom, Spacing.large)
             }
             .clipShape(.rect(cornerRadius: CornerRadius.large, style: .continuous))
             .accessibilityElement(children: .combine)

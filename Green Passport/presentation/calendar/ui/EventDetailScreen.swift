@@ -39,13 +39,13 @@ struct EventDetailScreen: View {
                         Text(.dateTime(event.dateText, event.timeText))
                     } icon: {
                         Image(systemName: "calendar")
-                            .foregroundStyle(SectionColor.calendar)
+                            .foregroundStyle(Palette.forest)
                     }
                     Label {
                         Text(event.location)
                     } icon: {
                         Image(systemName: "mappin.and.ellipse")
-                            .foregroundStyle(SectionColor.feedback)
+                            .foregroundStyle(Palette.forest)
                     }
                 }
                 .font(.subheadline)

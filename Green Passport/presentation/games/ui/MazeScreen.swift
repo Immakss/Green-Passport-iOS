@@ -70,9 +70,9 @@ struct MazeScreen: View {
         }
         switch cell {
         case .item where !uiState.collectedItems.contains(position):
-            return ("leaf.fill", SectionColor.tips)
+            return ("leaf.fill", Palette.forest)
         case .exit:
-            return ("flag.checkered", SectionColor.feedback)
+            return ("flag.checkered", Palette.forest)
         default:
             return nil
         }

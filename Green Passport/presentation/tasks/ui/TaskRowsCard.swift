@@ -7,7 +7,7 @@ struct TaskRowsCard: View {
     let onTask: (EcoTask) -> Void
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: Spacing.small) {
             ForEach(tasks) { task in
                 Button {
                     onTask(task)
@@ -21,16 +21,12 @@ struct TaskRowsCard: View {
                             .foregroundStyle(Color(.tertiaryLabel))
                     }
                     .padding(.horizontal, Spacing.medium)
+                    .padding(.vertical, Spacing.xSmall)
+                    .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
                 }
                 .buttonStyle(.plain)
-                if task.id != tasks.last?.id {
-                    Divider()
-                        .padding(.leading, Spacing.medium + Self.mascotSize + Spacing.small)
-                }
             }
         }
-        .padding(.vertical, Spacing.xxSmall)
-        .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
     }
 }
 

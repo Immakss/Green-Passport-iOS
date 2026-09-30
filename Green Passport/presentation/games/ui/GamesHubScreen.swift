@@ -12,7 +12,7 @@ struct GamesHubScreen: View {
                 onGame(game)
             } label: {
                 ListRow(title: String(localized: game.title)) {
-                    SymbolTile(systemImage: game.systemImage, color: game.color, size: Self.tileSize)
+                    SymbolTile(systemImage: game.systemImage, size: Self.tileSize)
                 } trailing: {
                     if let best = bestScores[game] {
                         Text(.gamesBestScoreFormat(best))

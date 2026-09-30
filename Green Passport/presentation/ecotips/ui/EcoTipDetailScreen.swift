@@ -32,7 +32,7 @@ struct EcoTipDetailScreen: View {
                     Image(systemName: tip.category.systemImage)
                 }
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(SectionColor.tips)
+                .foregroundStyle(Palette.forest)
                 Text(tip.title)
                     .font(.largeTitle.bold())
                 Text(tip.body)

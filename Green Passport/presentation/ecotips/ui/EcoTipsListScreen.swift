@@ -36,12 +36,6 @@ struct EcoTipsListScreen: View {
                     .listRowBackground(Palette.mintSurface)
                 }
             }
-            Section {
-                FilterBar(options: EcoTipFilter.allFilters, selected: uiState.filter, title: { return $0.title }, onSelect: onFilter)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
-            }
-            .listSectionMargins(.horizontal, 0)
             if !uiState.visibleTips.isEmpty {
                 Section {
                     ForEach(uiState.visibleTips) { tip in
@@ -51,6 +45,9 @@ struct EcoTipsListScreen: View {
             }
         }
         .listStyle(.insetGrouped)
+        .safeAreaInset(edge: .top, spacing: 0) {
+            FilterBar(options: EcoTipFilter.allFilters, selected: uiState.filter, title: { return $0.title }, onSelect: onFilter)
+        }
         .overlay {
             if uiState.isLoading {
                 StateView(kind: .loading)
@@ -73,10 +70,7 @@ struct EcoTipsListScreen: View {
             onTip(tip)
         } label: {
             ListRow(title: tip.title, subtitle: String(localized: tip.category.title)) {
-                SymbolTile(
-                    systemImage: isRead ? "checkmark" : "leaf.fill",
-                    color: isRead ? SectionColor.community : SectionColor.tips
-                )
+                SymbolTile(systemImage: isRead ? "checkmark" : "leaf.fill", style: isRead ? .prominent : .accent)
             } trailing: {
                 Button {
                     onToggleBookmark(tip)

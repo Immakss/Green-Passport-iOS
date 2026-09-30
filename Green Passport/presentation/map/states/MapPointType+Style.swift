@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 extension MapPointType {
     var title: LocalizedStringResource {
@@ -23,14 +23,4 @@ extension MapPointType {
         }
     }
 
-    var color: Color {
-        switch self {
-        case .ecoShop:
-            return SectionColor.games
-        case .recyclingPoint:
-            return SectionColor.community
-        case .ecoEvent:
-            return SectionColor.calendar
-        }
-    }
 }
