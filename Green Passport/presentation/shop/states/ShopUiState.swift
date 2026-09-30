@@ -8,6 +8,6 @@ struct ShopUiState {
     var hasError = false
 
     func rewardTitle(for coupon: Coupon) -> String {
-        return rewards.first { $0.id == coupon.rewardId }?.title ?? coupon.rewardId
+        return rewards.first { return $0.id == coupon.rewardId }?.title ?? coupon.rewardId
     }
 }

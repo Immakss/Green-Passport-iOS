@@ -88,7 +88,7 @@ final class TasksListViewModel {
     private func observeSubmissions(userId: String) async {
         do {
             for try await submissions in observeTaskSubmissions.execute(userId: userId) {
-                uiState.pendingTaskIds = Set(submissions.filter { $0.status == .pending }.map(\.taskId))
+                uiState.pendingTaskIds = Set(submissions.filter { return $0.status == .pending }.map(\.taskId))
             }
         } catch {
             uiState.pendingTaskIds = []

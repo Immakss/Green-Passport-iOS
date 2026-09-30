@@ -4,6 +4,7 @@ enum ProfileMenuEntry: CaseIterable {
     case achievements
     case cards
     case history
+    case notifications
     case favorites
     case bookmarks
     case exchange
@@ -16,6 +17,8 @@ enum ProfileMenuEntry: CaseIterable {
             return .profileCards
         case .history:
             return .profileHistory
+        case .notifications:
+            return .notificationsScreenTitle
         case .favorites:
             return .profileFavorites
         case .bookmarks:
@@ -33,6 +36,8 @@ enum ProfileMenuEntry: CaseIterable {
             return "rectangle.stack.fill"
         case .history:
             return "clock.arrow.circlepath"
+        case .notifications:
+            return "bell.fill"
         case .favorites:
             return "heart.fill"
         case .bookmarks:
@@ -50,6 +55,8 @@ enum ProfileMenuEntry: CaseIterable {
             return SectionColor.games
         case .history:
             return SectionColor.calendar
+        case .notifications:
+            return SectionColor.feedback
         case .favorites:
             return SectionColor.feedback
         case .bookmarks:
@@ -67,6 +74,8 @@ enum ProfileMenuEntry: CaseIterable {
             return .cards
         case .history:
             return .history
+        case .notifications:
+            return .notifications
         case .favorites:
             return .favorites(.tasks)
         case .bookmarks:

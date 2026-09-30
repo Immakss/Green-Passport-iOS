@@ -63,7 +63,7 @@ struct TaskDetailScreen: View {
     private func confirmation(task: EcoTask) -> some View {
         VStack(spacing: Spacing.small) {
             if uiState.isCompleted {
-                statusText(uiState.earnedPoints.map { .taskDonePointsEarned($0) } ?? .taskDetailCompletedLabel, color: Palette.forest)
+                statusText(uiState.earnedPoints.map { return .taskDonePointsEarned($0) } ?? .taskDetailCompletedLabel, color: Palette.forest)
             } else if task.verification == .photo && uiState.submission?.status == .pending {
                 statusText(.photoUnderReviewMsg, color: Palette.forest)
             } else {

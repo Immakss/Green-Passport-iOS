@@ -8,4 +8,11 @@ final class ObserveSessionUseCase {
     func execute() -> AsyncStream<AuthSession?> {
         return authRepository.observeSession()
     }
+
+    func current() async -> AuthSession? {
+        for await session in authRepository.observeSession() {
+            return session
+        }
+        return nil
+    }
 }

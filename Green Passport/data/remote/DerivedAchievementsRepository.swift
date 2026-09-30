@@ -55,7 +55,7 @@ final class DerivedAchievementsRepository: AchievementsRepository {
 
     private func isMemberOfAnyGroup(userId: String) async throws -> Bool {
         for try await groups in communityRepository.observeGroups() {
-            return groups.contains { $0.memberIds.contains(userId) }
+            return groups.contains { return $0.memberIds.contains(userId) }
         }
         return false
     }

@@ -11,7 +11,7 @@ final class FetchPendingTasksUseCase {
 
     func execute(userId: String, profile: UserProfile?) async throws -> [EcoTask] {
         let completedIds = try await tasksRepository.fetchCompletedTaskIds(userId: userId)
-        let pending = try await tasksRepository.fetchTasks().filter { !completedIds.contains($0.id) }
+        let pending = try await tasksRepository.fetchTasks().filter { return !completedIds.contains($0.id) }
         let ranked = pending.enumerated().sorted { lhs, rhs in
             let lhsScore = Self.score(lhs.element, profile: profile)
             let rhsScore = Self.score(rhs.element, profile: profile)

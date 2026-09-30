@@ -35,7 +35,9 @@ struct ProfileRoute: View {
         case .editProfile:
             isEditingProfile = true
         case .moderation:
-            break
+            router.push(.moderation)
+        case .notificationsToggled(let isEnabled):
+            viewModel.toggleNotifications(isEnabled)
         case .language:
             if let url = URL(string: UIApplication.openSettingsURLString) {
                 openURL(url)

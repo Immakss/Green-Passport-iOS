@@ -29,6 +29,12 @@ struct ProfileScreen: View {
                         onAction(.editProfile)
                     }
                 }
+                Toggle(isOn: Binding(get: { return uiState.notificationsEnabled }, set: { onAction(.notificationsToggled($0)) })) {
+                    HStack(spacing: Spacing.small) {
+                        SymbolTile(systemImage: "bell.badge.fill", color: Palette.forest, size: Self.tileSize)
+                        Text(.profileNotificationsLabel)
+                    }
+                }
                 Button {
                     onAction(.language)
                 } label: {

@@ -35,7 +35,7 @@ struct MapRoute: View {
 
     private var selectedPoint: Binding<MapPoint?> {
         return Binding(
-            get: { return viewModel.uiState.points.first { $0.id == selectedPointId } },
+            get: { return viewModel.uiState.points.first { return $0.id == selectedPointId } },
             set: { selectedPointId = $0?.id }
         )
     }

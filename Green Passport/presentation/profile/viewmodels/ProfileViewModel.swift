@@ -8,6 +8,8 @@ final class ProfileViewModel {
     @ObservationIgnored private let fetchPointsBalance: FetchPointsBalanceUseCase
     @ObservationIgnored private let fetchLevel: FetchLevelUseCase
     @ObservationIgnored private let signOut: SignOutUseCase
+    @ObservationIgnored private let isNotificationsEnabled: IsNotificationsEnabledUseCase
+    @ObservationIgnored private let setNotificationsEnabled: SetNotificationsEnabledUseCase
     @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var session: AuthSession?
 
@@ -19,7 +21,9 @@ final class ProfileViewModel {
         observeIsModerator: ObserveIsModeratorUseCase,
         fetchPointsBalance: FetchPointsBalanceUseCase,
         fetchLevel: FetchLevelUseCase,
-        signOut: SignOutUseCase
+        signOut: SignOutUseCase,
+        isNotificationsEnabled: IsNotificationsEnabledUseCase,
+        setNotificationsEnabled: SetNotificationsEnabledUseCase
     ) {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
@@ -27,6 +31,9 @@ final class ProfileViewModel {
         self.fetchPointsBalance = fetchPointsBalance
         self.fetchLevel = fetchLevel
         self.signOut = signOut
+        self.isNotificationsEnabled = isNotificationsEnabled
+        self.setNotificationsEnabled = setNotificationsEnabled
+        uiState.notificationsEnabled = isNotificationsEnabled.execute()
     }
 
     func observe() async {
@@ -49,6 +56,13 @@ final class ProfileViewModel {
             return
         }
         await loadPoints(userId: session.userId)
+    }
+
+    func toggleNotifications(_ isEnabled: Bool) {
+        uiState.notificationsEnabled = isEnabled
+        Task {
+            uiState.notificationsEnabled = await setNotificationsEnabled.execute(isEnabled: isEnabled)
+        }
     }
 
     func performSignOut() {

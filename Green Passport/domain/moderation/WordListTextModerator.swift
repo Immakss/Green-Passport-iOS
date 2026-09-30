@@ -22,17 +22,17 @@ final class WordListTextModerator: TextModerator {
         let lowercase = text.lowercased().replacingOccurrences(of: "ё", with: "е")
         let candidates = words(in: map(lowercase, with: Self.cyrillicLookalikes))
             + words(in: map(lowercase, with: Self.latinLookalikes))
-        return !candidates.contains { isBanned($0) }
+        return !candidates.contains { return isBanned($0) }
     }
 
     private func isBanned(_ word: String) -> Bool {
-        let hasAllowedStem = allowedStems.contains { word.contains($0) }
-        let hasBannedRoot = bannedRoots.contains { word.contains($0) }
+        let hasAllowedStem = allowedStems.contains { return word.contains($0) }
+        let hasBannedRoot = bannedRoots.contains { return word.contains($0) }
         return !hasAllowedStem && hasBannedRoot
     }
 
     private func words(in text: String) -> [String] {
-        let tokens = text.split(separator: Self.wordSeparator).map(String.init).filter { !$0.isEmpty }
+        let tokens = text.split(separator: Self.wordSeparator).map(String.init).filter { return !$0.isEmpty }
         var merged: [String] = []
         var singleLetters = ""
         for token in tokens {
@@ -49,7 +49,7 @@ final class WordListTextModerator: TextModerator {
         if !singleLetters.isEmpty {
             merged.append(singleLetters)
         }
-        return merged.map { collapseRepeatedLetters($0) }
+        return merged.map { return collapseRepeatedLetters($0) }
     }
 
     private func collapseRepeatedLetters(_ word: String) -> String {
@@ -61,7 +61,7 @@ final class WordListTextModerator: TextModerator {
     }
 
     private func map(_ text: String, with lookalikes: [Character: Character]) -> String {
-        return String(text.map { lookalikes[$0] ?? $0 })
+        return String(text.map { return lookalikes[$0] ?? $0 })
     }
 
     private static func readLines(resource: String) -> [String] {
@@ -71,7 +71,7 @@ final class WordListTextModerator: TextModerator {
         }
         return content
             .split(whereSeparator: \.isNewline)
-            .map { $0.trimmingCharacters(in: .whitespaces).lowercased() }
-            .filter { !$0.isEmpty }
+            .map { return $0.trimmingCharacters(in: .whitespaces).lowercased() }
+            .filter { return !$0.isEmpty }
     }
 }

@@ -73,7 +73,7 @@ final class FirebaseAuthRepository: AuthRepository {
             email: user.email,
             isAnonymous: user.isAnonymous,
             displayName: displayName?.isEmpty == false ? displayName : nil,
-            isGoogleAccount: user.providerData.contains { $0.providerID == googleProviderId }
+            isGoogleAccount: user.providerData.contains { return $0.providerID == googleProviderId }
         )
     }
 

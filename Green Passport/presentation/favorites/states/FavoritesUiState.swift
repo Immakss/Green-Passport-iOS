@@ -7,10 +7,10 @@ struct FavoritesUiState {
     var hasError = false
 
     var favoriteTasks: [EcoTask] {
-        return tasks.filter { favoriteTaskIds.contains($0.id) }
+        return tasks.filter { return favoriteTaskIds.contains($0.id) }
     }
 
     var bookmarkedTips: [EcoTip] {
-        return tips.filter { bookmarkedTipIds.contains($0.id) }
+        return tips.filter { return bookmarkedTipIds.contains($0.id) }
     }
 }

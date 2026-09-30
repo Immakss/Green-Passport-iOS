@@ -10,7 +10,7 @@ final class FetchUpcomingEventUseCase {
     func execute() async throws -> EcoEvent? {
         let now = Date()
         return try await eventsRepository.fetchEvents()
-            .filter { $0.startAt > now }
-            .min { $0.startAt < $1.startAt }
+            .filter { return $0.startAt > now }
+            .min { return $0.startAt < $1.startAt }
     }
 }
