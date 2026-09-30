@@ -8,59 +8,71 @@ struct EcoTipsListScreen: View {
     let onRefresh: () async -> Void
 
     var body: some View {
-        List {
-            if let dailyTip = uiState.dailyTip {
-                Section {
-                    Button {
-                        onTip(dailyTip)
-                    } label: {
-                        VStack(alignment: .leading, spacing: Spacing.xSmall) {
-                            Label {
-                                Text(.ecotipsDailyTipLabel)
-                            } icon: {
-                                Image(systemName: "sun.max.fill")
-                            }
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(Palette.forest)
-                            Text(dailyTip.title)
-                                .font(.headline)
-                                .foregroundStyle(Color.primary)
-                            Text(dailyTip.body)
-                                .font(.subheadline)
-                                .foregroundStyle(Palette.secondaryText)
-                                .lineLimit(2)
-                        }
-                        .padding(.vertical, Spacing.xSmall)
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Palette.mintSurface)
+        ScrollView {
+            VStack(alignment: .leading, spacing: Spacing.medium) {
+                if let dailyTip = uiState.dailyTip {
+                    dailyTipCard(dailyTip)
+                        .padding(.horizontal, Spacing.screenHorizontal)
                 }
+                FilterBar(options: EcoTipFilter.allFilters, selected: uiState.filter, title: { return $0.title }, onSelect: onFilter)
+                content
             }
-            if !uiState.visibleTips.isEmpty {
-                Section {
-                    ForEach(uiState.visibleTips) { tip in
-                        row(tip)
-                    }
-                }
-            }
+            .padding(.top, Spacing.xSmall)
+            .padding(.bottom, Spacing.large)
         }
-        .listStyle(.insetGrouped)
-        .safeAreaInset(edge: .top, spacing: 0) {
-            FilterBar(options: EcoTipFilter.allFilters, selected: uiState.filter, title: { return $0.title }, onSelect: onFilter)
-        }
-        .overlay {
-            if uiState.isLoading {
-                StateView(kind: .loading)
-            } else if uiState.hasError {
-                StateView(kind: .error(retry: { Task { await onRefresh() } }))
-            } else if uiState.visibleTips.isEmpty {
-                StateView(kind: .empty(message: .ecotipsEmpty))
-            }
-        }
+        .background(Palette.screenBackground)
         .navigationTitle(Text(.homeTileEcotips))
         .refreshable {
             await onRefresh()
         }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        if uiState.isLoading {
+            ProgressView()
+                .controlSize(.large)
+                .frame(maxWidth: .infinity)
+                .padding(.top, Spacing.xLarge)
+        } else if uiState.hasError {
+            StateView(kind: .error(retry: { Task { await onRefresh() } }))
+        } else if uiState.visibleTips.isEmpty {
+            StateView(kind: .empty(message: .ecotipsEmpty))
+        } else {
+            VStack(spacing: Spacing.small) {
+                ForEach(uiState.visibleTips) { tip in
+                    row(tip)
+                }
+            }
+            .padding(.horizontal, Spacing.screenHorizontal)
+        }
+    }
+
+    private func dailyTipCard(_ tip: EcoTip) -> some View {
+        return Button {
+            onTip(tip)
+        } label: {
+            VStack(alignment: .leading, spacing: Spacing.xSmall) {
+                Label {
+                    Text(.ecotipsDailyTipLabel)
+                } icon: {
+                    Image(systemName: "sun.max.fill")
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Palette.forest)
+                Text(tip.title)
+                    .font(.headline)
+                    .foregroundStyle(Color.primary)
+                Text(tip.body)
+                    .font(.subheadline)
+                    .foregroundStyle(Palette.secondaryText)
+                    .lineLimit(2)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(Spacing.medium)
+            .background(Palette.mintSurface, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
+        }
+        .buttonStyle(.plain)
     }
 
     private func row(_ tip: EcoTip) -> some View {
@@ -83,6 +95,9 @@ struct EcoTipsListScreen: View {
                 .accessibilityLabel(Text(.profileBookmarks))
                 .sensoryFeedback(.impact, trigger: isBookmarked)
             }
+            .padding(.horizontal, Spacing.medium)
+            .padding(.vertical, Spacing.xSmall)
+            .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
         }
         .buttonStyle(.plain)
     }
