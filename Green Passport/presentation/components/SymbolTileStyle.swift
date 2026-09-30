@@ -8,7 +8,7 @@ enum SymbolTileStyle {
     var background: AnyShapeStyle {
         switch self {
         case .accent:
-            return AnyShapeStyle(Palette.mintSurface)
+            return AnyShapeStyle(Palette.mintSurfaceHigh)
         case .prominent:
             return AnyShapeStyle(Palette.forest.gradient)
         case .muted:

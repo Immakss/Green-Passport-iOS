@@ -2,7 +2,8 @@ import SwiftUI
 
 struct HomeScreen: View {
     private static let toolbarAvatarSize: CGFloat = 36
-    private static let quickActionTileSize: CGFloat = 44
+    private static let quickActionTileSize: CGFloat = 56
+    private static let quickActionSymbolScale: CGFloat = 0.38
     private static let taskMascotSize: CGFloat = 34
     private static let placeholderTaskCount = 3
     private static let labelMinimumScale: CGFloat = 0.8
@@ -66,8 +67,8 @@ struct HomeScreen: View {
                 Button {
                     onQuickAction(action)
                 } label: {
-                    VStack(spacing: Spacing.xxSmall) {
-                        SymbolTile(systemImage: action.systemImage, size: Self.quickActionTileSize)
+                    VStack(spacing: Spacing.xSmall) {
+                        SymbolTile(systemImage: action.systemImage, size: Self.quickActionTileSize, symbolScale: Self.quickActionSymbolScale)
                         Text(action.title)
                             .font(.caption.weight(.medium))
                             .foregroundStyle(Color.primary)

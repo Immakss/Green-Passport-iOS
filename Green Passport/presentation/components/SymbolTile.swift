@@ -1,12 +1,13 @@
 import SwiftUI
 
 struct SymbolTile: View {
-    private static let symbolScale: CGFloat = 0.5
+    static let defaultSymbolScale: CGFloat = 0.5
     private static let cornerScale: CGFloat = 0.28
 
     let systemImage: String
     var style: SymbolTileStyle = .accent
     var size: CGFloat = 32
+    var symbolScale: CGFloat = SymbolTile.defaultSymbolScale
 
     var body: some View {
         RoundedRectangle(cornerRadius: size * Self.cornerScale, style: .continuous)
@@ -14,7 +15,7 @@ struct SymbolTile: View {
             .frame(width: size, height: size)
             .overlay {
                 Image(systemName: systemImage)
-                    .font(.system(size: size * Self.symbolScale, weight: .semibold))
+                    .font(.system(size: size * symbolScale, weight: .semibold))
                     .foregroundStyle(style.foreground)
             }
             .accessibilityHidden(true)
