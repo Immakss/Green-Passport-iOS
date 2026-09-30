@@ -657,6 +657,29 @@
         }
       }
     },
+    "cancel": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скасаваць"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Отмена"
+          }
+        }
+      }
+    },
     "cards_locked_label": {
       "extractionState": "manual",
       "localizations": {
@@ -772,6 +795,29 @@
         }
       }
     },
+    "choose_from_library": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбраць з галерэі"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose from library"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выбрать из галереи"
+          }
+        }
+      }
+    },
     "choose_one_or_more_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -837,6 +883,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Уборки"
+          }
+        }
+      }
+    },
+    "close": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Закрыць"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Закрыть"
           }
         }
       }
@@ -4142,6 +4211,29 @@
         }
       }
     },
+    "point_camera_at_task_qr_code_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Навядзі камеру на QR-код задання"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point the camera at the task QR code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Наведи камеру на QR-код задания"
+          }
+        }
+      }
+    },
     "points_balance": {
       "extractionState": "manual",
       "localizations": {
@@ -4506,6 +4598,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "QR-код на месте"
+          }
+        }
+      }
+    },
+    "qr_scanner_unavailable_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сканер QR-кодаў недаступны на гэтай прыладзе"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The QR scanner is not available on this device"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сканер QR-кодов недоступен на этом устройстве"
           }
         }
       }
@@ -6335,6 +6450,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Как в системе"
+          }
+        }
+      }
+    },
+    "take_photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зрабіць фота"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Take photo"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Снять фото"
           }
         }
       }

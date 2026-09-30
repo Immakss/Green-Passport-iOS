@@ -76,6 +76,12 @@ Three layers under `Green Passport/`, with a strict dependency direction `presen
 - Work never starts in `init`. Streams are consumed in `func observe() async`, started from the route's `.task { await viewModel.observe() }`, so they are cancelled when the view goes away (the equivalent of Android's `WhileSubscribed`). Switching to a new inner stream per session is done by cancelling a stored `Task` (see `RootViewModel`).
 - Each screen has **two** views: `XRoute` owns the ViewModel (`@State`, built by the container) and `XScreen` is a pure view taking plain data plus closures or a `XUserAction` enum, with a `#Preview`. Screens take no ViewModel.
 
+### Navigation
+
+`MainTabView` has four tabs (Home, Shop, Map, Favorites — same order as Android). Each tab is a `TabStack`: its own `NavigationStack` bound to a `TabRouter` (`@Observable`, `path: [AppDestination]`) that is put into the environment. Routes push with `@Environment(TabRouter.self)`, screens never see the router. Every pushable screen is a case of `AppDestination` and is resolved in one place, `AppDestinationView` — add new screens there. Details that open from several places (task, event, later map point) are sheets with `.presentationDetents([.medium, .large])`, attached through `View.taskDetailSheet(item:container:onDismiss:)` / `eventDetailSheet(...)`; the presenting route refreshes in `onDismiss` (Android refreshes on resume). Profile opens from the avatar in the Home toolbar; Edit profile is a `fullScreenCover` with `ProfileSetupRoute(isEditing: true)`.
+
+The domain task model is `EcoTask` (not `Task`, which would shadow Swift Concurrency's `Task`).
+
 ### App start
 
 `RootRoute` switches on `RootViewModel.state` (`AppStartState`): loading → onboarding → auth → profile setup → `MainTabView`. Same rules as Android `MainViewModel`: anonymous users skip the profile wizard, a missing `profileCompletedAt` means the wizard is shown, a profile read error counts as complete. `ProfileSetupRoute(isEditing:)` is reused for "Edit profile".

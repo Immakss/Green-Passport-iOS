@@ -18,10 +18,50 @@ final class AppDIContainer {
     )
     private lazy var userProfileRepository: UserProfileRepository = FirestoreUserProfileRepository(firestore: firestore)
     private lazy var settingsRepository: SettingsRepository = UserDefaultsSettingsRepository()
+    private lazy var tasksRepository: TasksRepository = FirestoreTasksRepository(firestore: firestore)
+    private lazy var pointsRepository: PointsRepository = FirestorePointsRepository(firestore: firestore)
+    private lazy var eventsRepository: EventsRepository = FirestoreEventsRepository(firestore: firestore)
+    private lazy var shopRepository: ShopRepository = FirestoreShopRepository(firestore: firestore)
+    private lazy var ecoTipsRepository: EcoTipsRepository = FirestoreEcoTipsRepository(firestore: firestore)
+    private lazy var communityRepository: CommunityRepository = FirestoreCommunityRepository(firestore: firestore)
+    private lazy var favoritesRepository: FavoritesRepository = FirestoreFavoritesRepository(firestore: firestore)
+    private lazy var moderationRepository: ModerationRepository = FirebaseModerationRepository(firestore: firestore)
+    private lazy var taskSubmissionsRepository: TaskSubmissionsRepository = FirebaseTaskSubmissionsRepository(
+        firestore: firestore,
+        storage: storage
+    )
+    private lazy var rewardNotifier: RewardNotifier = SilentRewardNotifier()
+    private lazy var rewardsRepository: RewardsRepository = FirebaseRewardsRepository(
+        functions: functions,
+        rewardNotifier: rewardNotifier
+    )
+    private lazy var reminderScheduler: ReminderScheduler = LocalNotificationReminderScheduler()
+    private lazy var achievementsRepository: AchievementsRepository = DerivedAchievementsRepository(
+        tasksRepository: tasksRepository,
+        eventsRepository: eventsRepository,
+        ecoTipsRepository: ecoTipsRepository,
+        communityRepository: communityRepository,
+        pointsRepository: pointsRepository
+    )
+    private lazy var historyRepository: HistoryRepository = FirestoreHistoryRepository(
+        firestore: firestore,
+        tasksRepository: tasksRepository,
+        eventsRepository: eventsRepository,
+        shopRepository: shopRepository
+    )
 
     private lazy var observeSessionUseCase = ObserveSessionUseCase(authRepository: authRepository)
     private lazy var observeUserProfileUseCase = ObserveUserProfileUseCase(userProfileRepository: userProfileRepository)
     private lazy var signOutUseCase = SignOutUseCase(authRepository: authRepository)
+    private lazy var fetchPointsBalanceUseCase = FetchPointsBalanceUseCase(pointsRepository: pointsRepository)
+    private lazy var fetchLevelUseCase = FetchLevelUseCase(pointsRepository: pointsRepository)
+    private lazy var fetchTasksUseCase = FetchTasksUseCase(tasksRepository: tasksRepository)
+    private lazy var fetchCompletedTaskIdsUseCase = FetchCompletedTaskIdsUseCase(tasksRepository: tasksRepository)
+    private lazy var fetchEventsUseCase = FetchEventsUseCase(eventsRepository: eventsRepository)
+    private lazy var observeTaskSubmissionsUseCase = ObserveTaskSubmissionsUseCase(
+        taskSubmissionsRepository: taskSubmissionsRepository
+    )
+    private lazy var observeIsModeratorUseCase = ObserveIsModeratorUseCase(moderationRepository: moderationRepository)
 }
 
 extension AppDIContainer {
@@ -54,6 +94,86 @@ extension AppDIContainer {
             ),
             isTextAllowed: IsTextAllowedUseCase(textModerator: textModerator),
             signOut: signOutUseCase
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildHomeViewModel() -> HomeViewModel {
+        return HomeViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            fetchPendingTasks: FetchPendingTasksUseCase(tasksRepository: tasksRepository),
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            fetchLevel: fetchLevelUseCase,
+            fetchUpcomingEvent: FetchUpcomingEventUseCase(eventsRepository: eventsRepository)
+        )
+    }
+
+    func buildTasksListViewModel() -> TasksListViewModel {
+        return TasksListViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
+            toggleTaskFavorite: ToggleTaskFavoriteUseCase(favoritesRepository: favoritesRepository),
+            observeTaskSubmissions: observeTaskSubmissionsUseCase
+        )
+    }
+
+    func buildTaskDetailViewModel(taskId: String) -> TaskDetailViewModel {
+        return TaskDetailViewModel(
+            taskId: taskId,
+            observeSession: observeSessionUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            completeSelfTask: CompleteSelfTaskUseCase(rewardsRepository: rewardsRepository),
+            redeemTaskCode: RedeemTaskCodeUseCase(rewardsRepository: rewardsRepository),
+            submitTaskPhoto: SubmitTaskPhotoUseCase(
+                photoCompressor: JpegPhotoCompressor(),
+                userProfileRepository: userProfileRepository,
+                taskSubmissionsRepository: taskSubmissionsRepository
+            ),
+            observeTaskSubmissions: observeTaskSubmissionsUseCase
+        )
+    }
+
+    func buildEventDetailViewModel(eventId: String) -> EventDetailViewModel {
+        return EventDetailViewModel(
+            eventId: eventId,
+            observeSession: observeSessionUseCase,
+            fetchEvents: fetchEventsUseCase,
+            fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
+            registerForEvent: RegisterForEventUseCase(
+                eventsRepository: eventsRepository,
+                reminderScheduler: reminderScheduler
+            )
+        )
+    }
+
+    func buildProfileViewModel() -> ProfileViewModel {
+        return ProfileViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            observeIsModerator: observeIsModeratorUseCase,
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            fetchLevel: fetchLevelUseCase,
+            signOut: signOutUseCase
+        )
+    }
+
+    func buildAchievementsViewModel() -> AchievementsViewModel {
+        return AchievementsViewModel(
+            observeSession: observeSessionUseCase,
+            fetchAchievements: FetchAchievementsUseCase(achievementsRepository: achievementsRepository)
+        )
+    }
+
+    func buildHistoryViewModel() -> HistoryViewModel {
+        return HistoryViewModel(
+            observeSession: observeSessionUseCase,
+            fetchHistory: FetchHistoryUseCase(historyRepository: historyRepository)
         )
     }
 }
