@@ -20,18 +20,18 @@ struct ProfileScreen: View {
             .listRowSeparator(.hidden)
             Section {
                 if uiState.isModerator {
-                    menuButton(title: .moderation, systemImage: "checkmark.shield.fill") {
+                    menuButton(title: .moderation, systemImage: "checkmark.shield.fill", color: Palette.error) {
                         onAction(.moderation)
                     }
                 }
                 if !uiState.isAnonymous {
-                    menuButton(title: .editProfile, systemImage: "pencil") {
+                    menuButton(title: .editProfile, systemImage: "pencil", color: Palette.forest) {
                         onAction(.editProfile)
                     }
                 }
                 Toggle(isOn: Binding(get: { return uiState.notificationsEnabled }, set: { onAction(.notificationsToggled($0)) })) {
                     HStack(spacing: Spacing.small) {
-                        SymbolTile(systemImage: "bell.badge.fill", style: .prominent, size: Self.tileSize)
+                        SymbolTile(systemImage: "bell.badge.fill", style: .tinted(Palette.forest), size: Self.tileSize)
                         Text(.profileNotificationsLabel)
                     }
                 }
@@ -46,7 +46,7 @@ struct ProfileScreen: View {
                     }
                 } label: {
                     HStack(spacing: Spacing.small) {
-                        SymbolTile(systemImage: uiState.theme.systemImage, style: .prominent, size: Self.tileSize)
+                        SymbolTile(systemImage: uiState.theme.systemImage, style: .tinted(SectionColor.games), size: Self.tileSize)
                         Text(.theme)
                     }
                 }
@@ -56,7 +56,7 @@ struct ProfileScreen: View {
                     onAction(.language)
                 } label: {
                     HStack(spacing: Spacing.small) {
-                        SymbolTile(systemImage: "character.bubble.fill", style: .prominent, size: Self.tileSize)
+                        SymbolTile(systemImage: "character.bubble.fill", style: .tinted(SectionColor.calendar), size: Self.tileSize)
                         Text(.language)
                             .foregroundStyle(Color.primary)
                         Spacer()
@@ -70,7 +70,7 @@ struct ProfileScreen: View {
             }
             Section {
                 ForEach(ProfileMenuEntry.allCases, id: \.self) { entry in
-                    menuButton(title: entry.title, systemImage: entry.systemImage) {
+                    menuButton(title: entry.title, systemImage: entry.systemImage, color: entry.color) {
                         onAction(.open(entry.destination))
                     }
                 }
@@ -128,11 +128,12 @@ struct ProfileScreen: View {
     private func menuButton(
         title: LocalizedStringResource,
         systemImage: String,
+        color: Color,
         action: @escaping () -> Void
     ) -> some View {
         return Button(action: action) {
             HStack(spacing: Spacing.small) {
-                SymbolTile(systemImage: systemImage, style: .prominent, size: Self.tileSize)
+                SymbolTile(systemImage: systemImage, style: .tinted(color), size: Self.tileSize)
                 Text(title)
                     .foregroundStyle(Color.primary)
                 Spacer()
