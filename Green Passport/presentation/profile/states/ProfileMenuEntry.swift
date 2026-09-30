@@ -4,6 +4,8 @@ enum ProfileMenuEntry: CaseIterable {
     case achievements
     case cards
     case history
+    case favorites
+    case bookmarks
     case exchange
 
     var title: LocalizedStringResource {
@@ -14,6 +16,10 @@ enum ProfileMenuEntry: CaseIterable {
             return .profileCards
         case .history:
             return .profileHistory
+        case .favorites:
+            return .profileFavorites
+        case .bookmarks:
+            return .profileBookmarks
         case .exchange:
             return .profileExchange
         }
@@ -27,6 +33,10 @@ enum ProfileMenuEntry: CaseIterable {
             return "rectangle.stack.fill"
         case .history:
             return "clock.arrow.circlepath"
+        case .favorites:
+            return "heart.fill"
+        case .bookmarks:
+            return "bookmark.fill"
         case .exchange:
             return "arrow.left.arrow.right"
         }
@@ -40,6 +50,10 @@ enum ProfileMenuEntry: CaseIterable {
             return SectionColor.games
         case .history:
             return SectionColor.calendar
+        case .favorites:
+            return SectionColor.feedback
+        case .bookmarks:
+            return SectionColor.community
         case .exchange:
             return SectionColor.games
         }
@@ -53,6 +67,10 @@ enum ProfileMenuEntry: CaseIterable {
             return .cards
         case .history:
             return .history
+        case .favorites:
+            return .favorites(.tasks)
+        case .bookmarks:
+            return .favorites(.tips)
         case .exchange:
             return .exchange
         }

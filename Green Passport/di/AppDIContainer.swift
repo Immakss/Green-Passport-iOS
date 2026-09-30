@@ -30,6 +30,8 @@ final class AppDIContainer {
         firestore: firestore,
         storage: storage
     )
+    private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
+    private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
     private lazy var rewardNotifier: RewardNotifier = SilentRewardNotifier()
     private lazy var rewardsRepository: RewardsRepository = FirebaseRewardsRepository(
         functions: functions,
@@ -174,6 +176,40 @@ extension AppDIContainer {
         return HistoryViewModel(
             observeSession: observeSessionUseCase,
             fetchHistory: FetchHistoryUseCase(historyRepository: historyRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildShopViewModel() -> ShopViewModel {
+        return ShopViewModel(
+            observeSession: observeSessionUseCase,
+            fetchRewards: FetchRewardsUseCase(shopRepository: shopRepository),
+            fetchPurchases: FetchPurchasesUseCase(shopRepository: shopRepository),
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            purchaseReward: PurchaseRewardUseCase(rewardsRepository: rewardsRepository)
+        )
+    }
+
+    func buildCalendarViewModel() -> CalendarViewModel {
+        return CalendarViewModel(fetchEvents: fetchEventsUseCase)
+    }
+
+    func buildMapViewModel() -> MapViewModel {
+        return MapViewModel(
+            fetchMapPoints: FetchMapPointsUseCase(mapPointsRepository: mapPointsRepository),
+            savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
+        )
+    }
+
+    func buildFavoritesViewModel() -> FavoritesViewModel {
+        return FavoritesViewModel(
+            observeSession: observeSessionUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchEcoTips: FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository),
+            observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
         )
     }
 }
