@@ -369,6 +369,29 @@
         }
       }
     },
+    "all_cities": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Усе гарады"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All cities"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Все города"
+          }
+        }
+      }
+    },
     "all_tasks_completed": {
       "extractionState": "manual",
       "localizations": {
@@ -480,6 +503,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Прикрепить фото"
+          }
+        }
+      }
+    },
+    "available_tasks": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Даступныя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Доступные"
           }
         }
       }
@@ -749,6 +795,29 @@
         }
       }
     },
+    "category": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Катэгорыя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Категория"
+          }
+        }
+      }
+    },
     "choose_at_least_one": {
       "extractionState": "manual",
       "localizations": {
@@ -860,6 +929,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Выбери одно или несколько направлений"
+          }
+        }
+      }
+    },
+    "city": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Горад"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "City"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Город"
           }
         }
       }
@@ -1021,6 +1113,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Группы"
+          }
+        }
+      }
+    },
+    "completed_tasks": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выкананыя"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Completed"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Выполненные"
+          }
+        }
+      }
+    },
+    "confirmation": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пацвярджэнне"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Confirmation"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Подтверждение"
           }
         }
       }
@@ -2160,6 +2298,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Опрос"
+          }
+        }
+      }
+    },
+    "filters": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фільтры"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Filters"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Фильтры"
           }
         }
       }
@@ -3655,6 +3816,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Этот раздел доступен только модераторам"
+          }
+        }
+      }
+    },
+    "my_city": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мой горад"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My city"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мой город"
           }
         }
       }
@@ -5384,6 +5568,29 @@
         }
       }
     },
+    "remove_filter": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Прыбраць фільтр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove filter"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Убрать фильтр"
+          }
+        }
+      }
+    },
     "repeat_password": {
       "extractionState": "manual",
       "localizations": {
@@ -5472,6 +5679,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Жалобы (%1$lld)"
+          }
+        }
+      }
+    },
+    "reset": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Скінуць"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сбросить"
           }
         }
       }
@@ -5994,6 +6224,29 @@
         }
       }
     },
+    "show_tasks_count": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Паказаць заданні (%1$lld)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show tasks (%1$lld)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Показать задания (%1$lld)"
+          }
+        }
+      }
+    },
     "sign_in": {
       "extractionState": "manual",
       "localizations": {
@@ -6496,6 +6749,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Спам"
+          }
+        }
+      }
+    },
+    "status": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Статус"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Status"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Статус"
           }
         }
       }

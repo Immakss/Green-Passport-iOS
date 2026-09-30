@@ -7,18 +7,39 @@ struct TasksListScreen: View {
     let onRefresh: () async -> Void
     let onAction: (TasksListUserAction) -> Void
 
+    @State private var isFiltersPresented = false
+
     var body: some View {
         List {
             content
         }
         .listStyle(.insetGrouped)
         .safeAreaInset(edge: .top, spacing: 0) {
-            FilterBar(
-                options: uiState.availableFilters,
-                selected: uiState.effectiveFilter,
-                title: { return $0.title },
-                onSelect: { onAction(.filterSelected($0)) }
+            if !uiState.filterChips.isEmpty {
+                activeFilters
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isFiltersPresented = true
+                } label: {
+                    Image(systemName: uiState.filters.activeCount > 0
+                        ? "line.3.horizontal.decrease.circle.fill"
+                        : "line.3.horizontal.decrease.circle")
+                }
+                .accessibilityLabel(Text(.filters))
+            }
+        }
+        .sheet(isPresented: $isFiltersPresented) {
+            TaskFiltersSheet(
+                initialFilters: uiState.filters,
+                profileCity: uiState.profile?.city,
+                resultCount: { return uiState.tasks(for: $0).count },
+                onApply: { onAction(.filtersChanged($0)) }
             )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         .overlay {
             overlayState
@@ -27,7 +48,7 @@ struct TasksListScreen: View {
         .refreshable {
             await onRefresh()
         }
-        .animation(.snappy, value: uiState.effectiveFilter)
+        .animation(.snappy, value: uiState.filters)
     }
 
     @ViewBuilder
@@ -39,6 +60,34 @@ struct TasksListScreen: View {
                 }
             }
         }
+    }
+
+    private var activeFilters: some View {
+        ScrollView(.horizontal) {
+            HStack(spacing: Spacing.xSmall) {
+                ForEach(uiState.filterChips) { chip in
+                    Button {
+                        onAction(.filtersChanged(chip.remaining))
+                    } label: {
+                        HStack(spacing: Spacing.xxSmall) {
+                            Text(chip.title)
+                            Image(systemName: "xmark")
+                                .font(.caption2.weight(.bold))
+                        }
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Palette.forest)
+                        .padding(.horizontal, Spacing.small)
+                        .padding(.vertical, Spacing.xSmall)
+                        .background(Palette.mintSurfaceHigh, in: .capsule)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityHint(Text(.removeFilter))
+                }
+            }
+            .padding(.horizontal, Spacing.screenHorizontal)
+            .padding(.vertical, Spacing.xSmall)
+        }
+        .scrollIndicators(.hidden)
     }
 
     @ViewBuilder

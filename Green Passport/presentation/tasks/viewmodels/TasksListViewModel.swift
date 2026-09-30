@@ -61,8 +61,8 @@ final class TasksListViewModel {
 
     func handle(_ action: TasksListUserAction) {
         switch action {
-        case .filterSelected(let filter):
-            uiState.filter = filter
+        case .filtersChanged(let filters):
+            uiState.filters = filters
         case .favoriteToggled(let task):
             toggleFavorite(task)
         case .taskSelected:

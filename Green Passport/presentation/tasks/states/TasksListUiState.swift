@@ -1,35 +1,48 @@
 struct TasksListUiState {
+    private static let cityMatchWeight = 2
+    private static let interestMatchWeight = 1
+
     var tasks: [EcoTask] = []
     var completedTaskIds: Set<String> = []
     var favoriteTaskIds: Set<String> = []
     var pendingTaskIds: Set<String> = []
     var profile: UserProfile?
-    var filter: TaskFilter = .forYou
+    var filters = TaskFilters()
     var isLoading = true
     var hasError = false
 
-    var availableFilters: [TaskFilter] {
-        return profile == nil ? TaskFilter.allFilters.filter { return $0 != .forYou } : TaskFilter.allFilters
-    }
-
-    var effectiveFilter: TaskFilter {
-        return filter == .forYou && profile == nil ? .all : filter
-    }
-
     var visibleTasks: [EcoTask] {
-        switch effectiveFilter {
-        case .all:
-            return tasks
-        case .category(let category):
-            return tasks.filter { return $0.category == category }
-        case .forYou:
-            guard let profile else {
-                return tasks
-            }
-            let matching = tasks.filter { return $0.city == profile.city || profile.interests.contains($0.category) }
-            let bestMatches = matching.filter { return $0.city == profile.city && profile.interests.contains($0.category) }
-            let otherMatches = matching.filter { return !($0.city == profile.city && profile.interests.contains($0.category)) }
-            return bestMatches + otherMatches
+        return tasks(for: filters)
+    }
+
+    var filterChips: [TaskFilterChip] {
+        return filters.chips(profileCity: profile?.city)
+    }
+
+    func tasks(for filters: TaskFilters) -> [EcoTask] {
+        let filtered = filters.apply(
+            to: tasks,
+            completedIds: completedTaskIds,
+            pendingIds: pendingTaskIds,
+            profileCity: profile?.city
+        )
+        guard let profile else {
+            return filtered
         }
+        return filtered.enumerated().sorted { lhs, rhs in
+            let lhsScore = Self.relevance(lhs.element, profile: profile)
+            let rhsScore = Self.relevance(rhs.element, profile: profile)
+            if lhsScore != rhsScore {
+                return lhsScore > rhsScore
+            }
+            return lhs.offset < rhs.offset
+        }
+        .map(\.element)
+    }
+
+    private static func relevance(_ task: EcoTask, profile: UserProfile) -> Int {
+        let cityScore = task.city == profile.city ? cityMatchWeight : 0
+        let interestScore = profile.interests.contains(task.category) ? interestMatchWeight : 0
+        return cityScore + interestScore
     }
 }
