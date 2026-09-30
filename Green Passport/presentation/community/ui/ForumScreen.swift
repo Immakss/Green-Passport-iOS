@@ -59,7 +59,7 @@ struct ForumScreen: View {
                 .accessibilityLabel(Text(.forumPostButton))
             }
         }
-        .padding(.horizontal, Spacing.medium)
+        .padding(.horizontal, Spacing.screenHorizontal)
         .padding(.bottom, Spacing.xSmall)
     }
 
