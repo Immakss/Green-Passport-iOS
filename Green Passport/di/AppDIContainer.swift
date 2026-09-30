@@ -32,6 +32,7 @@ final class AppDIContainer {
     )
     private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
     private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
+    private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
     private lazy var rewardNotifier: RewardNotifier = SilentRewardNotifier()
     private lazy var rewardsRepository: RewardsRepository = FirebaseRewardsRepository(
         functions: functions,
@@ -63,6 +64,8 @@ final class AppDIContainer {
     private lazy var observeTaskSubmissionsUseCase = ObserveTaskSubmissionsUseCase(
         taskSubmissionsRepository: taskSubmissionsRepository
     )
+    private lazy var fetchEcoTipsUseCase = FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var fetchReadTipIdsUseCase = FetchReadTipIdsUseCase(ecoTipsRepository: ecoTipsRepository)
     private lazy var observeIsModeratorUseCase = ObserveIsModeratorUseCase(moderationRepository: moderationRepository)
 }
 
@@ -207,9 +210,63 @@ extension AppDIContainer {
         return FavoritesViewModel(
             observeSession: observeSessionUseCase,
             fetchTasks: fetchTasksUseCase,
-            fetchEcoTips: FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository),
+            fetchEcoTips: fetchEcoTipsUseCase,
             observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
             observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildForumViewModel() -> ForumViewModel {
+        return ForumViewModel(
+            observeSession: observeSessionUseCase,
+            observeForumPosts: ObserveForumPostsUseCase(communityRepository: communityRepository),
+            postToForum: PostToForumUseCase(
+                communityRepository: communityRepository,
+                userProfileRepository: userProfileRepository,
+                textModerator: textModerator
+            ),
+            reportPost: ReportPostUseCase(moderationRepository: moderationRepository)
+        )
+    }
+
+    func buildGroupsViewModel() -> GroupsViewModel {
+        return GroupsViewModel(
+            observeSession: observeSessionUseCase,
+            observeGroups: ObserveGroupsUseCase(communityRepository: communityRepository),
+            createGroup: CreateGroupUseCase(communityRepository: communityRepository, textModerator: textModerator),
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository)
+        )
+    }
+
+    func buildEcoTipsListViewModel() -> EcoTipsListViewModel {
+        return EcoTipsListViewModel(
+            observeSession: observeSessionUseCase,
+            fetchEcoTips: fetchEcoTipsUseCase,
+            fetchReadTipIds: fetchReadTipIdsUseCase,
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository),
+            toggleTipBookmark: ToggleTipBookmarkUseCase(favoritesRepository: favoritesRepository)
+        )
+    }
+
+    func buildEcoTipDetailViewModel(tipId: String) -> EcoTipDetailViewModel {
+        return EcoTipDetailViewModel(
+            tipId: tipId,
+            observeSession: observeSessionUseCase,
+            fetchEcoTips: fetchEcoTipsUseCase,
+            fetchReadTipIds: fetchReadTipIdsUseCase,
+            markTipRead: MarkTipReadUseCase(rewardsRepository: rewardsRepository)
+        )
+    }
+
+    func buildFeedbackViewModel() -> FeedbackViewModel {
+        return FeedbackViewModel(
+            observeSession: observeSessionUseCase,
+            submitFeedback: SubmitFeedbackUseCase(feedbackRepository: feedbackRepository, textModerator: textModerator),
+            fetchActiveSurvey: FetchActiveSurveyUseCase(feedbackRepository: feedbackRepository),
+            hasAnsweredSurvey: HasAnsweredSurveyUseCase(feedbackRepository: feedbackRepository),
+            submitSurveyAnswer: SubmitSurveyAnswerUseCase(feedbackRepository: feedbackRepository)
         )
     }
 }

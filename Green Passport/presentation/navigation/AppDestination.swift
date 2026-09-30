@@ -12,4 +12,6 @@ enum AppDestination: Hashable {
     case feedback
     case favorites(FavoritesSegment)
     case ecoTipDetail(tipId: String)
+    case forum
+    case groups
 }

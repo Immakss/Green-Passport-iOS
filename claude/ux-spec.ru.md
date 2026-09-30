@@ -217,6 +217,30 @@
 - Задания открывают шторку задания, советы — экран совета. Пусто — `favorites_empty` / `bookmarks_empty`.
 - Из меню профиля открывается тот же экран: «Избранное» с вкладкой заданий, «Закладки» с вкладкой советов.
 
+### 6.14 Сообщество
+- **Хаб** — две строки: `community_forum_title` (плитка `SectionCommunity`) и `community_groups_title` (плитка `SectionCalendar`).
+- **Форум** — лента в реальном времени, новые сверху, скрытые посты не показываются.
+  - Пост: аватар 36, имя автора (или `guest`), дата и время, текст.
+  - На чужих постах флажок `report` → 4 причины: `insults_or_obscenity`, `spam`, `inappropriate_content`, `other`. После жалобы — `report_sent`.
+  - Внизу поле `forum_draft_label` и кнопка отправки. Мат → `text_contains_banned_words`.
+- **Группы** — сверху поле `groups_draft_label` и кнопка `groups_create_button` (фильтр мата).
+  - Строка: название, `groups_member_count_format`, справа `groups_joined_label` или `groups_join_button`.
+
+### 6.15 Эко-советы
+- Сверху карточка «Совет дня» (`MintSurface`, `ecotips_daily_tip_label` цветом Forest). Ниже фильтры (`ecotips_filter_all` + 3 категории).
+- Строка: плитка (галочка `SectionCommunity`, если прочитан, иначе лист `SectionTips`), название, категория, закладка.
+- **Экран совета:** категория, заголовок, текст, ссылка `mediaUrl` (кликабельная), `ecotip_detail_reward_format`.
+  - Внизу `ecotip_detail_read_label` или кнопка `ecotip_detail_mark_read_button` (`recordTipRead`).
+
+### 6.16 Отзывы
+Форма из секций:
+- `feedback_review_title`: 5 звёзд (цвет `SectionTips`), комментарий, отправка возможна от 1 звезды.
+- `feedback_suggestion_title`: текст обязателен.
+- `feedback_survey_title`: вопрос и варианты, отвечать можно один раз. Секция есть только при активном опросе.
+- `feedback_support_title`: почта и телефон, кликабельные.
+
+Мат в тексте → `text_contains_banned_words` под секцией.
+
 ## 7. Сознательные различия платформ
 
 | Что | iOS | Android | Почему |
