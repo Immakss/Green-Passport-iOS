@@ -12,7 +12,7 @@ struct MapPointSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.medium) {
             HStack(spacing: Spacing.small) {
-                SymbolTile(systemImage: point.type.systemImage, color: point.type.color, size: Self.tileSize)
+                SymbolTile(systemImage: point.type.systemImage, size: Self.tileSize)
                 VStack(alignment: .leading, spacing: Spacing.hairline) {
                     Text(point.name)
                         .font(.title3.bold())

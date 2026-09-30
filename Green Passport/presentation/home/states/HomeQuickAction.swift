@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 enum HomeQuickAction: CaseIterable {
     case community
@@ -52,18 +52,4 @@ enum HomeQuickAction: CaseIterable {
         }
     }
 
-    var color: Color {
-        switch self {
-        case .community:
-            return SectionColor.community
-        case .games:
-            return SectionColor.games
-        case .ecoTips:
-            return SectionColor.tips
-        case .calendar:
-            return SectionColor.calendar
-        case .feedback:
-            return SectionColor.feedback
-        }
-    }
 }

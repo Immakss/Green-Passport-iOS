@@ -49,7 +49,7 @@ struct FeedbackScreen: View {
                         } label: {
                             Image(systemName: value <= rating ? "star.fill" : "star")
                                 .font(.title2)
-                                .foregroundStyle(value <= rating ? SectionColor.tips : Palette.secondaryText)
+                                .foregroundStyle(value <= rating ? Palette.forest : Palette.secondaryText)
                                 .symbolEffect(.bounce, value: rating == value)
                         }
                         .buttonStyle(.borderless)

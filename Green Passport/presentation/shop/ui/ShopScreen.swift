@@ -57,7 +57,7 @@ struct ShopScreen: View {
                             title: uiState.rewardTitle(for: coupon),
                             subtitle: coupon.redeemedAt.formatted(date: .abbreviated, time: .shortened)
                         ) {
-                            SymbolTile(systemImage: "gift.fill", color: SectionColor.games)
+                            SymbolTile(systemImage: "gift.fill")
                         } trailing: {
                             EmptyView()
                         }

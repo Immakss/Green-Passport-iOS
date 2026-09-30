@@ -278,10 +278,10 @@
 				CODE_SIGN_ENTITLEMENTS = Config/GreenPassport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62Z3NJ7UN6;
+				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				GOOGLE_REVERSED_CLIENT_ID = "";
+				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc";
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -315,10 +315,10 @@
 				CODE_SIGN_ENTITLEMENTS = Config/GreenPassport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62Z3NJ7UN6;
+				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				GOOGLE_REVERSED_CLIENT_ID = "";
+				GOOGLE_REVERSED_CLIENT_ID = "com.googleusercontent.apps.395397163961-ev4li9t1p6b1s93343954k7u0sm2c6jc";
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";

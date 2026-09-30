@@ -31,7 +31,7 @@ struct FavoritesScreen: View {
                         onTip(tip)
                     } label: {
                         ListRow(title: tip.title, subtitle: String(localized: tip.category.title)) {
-                            SymbolTile(systemImage: tip.category.systemImage, color: SectionColor.tips)
+                            SymbolTile(systemImage: tip.category.systemImage)
                         } trailing: {
                             Image(systemName: "chevron.right")
                                 .font(.footnote.weight(.semibold))

@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 extension HistoryEntryType {
     var title: LocalizedStringResource {
@@ -23,14 +23,4 @@ extension HistoryEntryType {
         }
     }
 
-    var color: Color {
-        switch self {
-        case .taskCompleted:
-            return SectionColor.community
-        case .eventAttended:
-            return SectionColor.calendar
-        case .rewardRedeemed:
-            return SectionColor.games
-        }
-    }
 }

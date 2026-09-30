@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 enum ProfileMenuEntry: CaseIterable {
     case achievements
@@ -47,24 +47,6 @@ enum ProfileMenuEntry: CaseIterable {
         }
     }
 
-    var color: Color {
-        switch self {
-        case .achievements:
-            return SectionColor.tips
-        case .cards:
-            return SectionColor.games
-        case .history:
-            return SectionColor.calendar
-        case .notifications:
-            return SectionColor.feedback
-        case .favorites:
-            return SectionColor.feedback
-        case .bookmarks:
-            return SectionColor.community
-        case .exchange:
-            return SectionColor.games
-        }
-    }
 
     var destination: AppDestination {
         switch self {

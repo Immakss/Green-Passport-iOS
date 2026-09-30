@@ -23,7 +23,7 @@ struct WasteSortingScreen: View {
                             .contentTransition(.numericText(value: Double(uiState.score)))
                     } icon: {
                         Image(systemName: "star.fill")
-                            .foregroundStyle(SectionColor.tips)
+                            .foregroundStyle(Palette.forest)
                     }
                     Spacer()
                     Label {

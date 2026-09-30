@@ -2630,19 +2630,19 @@
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Прывітанне! 👋"
+            "value": "Прывітанне!"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hello! 👋"
+            "value": "Hello!"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Привет! 👋"
+            "value": "Привет!"
           }
         }
       }
@@ -2653,19 +2653,19 @@
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Прывітанне, %1$@ 👋"
+            "value": "Прывітанне, %1$@"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hello, %1$@ 👋"
+            "value": "Hello, %1$@"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Привет, %1$@ 👋"
+            "value": "Привет, %1$@"
           }
         }
       }

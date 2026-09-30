@@ -19,7 +19,7 @@ struct AchievementsScreen: View {
                     HStack(spacing: Spacing.small) {
                         SymbolTile(
                             systemImage: achievement.isUnlocked ? "trophy.fill" : "lock.fill",
-                            color: achievement.isUnlocked ? SectionColor.tips : Color(.systemGray3),
+                            style: achievement.isUnlocked ? .accent : .muted,
                             size: Self.tileSize
                         )
                         VStack(alignment: .leading, spacing: Spacing.hairline) {

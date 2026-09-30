@@ -18,7 +18,7 @@ struct MapScreen: View {
         Map(position: $position, selection: $selectedPointId) {
             ForEach(uiState.visiblePoints) { point in
                 Annotation(point.name, coordinate: point.coordinate) {
-                    SymbolTile(systemImage: point.type.systemImage, color: point.type.color, size: Self.annotationSize)
+                    SymbolTile(systemImage: point.type.systemImage, style: .prominent, size: Self.annotationSize)
                         .scaleEffect(selectedPointId == point.id ? Self.selectedScale : 1)
                         .shadow(radius: Spacing.xxSmall)
                         .animation(.snappy, value: selectedPointId)

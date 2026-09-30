@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 
 extension GameId {
     var title: LocalizedStringResource {
@@ -27,16 +27,4 @@ extension GameId {
         }
     }
 
-    var color: Color {
-        switch self {
-        case .ecoPuzzle:
-            return SectionColor.games
-        case .wasteSorting:
-            return SectionColor.community
-        case .ecoMaze:
-            return SectionColor.calendar
-        case .ecoQuiz:
-            return SectionColor.tips
-        }
-    }
 }
