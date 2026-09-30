@@ -186,7 +186,8 @@ extension AppDIContainer {
             setNotificationsEnabled: SetNotificationsEnabledUseCase(
                 settingsRepository: settingsRepository,
                 notificationPermission: notificationPermission
-            )
+            ),
+            appTheme: AppThemeUseCase(settingsRepository: settingsRepository)
         )
     }
 

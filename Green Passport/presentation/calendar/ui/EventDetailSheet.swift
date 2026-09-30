@@ -8,7 +8,7 @@ extension View {
     ) -> some View {
         return sheet(item: item, onDismiss: onDismiss) { selected in
             EventDetailRoute(eventId: selected.id, container: container)
-                .presentationDetents([.medium, .large])
+                .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
     }

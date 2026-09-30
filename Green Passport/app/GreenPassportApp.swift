@@ -13,7 +13,7 @@ struct GreenPassportApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Group {
+            ThemedRoot {
                 if let container {
                     RootRoute(container: container)
                 } else {

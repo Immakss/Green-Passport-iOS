@@ -10,6 +10,7 @@ final class ProfileViewModel {
     @ObservationIgnored private let signOut: SignOutUseCase
     @ObservationIgnored private let isNotificationsEnabled: IsNotificationsEnabledUseCase
     @ObservationIgnored private let setNotificationsEnabled: SetNotificationsEnabledUseCase
+    @ObservationIgnored private let appTheme: AppThemeUseCase
     @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var session: AuthSession?
 
@@ -23,7 +24,8 @@ final class ProfileViewModel {
         fetchLevel: FetchLevelUseCase,
         signOut: SignOutUseCase,
         isNotificationsEnabled: IsNotificationsEnabledUseCase,
-        setNotificationsEnabled: SetNotificationsEnabledUseCase
+        setNotificationsEnabled: SetNotificationsEnabledUseCase,
+        appTheme: AppThemeUseCase
     ) {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
@@ -33,7 +35,9 @@ final class ProfileViewModel {
         self.signOut = signOut
         self.isNotificationsEnabled = isNotificationsEnabled
         self.setNotificationsEnabled = setNotificationsEnabled
+        self.appTheme = appTheme
         uiState.notificationsEnabled = isNotificationsEnabled.execute()
+        uiState.theme = appTheme.current()
     }
 
     func observe() async {
@@ -63,6 +67,11 @@ final class ProfileViewModel {
         Task {
             uiState.notificationsEnabled = await setNotificationsEnabled.execute(isEnabled: isEnabled)
         }
+    }
+
+    func selectTheme(_ theme: AppTheme) {
+        appTheme.update(theme)
+        uiState.theme = theme
     }
 
     func performSignOut() {
