@@ -41,9 +41,6 @@ struct HomeScreen: View {
         .background(Palette.screenBackground)
         .navigationTitle(Text(.home))
         .toolbar(.hidden, for: .navigationBar)
-        .refreshable {
-            await onRefresh()
-        }
     }
 
     private var header: some View {

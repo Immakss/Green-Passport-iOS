@@ -4,6 +4,7 @@ struct HomeRoute: View {
     let container: AppDIContainer
 
     @Environment(TabRouter.self) private var router
+    @Environment(\.scenePhase) private var scenePhase
     @State private var viewModel: HomeViewModel
     @State private var selectedTask: TaskSheetItem?
     @State private var selectedEvent: EventSheetItem?
@@ -25,6 +26,11 @@ struct HomeRoute: View {
         )
         .task {
             await viewModel.observe()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            if phase == .active {
+                Task { await viewModel.refresh() }
+            }
         }
         .taskDetailSheet(item: $selectedTask, container: container) {
             Task { await viewModel.refresh() }
