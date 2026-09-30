@@ -3,6 +3,7 @@ import SwiftUI
 struct ShopScreen: View {
     let uiState: ShopUiState
     let onPurchase: (Reward) -> Void
+    let onCoupons: () -> Void
     let onRefresh: () async -> Void
 
     var body: some View {
@@ -47,26 +48,22 @@ struct ShopScreen: View {
                     }
                 }
             }
-            SectionTitle(title: .shopHistoryTitle)
-            if uiState.purchases.isEmpty {
-                emptyText(.shopEmptyPurchases)
-            } else {
-                card {
-                    ForEach(uiState.purchases) { coupon in
-                        ListRow(
-                            title: uiState.rewardTitle(for: coupon),
-                            subtitle: coupon.redeemedAt.formatted(date: .abbreviated, time: .shortened)
-                        ) {
-                            SymbolTile(systemImage: "gift.fill")
-                        } trailing: {
-                            EmptyView()
-                        }
-                        if coupon.id != uiState.purchases.last?.id {
-                            Divider()
-                        }
-                    }
+            Button(action: onCoupons) {
+                ListRow(
+                    title: String(localized: .myCoupons),
+                    subtitle: String(localized: .activeCouponsCount(uiState.activeCouponCount))
+                ) {
+                    SymbolTile(systemImage: "ticket.fill")
+                } trailing: {
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(Color(.tertiaryLabel))
                 }
+                .padding(.horizontal, Spacing.medium)
+                .padding(.vertical, Spacing.xSmall)
+                .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
             }
+            .buttonStyle(.plain)
         }
         .padding(.horizontal, Spacing.screenHorizontal)
         .padding(.bottom, Spacing.large)
@@ -125,6 +122,7 @@ struct ShopScreen: View {
                 isLoading: false
             ),
             onPurchase: { _ in },
+            onCoupons: {},
             onRefresh: {}
         )
     }

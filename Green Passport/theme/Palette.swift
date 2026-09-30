@@ -12,4 +12,5 @@ enum Palette {
     static let fieldBackground = Color(.tertiarySystemFill)
     static let secondaryText = Color(.secondaryLabel)
     static let error = Color(.systemRed)
+    static let disabledOpacity: Double = 0.4
 }

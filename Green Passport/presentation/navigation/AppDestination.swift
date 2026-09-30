@@ -17,4 +17,5 @@ enum AppDestination: Hashable {
     case game(GameId)
     case moderation
     case notifications
+    case coupons
 }

@@ -8,6 +8,8 @@ final class FirestoreShopRepository: ShopRepository {
     private static let fieldRewardId = "rewardId"
     private static let fieldRedeemedAt = "redeemedAtEpochMillis"
     private static let fieldExpiresAt = "expiresAtEpochMillis"
+    private static let fieldCode = "code"
+    private static let fieldUsedAt = "usedAtEpochMillis"
 
     private let firestore: Firestore
 
@@ -39,8 +41,10 @@ final class FirestoreShopRepository: ShopRepository {
             return Coupon(
                 id: document.documentID,
                 rewardId: rewardId,
+                code: document.string(Self.fieldCode),
                 redeemedAt: redeemedAt,
-                expiresAt: document.date(Self.fieldExpiresAt)
+                expiresAt: document.date(Self.fieldExpiresAt),
+                usedAt: document.date(Self.fieldUsedAt)
             )
         }
     }

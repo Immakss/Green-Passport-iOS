@@ -12,6 +12,10 @@ final class FirebaseRewardsRepository: RewardsRepository {
     private static let resultXp = "xp"
     private static let resultCouponId = "couponId"
     private static let resultRedeemedAt = "redeemedAtEpochMillis"
+    private static let resultCode = "code"
+    private static let resultExpiresAt = "expiresAtEpochMillis"
+    private static let resultUsedAt = "usedAtEpochMillis"
+    private static let paramCouponId = "couponId"
 
     private let functions: Functions
     private let rewardNotifier: RewardNotifier
@@ -44,12 +48,21 @@ final class FirebaseRewardsRepository: RewardsRepository {
     func redeemReward(rewardId: String) async throws -> Coupon {
         let result = try await call(.redeemReward, data: [Self.paramRewardId: rewardId])
         let redeemedAt = (result[Self.resultRedeemedAt] as? NSNumber)?.int64Value ?? EpochMillis.now
+        let expiresAt = (result[Self.resultExpiresAt] as? NSNumber)?.int64Value
         return Coupon(
             id: result[Self.resultCouponId] as? String ?? "",
             rewardId: rewardId,
+            code: result[Self.resultCode] as? String,
             redeemedAt: EpochMillis.date(from: redeemedAt),
-            expiresAt: nil
+            expiresAt: expiresAt.map(EpochMillis.date(from:)),
+            usedAt: nil
         )
+    }
+
+    func markCouponUsed(couponId: String) async throws -> Date {
+        let result = try await call(.markCouponUsed, data: [Self.paramCouponId: couponId])
+        let usedAt = (result[Self.resultUsedAt] as? NSNumber)?.int64Value ?? EpochMillis.now
+        return EpochMillis.date(from: usedAt)
     }
 
     private func callForReward(

@@ -83,6 +83,7 @@ final class AppDIContainer {
     )
     private lazy var fetchEcoTipsUseCase = FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository)
     private lazy var fetchReadTipIdsUseCase = FetchReadTipIdsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var fetchCouponsUseCase = FetchCouponsUseCase(shopRepository: shopRepository)
     private lazy var observeIsModeratorUseCase = ObserveIsModeratorUseCase(moderationRepository: moderationRepository)
 }
 
@@ -211,9 +212,9 @@ extension AppDIContainer {
         return ShopViewModel(
             observeSession: observeSessionUseCase,
             fetchRewards: FetchRewardsUseCase(shopRepository: shopRepository),
-            fetchPurchases: FetchPurchasesUseCase(shopRepository: shopRepository),
+            fetchCoupons: fetchCouponsUseCase,
             fetchPointsBalance: fetchPointsBalanceUseCase,
-            purchaseReward: PurchaseRewardUseCase(rewardsRepository: rewardsRepository)
+            purchaseReward: PurchaseRewardUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
         )
     }
 
@@ -341,6 +342,19 @@ extension AppDIContainer {
     func buildNotificationsViewModel() -> NotificationsViewModel {
         return NotificationsViewModel(
             fetchNotificationLog: FetchNotificationLogUseCase(notificationLogRepository: notificationLogRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildCouponsViewModel() -> CouponsViewModel {
+        return CouponsViewModel(observeSession: observeSessionUseCase, fetchCoupons: fetchCouponsUseCase)
+    }
+
+    func buildCouponDetailViewModel(item: CouponItem) -> CouponDetailViewModel {
+        return CouponDetailViewModel(
+            item: item,
+            markCouponUsed: MarkCouponUsedUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
         )
     }
 }

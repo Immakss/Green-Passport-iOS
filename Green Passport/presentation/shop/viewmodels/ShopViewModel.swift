@@ -1,27 +1,29 @@
+import Foundation
 import Observation
 
 @Observable
 final class ShopViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
     @ObservationIgnored private let fetchRewards: FetchRewardsUseCase
-    @ObservationIgnored private let fetchPurchases: FetchPurchasesUseCase
+    @ObservationIgnored private let fetchCoupons: FetchCouponsUseCase
     @ObservationIgnored private let fetchPointsBalance: FetchPointsBalanceUseCase
     @ObservationIgnored private let purchaseReward: PurchaseRewardUseCase
     @ObservationIgnored private var userId: String?
 
     private(set) var uiState = ShopUiState()
     private(set) var purchaseCount = 0
+    var purchasedCoupon: CouponItem?
 
     init(
         observeSession: ObserveSessionUseCase,
         fetchRewards: FetchRewardsUseCase,
-        fetchPurchases: FetchPurchasesUseCase,
+        fetchCoupons: FetchCouponsUseCase,
         fetchPointsBalance: FetchPointsBalanceUseCase,
         purchaseReward: PurchaseRewardUseCase
     ) {
         self.observeSession = observeSession
         self.fetchRewards = fetchRewards
-        self.fetchPurchases = fetchPurchases
+        self.fetchCoupons = fetchCoupons
         self.fetchPointsBalance = fetchPointsBalance
         self.purchaseReward = purchaseReward
     }
@@ -38,14 +40,17 @@ final class ShopViewModel {
         do {
             let rewards = try await fetchRewards.execute()
             var points = 0
-            var purchases: [Coupon] = []
+            var activeCouponCount = 0
             if let userId {
                 points = try await fetchPointsBalance.execute(userId: userId)
-                purchases = try await fetchPurchases.execute(userId: userId)
+                let now = Date()
+                activeCouponCount = try await fetchCoupons.execute(userId: userId)
+                    .filter { return $0.coupon.status(at: now) == .active }
+                    .count
             }
             uiState.rewards = rewards
             uiState.points = points
-            uiState.purchases = purchases
+            uiState.activeCouponCount = activeCouponCount
         } catch {
             uiState.hasError = true
         }
@@ -65,7 +70,7 @@ final class ShopViewModel {
         uiState.purchasingRewardId = reward.id
         Task {
             do {
-                _ = try await purchaseReward.execute(reward: reward)
+                purchasedCoupon = try await purchaseReward.execute(reward: reward)
                 purchaseCount += 1
                 await refresh()
             } catch {

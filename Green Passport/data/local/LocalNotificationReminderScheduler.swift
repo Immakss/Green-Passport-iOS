@@ -3,6 +3,8 @@ import UserNotifications
 
 final class LocalNotificationReminderScheduler: ReminderScheduler {
     private static let identifierPrefix = "event_reminder_"
+    private static let couponIdentifierPrefix = "coupon_expiring_"
+    private static let couponReminderLeadTime: TimeInterval = 24 * 60 * 60
 
     private let settingsRepository: SettingsRepository
     private let notificationLogRepository: NotificationLogRepository
@@ -22,18 +24,43 @@ final class LocalNotificationReminderScheduler: ReminderScheduler {
     }
 
     func scheduleEventReminder(eventId: String, title: String, at date: Date) async {
-        let fireDate = max(date, Date())
-        notificationLogRepository.log(title: String(localized: .eventReminderTitle), body: title, sentAt: fireDate)
+        await schedule(
+            identifier: Self.identifierPrefix + eventId,
+            title: String(localized: .eventReminderTitle),
+            body: title,
+            at: max(date, Date())
+        )
+    }
+
+    func scheduleCouponReminder(couponId: String, title: String, expiresAt: Date) async {
+        let fireDate = expiresAt.addingTimeInterval(-Self.couponReminderLeadTime)
+        guard fireDate > Date() else {
+            return
+        }
+        await schedule(
+            identifier: Self.couponIdentifierPrefix + couponId,
+            title: String(localized: .couponExpiresSoon),
+            body: String(localized: .couponValidUntilTomorrowMsg(title)),
+            at: fireDate
+        )
+    }
+
+    func cancelCouponReminder(couponId: String) {
+        center.removePendingNotificationRequests(withIdentifiers: [Self.couponIdentifierPrefix + couponId])
+    }
+
+    private func schedule(identifier: String, title: String, body: String, at fireDate: Date) async {
+        notificationLogRepository.log(title: title, body: body, sentAt: fireDate)
         guard settingsRepository.isNotificationsEnabled, await notificationPermission.requestIfNeeded() else {
             return
         }
         let content = UNMutableNotificationContent()
-        content.title = String(localized: .eventReminderTitle)
-        content.body = title
+        content.title = title
+        content.body = body
         content.sound = .default
         let components = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: fireDate)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: Self.identifierPrefix + eventId, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         try? await center.add(request)
     }
 

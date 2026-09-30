@@ -58,6 +58,8 @@ struct AppDestinationView: View {
             ModerationRoute(container: container)
         case .notifications:
             NotificationsRoute(container: container)
+        case .coupons:
+            CouponsRoute(container: container)
         }
     }
 }

@@ -1,10 +1,14 @@
 import SwiftUI
 
 struct ShopRoute: View {
+    let container: AppDIContainer
+
+    @Environment(TabRouter.self) private var router
     @State private var viewModel: ShopViewModel
     @State private var pendingReward: Reward?
 
     init(container: AppDIContainer) {
+        self.container = container
         _viewModel = State(initialValue: container.buildShopViewModel())
     }
 
@@ -16,6 +20,7 @@ struct ShopRoute: View {
                     pendingReward = reward
                 }
             },
+            onCoupons: { router.push(.coupons) },
             onRefresh: viewModel.refresh
         )
         .task {
@@ -36,5 +41,8 @@ struct ShopRoute: View {
             Text(.exchangePointsForRewardMsg(reward.pointsCost, reward.title))
         }
         .sensoryFeedback(.success, trigger: viewModel.purchaseCount)
+        .couponDetailSheet(item: $viewModel.purchasedCoupon, container: container) {
+            Task { await viewModel.refresh() }
+        }
     }
 }

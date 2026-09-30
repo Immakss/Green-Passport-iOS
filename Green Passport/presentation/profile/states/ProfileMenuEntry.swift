@@ -3,6 +3,7 @@ import SwiftUI
 enum ProfileMenuEntry: CaseIterable {
     case achievements
     case cards
+    case coupons
     case history
     case notifications
     case favorites
@@ -15,6 +16,8 @@ enum ProfileMenuEntry: CaseIterable {
             return .profileAchievements
         case .cards:
             return .profileCards
+        case .coupons:
+            return .myCoupons
         case .history:
             return .profileHistory
         case .notifications:
@@ -34,6 +37,8 @@ enum ProfileMenuEntry: CaseIterable {
             return "trophy.fill"
         case .cards:
             return "rectangle.stack.fill"
+        case .coupons:
+            return "ticket.fill"
         case .history:
             return "clock.arrow.circlepath"
         case .notifications:
@@ -54,6 +59,8 @@ enum ProfileMenuEntry: CaseIterable {
             return .achievements
         case .cards:
             return .cards
+        case .coupons:
+            return .coupons
         case .history:
             return .history
         case .notifications:
@@ -73,6 +80,8 @@ enum ProfileMenuEntry: CaseIterable {
             return SectionColor.tips
         case .cards:
             return SectionColor.games
+        case .coupons:
+            return SectionColor.community
         case .history:
             return SectionColor.calendar
         case .notifications:
