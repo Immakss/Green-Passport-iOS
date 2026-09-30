@@ -22,7 +22,19 @@ struct AppDestinationView: View {
             CalendarRoute(container: container)
         case .favorites(let segment):
             FavoritesRoute(container: container, initialSegment: segment)
-        case .community, .games, .ecoTips, .feedback, .ecoTipDetail:
+        case .community:
+            CommunityHubScreen()
+        case .forum:
+            ForumRoute(container: container)
+        case .groups:
+            GroupsRoute(container: container)
+        case .ecoTips:
+            EcoTipsListRoute(container: container)
+        case .ecoTipDetail(let tipId):
+            EcoTipDetailRoute(tipId: tipId, container: container)
+        case .feedback:
+            FeedbackRoute(container: container)
+        case .games:
             StateView(kind: .loading)
         }
     }
