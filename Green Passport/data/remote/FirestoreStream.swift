@@ -30,4 +30,25 @@ enum FirestoreStream {
             }
         }
     }
+
+    static func mapped<Input, Output>(
+        _ stream: AsyncThrowingStream<Input, Error>,
+        transform: @escaping (Input) -> Output
+    ) -> AsyncThrowingStream<Output, Error> {
+        return AsyncThrowingStream { continuation in
+            let task = Task {
+                do {
+                    for try await value in stream {
+                        continuation.yield(transform(value))
+                    }
+                    continuation.finish()
+                } catch {
+                    continuation.finish(throwing: error)
+                }
+            }
+            continuation.onTermination = { _ in
+                task.cancel()
+            }
+        }
+    }
 }

@@ -1,0 +1,22 @@
+{
+  "sourceLanguage" : "ru",
+  "strings" : {
+    "CFBundleDisplayName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "be" : { "stringUnit" : { "state" : "translated", "value" : "Зялёны пашпарт" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Green Passport" } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Зелёный паспорт" } }
+      }
+    },
+    "NSCameraUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "be" : { "stringUnit" : { "state" : "translated", "value" : "Камера патрэбна, каб сканаваць QR-коды заданняў і фатаграфаваць вынік для пацвярджэння." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The camera is used to scan task QR codes and take photos that confirm completed tasks." } },
+        "ru" : { "stringUnit" : { "state" : "translated", "value" : "Камера нужна, чтобы сканировать QR-коды заданий и фотографировать результат для подтверждения." } }
+      }
+    }
+  },
+  "version" : "1.0"
+}

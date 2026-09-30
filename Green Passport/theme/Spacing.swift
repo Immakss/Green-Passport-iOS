@@ -1,6 +1,7 @@
 import CoreGraphics
 
 enum Spacing {
+    static let hairline: CGFloat = 2
     static let xxSmall: CGFloat = 4
     static let xSmall: CGFloat = 8
     static let small: CGFloat = 12
