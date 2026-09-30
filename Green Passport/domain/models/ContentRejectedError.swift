@@ -1,0 +1,1 @@
+nonisolated struct ContentRejectedError: Error {}

@@ -1,0 +1,25 @@
+import SwiftUI
+
+struct CalendarRoute: View {
+    let container: AppDIContainer
+
+    @State private var viewModel: CalendarViewModel
+    @State private var selectedEvent: EventSheetItem?
+
+    init(container: AppDIContainer) {
+        self.container = container
+        _viewModel = State(initialValue: container.buildCalendarViewModel())
+    }
+
+    var body: some View {
+        CalendarScreen(
+            uiState: viewModel.uiState,
+            onEvent: { selectedEvent = EventSheetItem(id: $0.id) },
+            onRefresh: viewModel.load
+        )
+        .task {
+            await viewModel.load()
+        }
+        .eventDetailSheet(item: $selectedEvent, container: container)
+    }
+}
