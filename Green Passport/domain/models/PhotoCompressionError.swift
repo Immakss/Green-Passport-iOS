@@ -1,0 +1,1 @@
+nonisolated struct PhotoCompressionError: Error {}

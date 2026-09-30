@@ -1,0 +1,353 @@
+import FirebaseAuth
+import FirebaseFirestore
+import FirebaseFunctions
+import FirebaseStorage
+import SwiftData
+
+final class AppDIContainer {
+    private static let functionsRegion = "europe-central2"
+
+    private lazy var firestore = Firestore.firestore()
+    private lazy var auth = Auth.auth()
+    private lazy var functions = Functions.functions(region: Self.functionsRegion)
+    private lazy var storage = Storage.storage()
+    private lazy var localStore = LocalStore.makeContainer()
+
+    private lazy var textModerator: TextModerator = WordListTextModerator()
+    private lazy var authRepository: AuthRepository = FirebaseAuthRepository(
+        auth: auth,
+        googleSignInProvider: GoogleSignInProvider()
+    )
+    private lazy var userProfileRepository: UserProfileRepository = FirestoreUserProfileRepository(firestore: firestore)
+    private lazy var settingsRepository: SettingsRepository = UserDefaultsSettingsRepository()
+    private lazy var tasksRepository: TasksRepository = FirestoreTasksRepository(firestore: firestore)
+    private lazy var pointsRepository: PointsRepository = FirestorePointsRepository(firestore: firestore)
+    private lazy var eventsRepository: EventsRepository = FirestoreEventsRepository(firestore: firestore)
+    private lazy var shopRepository: ShopRepository = FirestoreShopRepository(firestore: firestore)
+    private lazy var ecoTipsRepository: EcoTipsRepository = FirestoreEcoTipsRepository(firestore: firestore)
+    private lazy var communityRepository: CommunityRepository = FirestoreCommunityRepository(firestore: firestore)
+    private lazy var favoritesRepository: FavoritesRepository = FirestoreFavoritesRepository(firestore: firestore)
+    private lazy var moderationRepository: ModerationRepository = FirebaseModerationRepository(
+        firestore: firestore,
+        functions: functions
+    )
+    private lazy var taskSubmissionsRepository: TaskSubmissionsRepository = FirebaseTaskSubmissionsRepository(
+        firestore: firestore,
+        storage: storage
+    )
+    private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
+    private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
+    private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
+    private lazy var gamesRepository: GamesRepository = FirestoreGamesRepository(firestore: firestore)
+    private lazy var gameProgressRepository: GameProgressRepository = SwiftDataGameProgressRepository(container: localStore)
+    private lazy var notificationLogRepository: NotificationLogRepository = SwiftDataNotificationLogRepository(
+        container: localStore
+    )
+    private lazy var notificationPermission: NotificationPermission = UserNotificationPermission()
+    private lazy var rewardNotifier: RewardNotifier = LocalRewardNotifier(
+        settingsRepository: settingsRepository,
+        notificationLogRepository: notificationLogRepository
+    )
+    private lazy var rewardsRepository: RewardsRepository = FirebaseRewardsRepository(
+        functions: functions,
+        rewardNotifier: rewardNotifier
+    )
+    private lazy var reminderScheduler: ReminderScheduler = LocalNotificationReminderScheduler(
+        settingsRepository: settingsRepository,
+        notificationLogRepository: notificationLogRepository,
+        notificationPermission: notificationPermission
+    )
+    private lazy var achievementsRepository: AchievementsRepository = DerivedAchievementsRepository(
+        tasksRepository: tasksRepository,
+        eventsRepository: eventsRepository,
+        ecoTipsRepository: ecoTipsRepository,
+        communityRepository: communityRepository,
+        pointsRepository: pointsRepository
+    )
+    private lazy var historyRepository: HistoryRepository = FirestoreHistoryRepository(
+        firestore: firestore,
+        tasksRepository: tasksRepository,
+        eventsRepository: eventsRepository,
+        shopRepository: shopRepository
+    )
+
+    private lazy var observeSessionUseCase = ObserveSessionUseCase(authRepository: authRepository)
+    private lazy var observeUserProfileUseCase = ObserveUserProfileUseCase(userProfileRepository: userProfileRepository)
+    private lazy var signOutUseCase = SignOutUseCase(authRepository: authRepository)
+    private lazy var fetchPointsBalanceUseCase = FetchPointsBalanceUseCase(pointsRepository: pointsRepository)
+    private lazy var fetchLevelUseCase = FetchLevelUseCase(pointsRepository: pointsRepository)
+    private lazy var fetchTasksUseCase = FetchTasksUseCase(tasksRepository: tasksRepository)
+    private lazy var fetchCompletedTaskIdsUseCase = FetchCompletedTaskIdsUseCase(tasksRepository: tasksRepository)
+    private lazy var fetchEventsUseCase = FetchEventsUseCase(eventsRepository: eventsRepository)
+    private lazy var observeTaskSubmissionsUseCase = ObserveTaskSubmissionsUseCase(
+        taskSubmissionsRepository: taskSubmissionsRepository
+    )
+    private lazy var fetchEcoTipsUseCase = FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var fetchReadTipIdsUseCase = FetchReadTipIdsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var fetchCouponsUseCase = FetchCouponsUseCase(shopRepository: shopRepository)
+    private lazy var observeIsModeratorUseCase = ObserveIsModeratorUseCase(moderationRepository: moderationRepository)
+}
+
+extension AppDIContainer {
+    func buildRootViewModel() -> RootViewModel {
+        return RootViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            isOnboardingSeen: IsOnboardingSeenUseCase(settingsRepository: settingsRepository),
+            markOnboardingSeen: MarkOnboardingSeenUseCase(settingsRepository: settingsRepository)
+        )
+    }
+
+    func buildAuthViewModel() -> AuthViewModel {
+        return AuthViewModel(
+            signInWithEmail: SignInWithEmailUseCase(authRepository: authRepository),
+            registerWithEmail: RegisterWithEmailUseCase(authRepository: authRepository),
+            signInAnonymously: SignInAnonymouslyUseCase(authRepository: authRepository),
+            signInWithGoogle: SignInWithGoogleUseCase(authRepository: authRepository),
+            signInWithApple: SignInWithAppleUseCase(authRepository: authRepository)
+        )
+    }
+
+    func buildProfileSetupViewModel() -> ProfileSetupViewModel {
+        return ProfileSetupViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            saveUserProfile: SaveUserProfileUseCase(
+                userProfileRepository: userProfileRepository,
+                textModerator: textModerator
+            ),
+            isTextAllowed: IsTextAllowedUseCase(textModerator: textModerator),
+            signOut: signOutUseCase
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildHomeViewModel() -> HomeViewModel {
+        return HomeViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            fetchPendingTasks: FetchPendingTasksUseCase(tasksRepository: tasksRepository),
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            fetchLevel: fetchLevelUseCase,
+            fetchUpcomingEvent: FetchUpcomingEventUseCase(eventsRepository: eventsRepository),
+            fetchStreak: FetchStreakUseCase(pointsRepository: pointsRepository)
+        )
+    }
+
+    func buildTasksListViewModel() -> TasksListViewModel {
+        return TasksListViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
+            toggleTaskFavorite: ToggleTaskFavoriteUseCase(favoritesRepository: favoritesRepository),
+            observeTaskSubmissions: observeTaskSubmissionsUseCase
+        )
+    }
+
+    func buildTaskDetailViewModel(taskId: String) -> TaskDetailViewModel {
+        return TaskDetailViewModel(
+            taskId: taskId,
+            observeSession: observeSessionUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            completeSelfTask: CompleteSelfTaskUseCase(rewardsRepository: rewardsRepository),
+            redeemTaskCode: RedeemTaskCodeUseCase(rewardsRepository: rewardsRepository),
+            submitTaskPhoto: SubmitTaskPhotoUseCase(
+                photoCompressor: JpegPhotoCompressor(),
+                userProfileRepository: userProfileRepository,
+                taskSubmissionsRepository: taskSubmissionsRepository
+            ),
+            observeTaskSubmissions: observeTaskSubmissionsUseCase
+        )
+    }
+
+    func buildEventDetailViewModel(eventId: String) -> EventDetailViewModel {
+        return EventDetailViewModel(
+            eventId: eventId,
+            observeSession: observeSessionUseCase,
+            fetchEvents: fetchEventsUseCase,
+            fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
+            registerForEvent: RegisterForEventUseCase(
+                eventsRepository: eventsRepository,
+                reminderScheduler: reminderScheduler
+            ),
+            fetchAttendedEventIds: FetchAttendedEventIdsUseCase(eventsRepository: eventsRepository),
+            checkInEvent: CheckInEventUseCase(rewardsRepository: rewardsRepository)
+        )
+    }
+
+    func buildProfileViewModel() -> ProfileViewModel {
+        return ProfileViewModel(
+            observeSession: observeSessionUseCase,
+            observeUserProfile: observeUserProfileUseCase,
+            observeIsModerator: observeIsModeratorUseCase,
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            fetchLevel: fetchLevelUseCase,
+            signOut: signOutUseCase,
+            isNotificationsEnabled: IsNotificationsEnabledUseCase(settingsRepository: settingsRepository),
+            setNotificationsEnabled: SetNotificationsEnabledUseCase(
+                settingsRepository: settingsRepository,
+                notificationPermission: notificationPermission
+            ),
+            appTheme: AppThemeUseCase(settingsRepository: settingsRepository)
+        )
+    }
+
+    func buildAchievementsViewModel() -> AchievementsViewModel {
+        return AchievementsViewModel(
+            observeSession: observeSessionUseCase,
+            fetchAchievements: FetchAchievementsUseCase(achievementsRepository: achievementsRepository)
+        )
+    }
+
+    func buildHistoryViewModel() -> HistoryViewModel {
+        return HistoryViewModel(
+            observeSession: observeSessionUseCase,
+            fetchHistory: FetchHistoryUseCase(historyRepository: historyRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildShopViewModel() -> ShopViewModel {
+        return ShopViewModel(
+            observeSession: observeSessionUseCase,
+            fetchRewards: FetchRewardsUseCase(shopRepository: shopRepository),
+            fetchCoupons: fetchCouponsUseCase,
+            fetchPointsBalance: fetchPointsBalanceUseCase,
+            purchaseReward: PurchaseRewardUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
+        )
+    }
+
+    func buildCalendarViewModel() -> CalendarViewModel {
+        return CalendarViewModel(fetchEvents: fetchEventsUseCase)
+    }
+
+    func buildMapViewModel() -> MapViewModel {
+        return MapViewModel(
+            fetchMapPoints: FetchMapPointsUseCase(mapPointsRepository: mapPointsRepository),
+            savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
+        )
+    }
+
+    func buildFavoritesViewModel() -> FavoritesViewModel {
+        return FavoritesViewModel(
+            observeSession: observeSessionUseCase,
+            fetchTasks: fetchTasksUseCase,
+            fetchEcoTips: fetchEcoTipsUseCase,
+            observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildForumViewModel() -> ForumViewModel {
+        return ForumViewModel(
+            observeSession: observeSessionUseCase,
+            observeForumPosts: ObserveForumPostsUseCase(communityRepository: communityRepository),
+            postToForum: PostToForumUseCase(
+                communityRepository: communityRepository,
+                userProfileRepository: userProfileRepository,
+                textModerator: textModerator
+            ),
+            reportPost: ReportPostUseCase(moderationRepository: moderationRepository)
+        )
+    }
+
+    func buildGroupsViewModel() -> GroupsViewModel {
+        return GroupsViewModel(
+            observeSession: observeSessionUseCase,
+            observeGroups: ObserveGroupsUseCase(communityRepository: communityRepository),
+            createGroup: CreateGroupUseCase(communityRepository: communityRepository, textModerator: textModerator),
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository)
+        )
+    }
+
+    func buildEcoTipsListViewModel() -> EcoTipsListViewModel {
+        return EcoTipsListViewModel(
+            observeSession: observeSessionUseCase,
+            fetchEcoTips: fetchEcoTipsUseCase,
+            fetchReadTipIds: fetchReadTipIdsUseCase,
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository),
+            toggleTipBookmark: ToggleTipBookmarkUseCase(favoritesRepository: favoritesRepository)
+        )
+    }
+
+    func buildEcoTipDetailViewModel(tipId: String) -> EcoTipDetailViewModel {
+        return EcoTipDetailViewModel(
+            tipId: tipId,
+            observeSession: observeSessionUseCase,
+            fetchEcoTips: fetchEcoTipsUseCase,
+            fetchReadTipIds: fetchReadTipIdsUseCase,
+            markTipRead: MarkTipReadUseCase(rewardsRepository: rewardsRepository)
+        )
+    }
+
+    func buildFeedbackViewModel() -> FeedbackViewModel {
+        return FeedbackViewModel(
+            observeSession: observeSessionUseCase,
+            submitFeedback: SubmitFeedbackUseCase(rewardsRepository: rewardsRepository, textModerator: textModerator),
+            fetchActiveSurvey: FetchActiveSurveyUseCase(feedbackRepository: feedbackRepository),
+            hasAnsweredSurvey: HasAnsweredSurveyUseCase(feedbackRepository: feedbackRepository),
+            submitSurveyAnswer: SubmitSurveyAnswerUseCase(rewardsRepository: rewardsRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildGamesHubViewModel() -> GamesHubViewModel {
+        return GamesHubViewModel(
+            fetchGames: FetchGamesUseCase(gamesRepository: gamesRepository),
+            fetchBestScores: FetchBestScoresUseCase(gameProgressRepository: gameProgressRepository)
+        )
+    }
+
+    func buildGameWebViewModel(game: Game) -> GameWebViewModel {
+        return GameWebViewModel(
+            game: game,
+            submitGameResult: SubmitGameResultUseCase(
+                gameProgressRepository: gameProgressRepository,
+                rewardsRepository: rewardsRepository,
+                authRepository: authRepository
+            ),
+            gameUrl: GameUrlUseCase(gamesRepository: gamesRepository)
+        )
+    }
+
+    func buildModerationViewModel() -> ModerationViewModel {
+        return ModerationViewModel(
+            observeSession: observeSessionUseCase,
+            observeIsModerator: observeIsModeratorUseCase,
+            observePendingSubmissions: ObservePendingSubmissionsUseCase(moderationRepository: moderationRepository),
+            observeFlaggedPosts: ObserveFlaggedPostsUseCase(moderationRepository: moderationRepository),
+            fetchTasks: fetchTasksUseCase,
+            fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase(taskSubmissionsRepository: taskSubmissionsRepository),
+            reviewSubmission: ReviewSubmissionUseCase(moderationRepository: moderationRepository),
+            moderatePost: ModeratePostUseCase(moderationRepository: moderationRepository)
+        )
+    }
+
+    func buildNotificationsViewModel() -> NotificationsViewModel {
+        return NotificationsViewModel(
+            fetchNotificationLog: FetchNotificationLogUseCase(notificationLogRepository: notificationLogRepository)
+        )
+    }
+}
+
+extension AppDIContainer {
+    func buildCouponsViewModel() -> CouponsViewModel {
+        return CouponsViewModel(observeSession: observeSessionUseCase, fetchCoupons: fetchCouponsUseCase)
+    }
+
+    func buildCouponDetailViewModel(item: CouponItem) -> CouponDetailViewModel {
+        return CouponDetailViewModel(
+            item: item,
+            markCouponUsed: MarkCouponUsedUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
+        )
+    }
+}
