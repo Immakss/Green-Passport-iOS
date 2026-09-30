@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    private static let toolbarAvatarSize: CGFloat = 36
+    private static let headerAvatarSize: CGFloat = 44
     private static let quickActionTileSize: CGFloat = 56
     private static let quickActionSymbolScale: CGFloat = 0.38
     private static let taskMascotSize: CGFloat = 34
@@ -19,6 +19,7 @@ struct HomeScreen: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.large) {
+                header
                 ProgressHeroCard(points: uiState.points, level: uiState.level)
                     .redacted(reason: uiState.isLoading ? .placeholder : [])
                 quickActions
@@ -38,20 +39,33 @@ struct HomeScreen: View {
             .animation(.snappy, value: uiState.isLoading)
         }
         .background(Palette.screenBackground)
-        .navigationTitle(greeting)
-        .navigationSubtitle(Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)).capitalized))
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button(action: onProfile) {
-                    ProfileAvatar(style: uiState.avatar, size: Self.toolbarAvatarSize)
-                }
-                .accessibilityLabel(Text(.profile))
-            }
-            .sharedBackgroundVisibility(.hidden)
-        }
+        .navigationTitle(Text(.home))
+        .toolbar(.hidden, for: .navigationBar)
         .refreshable {
             await onRefresh()
         }
+    }
+
+    private var header: some View {
+        HStack(alignment: .center, spacing: Spacing.small) {
+            VStack(alignment: .leading, spacing: Spacing.hairline) {
+                Text(Date.now.formatted(.dateTime.weekday(.wide).day().month(.wide)).capitalized)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(Palette.secondaryText)
+                Text(greeting)
+                    .font(.largeTitle.bold())
+                    .lineLimit(1)
+                    .minimumScaleFactor(Self.labelMinimumScale)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            Button(action: onProfile) {
+                ProfileAvatar(style: uiState.avatar, size: Self.headerAvatarSize)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(.profile))
+        }
+        .padding(.top, Spacing.xSmall)
+        .accessibilityElement(children: .contain)
     }
 
     private var greeting: String {

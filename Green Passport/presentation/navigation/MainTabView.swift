@@ -18,6 +18,7 @@ struct MainTabView: View {
             Tab(String(localized: .shop), systemImage: "bag") {
                 TabStack(container: container, router: shopRouter) {
                     ShopRoute(container: container)
+                        .navigationBarTitleDisplayMode(.inline)
                 }
             }
             Tab(String(localized: .map), systemImage: "map") {
@@ -28,6 +29,7 @@ struct MainTabView: View {
             Tab(String(localized: .favorites), systemImage: "heart") {
                 TabStack(container: container, router: favoritesRouter) {
                     FavoritesRoute(container: container)
+                        .navigationBarTitleDisplayMode(.inline)
                 }
             }
         }
