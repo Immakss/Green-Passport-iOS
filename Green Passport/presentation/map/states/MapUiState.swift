@@ -5,6 +5,7 @@ struct MapUiState {
     var savedPointIds: Set<String> = []
     var filter: MapFilter = .all
     var searchQuery = ""
+    var focus: MapFocus?
     var isLoading = true
     var hasError = false
 

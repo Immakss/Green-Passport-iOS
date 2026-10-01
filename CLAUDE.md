@@ -87,6 +87,7 @@ The domain task model is `EcoTask` (not `Task`, which would shadow Swift Concurr
 - UserDefaults (`data/local`): `onboarding_seen`, `notifications_enabled` (default true), `app_theme` (default system), `saved_map_point_ids` — same keys as Android's DataStore / `LocalSettingsStore`.
 - SwiftData (`LocalStore.makeContainer()`): `GameProgressRecord` (best score per game, like Android's Room `game_progress`) and `NotificationLogRecord` (the in-app notification log). Repositories use the container's `mainContext`.
 - Notifications are local only (`UNUserNotificationCenter`): `LocalRewardNotifier` fires after a reward callable returns points or XP, `LocalNotificationReminderScheduler` schedules `event_reminder_<eventId>` one hour before an event. Both write to the log and respect the `notifications_enabled` switch; permission is requested on first use, never at launch. `AppDelegate` shows banners while the app is in the foreground. Reminders are logged at scheduling time with their fire date; the Notifications screen shows only entries whose date has passed.
+- Location: "when in use" only, requested on the first map open by `CoreLocationRepository` (`CLServiceSession` + `CLLocationUpdate`, 5 s timeout). `ResolveMapFocusUseCase` puts the camera on the user, otherwise on the profile city (`SupportedCities.centers`), otherwise on Minsk; the camera is set once and is not reset when points update.
 
 ### Web games
 

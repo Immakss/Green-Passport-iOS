@@ -37,6 +37,7 @@ final class AppDIContainer {
     )
     private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
     private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
+    private lazy var locationRepository: LocationRepository = CoreLocationRepository()
     private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
     private lazy var gamesRepository: GamesRepository = FirestoreGamesRepository(firestore: firestore)
     private lazy var gameProgressRepository: GameProgressRepository = SwiftDataGameProgressRepository(container: localStore)
@@ -228,7 +229,12 @@ extension AppDIContainer {
         return MapViewModel(
             observeMapPoints: ObserveMapPointsUseCase(mapPointsRepository: mapPointsRepository),
             savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
-            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            resolveMapFocus: ResolveMapFocusUseCase(
+                locationRepository: locationRepository,
+                authRepository: authRepository,
+                userProfileRepository: userProfileRepository
+            )
         )
     }
 
