@@ -1,6 +1,6 @@
 protocol EventsRepository {
-    func fetchEvents() async throws -> [EcoEvent]
-    func fetchRegisteredEventIds(userId: String) async throws -> Set<String>
-    func fetchAttendedEventIds(userId: String) async throws -> Set<String>
+    func observeEvents() -> AsyncThrowingStream<[EcoEvent], Error>
+    func observeRegisteredEventIds(userId: String) -> AsyncThrowingStream<Set<String>, Error>
+    func observeAttendedEventIds(userId: String) -> AsyncThrowingStream<Set<String>, Error>
     func registerForEvent(userId: String, eventId: String) async throws
 }

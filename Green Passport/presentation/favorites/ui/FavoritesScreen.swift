@@ -7,7 +7,7 @@ struct FavoritesScreen: View {
     @Binding var segment: FavoritesSegment
     let onTask: (EcoTask) -> Void
     let onTip: (EcoTip) -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         List {
@@ -59,9 +59,6 @@ struct FavoritesScreen: View {
             overlayState
         }
         .navigationTitle(Text(.favoritesScreenTitle))
-        .refreshable {
-            await onRefresh()
-        }
     }
 
     @ViewBuilder
@@ -69,7 +66,7 @@ struct FavoritesScreen: View {
         if uiState.isLoading {
             StateView(kind: .loading)
         } else if uiState.hasError {
-            StateView(kind: .error(retry: { Task { await onRefresh() } }))
+            StateView(kind: .error(retry: onRetry))
         } else if segment == .tasks && uiState.favoriteTasks.isEmpty {
             StateView(kind: .empty(message: .favoritesEmpty))
         } else if segment == .tips && uiState.bookmarkedTips.isEmpty {
@@ -85,7 +82,7 @@ struct FavoritesScreen: View {
             segment: .constant(.tasks),
             onTask: { _ in },
             onTip: { _ in },
-            onRefresh: {}
+            onRetry: {}
         )
     }
 }

@@ -21,11 +21,17 @@ final class GameWebViewModel {
 
     func finish(score: Int) {
         Task {
-            guard let reward = await submitGameResult.execute(gameId: game.id, score: score),
-                  reward.points > 0 || reward.streakBonus > 0 else {
-                return
+            do {
+                guard let reward = try await submitGameResult.execute(gameId: game.id, score: score),
+                      reward.points > 0 || reward.streakBonus > 0 else {
+                    return
+                }
+                uiState.rewardFailure = nil
+                uiState.lastReward = reward
+            } catch {
+                uiState.lastReward = nil
+                uiState.rewardFailure = (error as? RewardFailureError)?.failure ?? .unknown
             }
-            uiState.lastReward = reward
             uiState.rewardCount += 1
         }
     }

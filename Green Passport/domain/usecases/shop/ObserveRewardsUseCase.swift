@@ -1,11 +1,11 @@
-final class FetchRewardsUseCase {
+final class ObserveRewardsUseCase {
     private let shopRepository: ShopRepository
 
     init(shopRepository: ShopRepository) {
         self.shopRepository = shopRepository
     }
 
-    func execute() async throws -> [Reward] {
-        return try await shopRepository.fetchRewards()
+    func execute() -> AsyncThrowingStream<[Reward], Error> {
+        return shopRepository.observeRewards()
     }
 }

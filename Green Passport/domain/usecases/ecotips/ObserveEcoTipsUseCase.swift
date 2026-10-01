@@ -1,11 +1,11 @@
-final class FetchEcoTipsUseCase {
+final class ObserveEcoTipsUseCase {
     private let ecoTipsRepository: EcoTipsRepository
 
     init(ecoTipsRepository: EcoTipsRepository) {
         self.ecoTipsRepository = ecoTipsRepository
     }
 
-    func execute() async throws -> [EcoTip] {
-        return try await ecoTipsRepository.fetchTips()
+    func execute() -> AsyncThrowingStream<[EcoTip], Error> {
+        return ecoTipsRepository.observeTips()
     }
 }

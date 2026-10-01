@@ -5,7 +5,7 @@ struct EcoTipsListScreen: View {
     let onFilter: (EcoTipFilter) -> Void
     let onTip: (EcoTip) -> Void
     let onToggleBookmark: (EcoTip) -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         ScrollView {
@@ -22,20 +22,16 @@ struct EcoTipsListScreen: View {
         }
         .background(Palette.screenBackground)
         .navigationTitle(Text(.homeTileEcotips))
-        .refreshable {
-            await onRefresh()
-        }
     }
 
     @ViewBuilder
     private var content: some View {
         if uiState.isLoading {
             ProgressView()
-                .controlSize(.large)
                 .frame(maxWidth: .infinity)
                 .padding(.top, Spacing.xLarge)
         } else if uiState.hasError {
-            StateView(kind: .error(retry: { Task { await onRefresh() } }))
+            StateView(kind: .error(retry: onRetry))
         } else if uiState.visibleTips.isEmpty {
             StateView(kind: .empty(message: .ecotipsEmpty))
         } else {
@@ -113,7 +109,7 @@ struct EcoTipsListScreen: View {
             onFilter: { _ in },
             onTip: { _ in },
             onToggleBookmark: { _ in },
-            onRefresh: {}
+            onRetry: {}
         )
     }
 }

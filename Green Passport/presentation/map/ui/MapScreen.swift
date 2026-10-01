@@ -25,9 +25,11 @@ struct MapScreen: View {
                 }
                 .tag(point.id)
             }
+            UserAnnotation()
         }
         .simultaneousGesture(TapGesture().onEnded(Keyboard.dismiss))
         .mapControls {
+            MapUserLocationButton()
             MapCompass()
             MapScaleView()
         }
@@ -37,14 +39,16 @@ struct MapScreen: View {
         .overlay {
             if uiState.isLoading {
                 ProgressView()
-                    .controlSize(.large)
             } else if uiState.hasError {
                 StateView(kind: .error(retry: onRetry))
                     .background(.regularMaterial)
             }
         }
-        .onChange(of: uiState.points) { _, points in
-            position = Self.initialPosition(for: points)
+        .onChange(of: uiState.focus, initial: true) { _, focus in
+            guard let focus else {
+                return
+            }
+            position = Self.position(for: focus)
         }
         .toolbar(.hidden, for: .navigationBar)
     }
@@ -81,17 +85,14 @@ struct MapScreen: View {
         }
     }
 
-    private static func initialPosition(for points: [MapPoint]) -> MapCameraPosition {
-        guard !points.isEmpty else {
-            return .automatic
-        }
-        let count = Double(points.count)
-        let center = CLLocationCoordinate2D(
-            latitude: points.map(\.latitude).reduce(0, +) / count,
-            longitude: points.map(\.longitude).reduce(0, +) / count
-        )
+    private static func position(for focus: MapFocus) -> MapCameraPosition {
         let span = MKCoordinateSpan(latitudeDelta: initialSpan, longitudeDelta: initialSpan)
-        return .region(MKCoordinateRegion(center: center, span: span))
+        switch focus {
+        case .userLocation(let location):
+            return .userLocation(fallback: .region(MKCoordinateRegion(center: location.coordinate, span: span)))
+        case .city(let center):
+            return .region(MKCoordinateRegion(center: center.coordinate, span: span))
+        }
     }
 }
 

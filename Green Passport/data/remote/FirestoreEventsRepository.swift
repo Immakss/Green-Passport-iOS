@@ -18,23 +18,18 @@ final class FirestoreEventsRepository: EventsRepository {
         self.firestore = firestore
     }
 
-    func fetchEvents() async throws -> [EcoEvent] {
-        let snapshot = try await FirestoreCollections.events(firestore).getDocuments()
-        return snapshot.documents.compactMap(Self.event(from:))
+    func observeEvents() -> AsyncThrowingStream<[EcoEvent], Error> {
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.events(firestore))) { snapshot in
+            return snapshot.documents.compactMap(Self.event(from:))
+        }
     }
 
-    func fetchRegisteredEventIds(userId: String) async throws -> Set<String> {
-        let snapshot = try await FirestoreCollections.eventRegistrations(firestore)
-            .whereField(Self.fieldUserId, isEqualTo: userId)
-            .getDocuments()
-        return Set(snapshot.documents.compactMap { return $0.string(Self.fieldEventId) })
+    func observeRegisteredEventIds(userId: String) -> AsyncThrowingStream<Set<String>, Error> {
+        return observeEventIds(in: FirestoreCollections.eventRegistrations(firestore), userId: userId)
     }
 
-    func fetchAttendedEventIds(userId: String) async throws -> Set<String> {
-        let snapshot = try await FirestoreCollections.eventAttendance(firestore)
-            .whereField(Self.fieldUserId, isEqualTo: userId)
-            .getDocuments()
-        return Set(snapshot.documents.compactMap { return $0.string(Self.fieldEventId) })
+    func observeAttendedEventIds(userId: String) -> AsyncThrowingStream<Set<String>, Error> {
+        return observeEventIds(in: FirestoreCollections.eventAttendance(firestore), userId: userId)
     }
 
     func registerForEvent(userId: String, eventId: String) async throws {
@@ -46,6 +41,13 @@ final class FirestoreEventsRepository: EventsRepository {
         try await FirestoreCollections.eventRegistrations(firestore)
             .document("\(userId)_\(eventId)")
             .setData(data)
+    }
+
+    private func observeEventIds(in collection: CollectionReference, userId: String) -> AsyncThrowingStream<Set<String>, Error> {
+        let query = collection.whereField(Self.fieldUserId, isEqualTo: userId)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
+            return Set(snapshot.documents.compactMap { return $0.string(Self.fieldEventId) })
+        }
     }
 
     private static func event(from document: DocumentSnapshot) -> EcoEvent? {

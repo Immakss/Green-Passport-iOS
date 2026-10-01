@@ -4,9 +4,10 @@ import Observation
 final class EcoTipDetailViewModel {
     @ObservationIgnored private let tipId: String
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
-    @ObservationIgnored private let fetchEcoTips: FetchEcoTipsUseCase
-    @ObservationIgnored private let fetchReadTipIds: FetchReadTipIdsUseCase
+    @ObservationIgnored private let observeEcoTips: ObserveEcoTipsUseCase
+    @ObservationIgnored private let observeReadTipIds: ObserveReadTipIdsUseCase
     @ObservationIgnored private let markTipRead: MarkTipReadUseCase
+    @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var userId: String?
 
     private(set) var uiState = EcoTipDetailUiState()
@@ -14,39 +15,29 @@ final class EcoTipDetailViewModel {
     init(
         tipId: String,
         observeSession: ObserveSessionUseCase,
-        fetchEcoTips: FetchEcoTipsUseCase,
-        fetchReadTipIds: FetchReadTipIdsUseCase,
+        observeEcoTips: ObserveEcoTipsUseCase,
+        observeReadTipIds: ObserveReadTipIdsUseCase,
         markTipRead: MarkTipReadUseCase
     ) {
         self.tipId = tipId
         self.observeSession = observeSession
-        self.fetchEcoTips = fetchEcoTips
-        self.fetchReadTipIds = fetchReadTipIds
+        self.observeEcoTips = observeEcoTips
+        self.observeReadTipIds = observeReadTipIds
         self.markTipRead = markTipRead
     }
 
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            await load()
+            start(userId: session?.userId)
         }
+        sessionTask.cancel()
     }
 
-    func load() async {
+    func retry() {
+        uiState.isLoading = true
         uiState.hasError = false
-        do {
-            let tip = try await fetchEcoTips.execute().first { return $0.id == tipId }
-            var readIds: Set<String> = []
-            if let userId {
-                readIds = try await fetchReadTipIds.execute(userId: userId)
-            }
-            uiState.tip = tip
-            uiState.isRead = readIds.contains(tipId)
-            uiState.hasError = tip == nil
-        } catch {
-            uiState.hasError = true
-        }
-        uiState.isLoading = false
+        start(userId: userId)
     }
 
     func markRead() {
@@ -54,14 +45,60 @@ final class EcoTipDetailViewModel {
             return
         }
         uiState.isSubmitting = true
+        uiState.failure = nil
         Task {
             do {
-                _ = try await markTipRead.execute(tipId: tipId)
+                let reward = try await markTipRead.execute(tipId: tipId)
                 uiState.isRead = true
+                uiState.streakBonus = reward.streakBonus
             } catch {
-                uiState.isRead = false
+                uiState.failure = (error as? RewardFailureError)?.failure ?? .unknown
             }
             uiState.isSubmitting = false
+        }
+    }
+
+    private func start(userId: String?) {
+        sessionTask.run { [weak self] in
+            await self?.observeData(userId: userId)
+        }
+    }
+
+    private func observeData(userId: String?) async {
+        guard let userId else {
+            await observeTip()
+            return
+        }
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.observeTip() }
+            group.addTask { await self.observeReadState(userId: userId) }
+        }
+    }
+
+    private func observeTip() async {
+        do {
+            for try await tips in observeEcoTips.execute() {
+                let tip = tips.first { return $0.id == tipId }
+                uiState.tip = tip
+                uiState.isLoading = false
+                uiState.hasError = tip == nil
+            }
+        } catch {
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
+            uiState.hasError = uiState.tip == nil
+        }
+    }
+
+    private func observeReadState(userId: String) async {
+        do {
+            for try await readIds in observeReadTipIds.execute(userId: userId) {
+                uiState.isRead = uiState.isRead || readIds.contains(tipId)
+            }
+        } catch {
+            return
         }
     }
 }

@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct NotificationsScreen: View {
-    let entries: [NotificationLogEntry]
+    let entries: [NotificationLogEntry]?
 
     var body: some View {
-        List(entries) { entry in
+        List(entries ?? []) { entry in
             VStack(alignment: .leading, spacing: Spacing.xxSmall) {
                 Text(entry.sentAt.formatted(date: .abbreviated, time: .shortened))
                     .font(.caption.weight(.medium))
@@ -19,7 +19,7 @@ struct NotificationsScreen: View {
         }
         .listStyle(.insetGrouped)
         .overlay {
-            if entries.isEmpty {
+            if entries?.isEmpty == true {
                 StateView(kind: .empty(message: .notificationsEmpty))
             }
         }

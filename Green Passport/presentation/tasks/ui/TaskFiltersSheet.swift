@@ -24,54 +24,67 @@ struct TaskFiltersSheet: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Spacing.large) {
-                    section(.status) {
-                        FlowLayout {
-                            ForEach(TaskStatusFilter.allCases, id: \.self) { status in
-                                ChoiceCapsule(title: String(localized: status.title), isSelected: draft.status == status) {
-                                    draft.status = status
-                                }
-                            }
+            Form {
+                Section {
+                    Picker(selection: $draft.status) {
+                        ForEach(TaskStatusFilter.allCases, id: \.self) { status in
+                            Text(status.title)
+                                .tag(status)
                         }
+                    } label: {
+                        Text(.status)
                     }
-                    section(.confirmation) {
-                        FlowLayout {
-                            ForEach(TaskVerification.filterOrder, id: \.self) { verification in
-                                ChoiceCapsule(
-                                    title: String(localized: verification.title),
-                                    isSelected: draft.verifications.contains(verification)
-                                ) {
-                                    toggle(verification, in: \.verifications)
-                                }
-                            }
-                        }
-                    }
-                    section(.city) {
-                        FlowLayout {
-                            cityCapsule(.profileCity)
-                            cityCapsule(.all)
-                            ForEach(SupportedCities.all.filter { return $0 != profileCity }, id: \.self) { city in
-                                cityCapsule(.city(city))
-                            }
-                        }
-                    }
-                    section(.category) {
-                        FlowLayout {
-                            ForEach(TaskCategory.allCases, id: \.self) { category in
-                                ChoiceCapsule(
-                                    title: String(localized: category.title),
-                                    isSelected: draft.categories.contains(category)
-                                ) {
-                                    toggle(category, in: \.categories)
-                                }
-                            }
-                        }
-                    }
+                    .pickerStyle(.inline)
+                    .labelsHidden()
+                } header: {
+                    Text(.status)
                 }
-                .padding(Spacing.screenHorizontal)
+                Section {
+                    ForEach(TaskVerification.filterOrder, id: \.self) { verification in
+                        checkRow(
+                            title: verification.title,
+                            subtitle: verification.hint,
+                            systemImage: verification.systemImage,
+                            isOn: draft.verifications.contains(verification)
+                        ) {
+                            toggle(verification, in: \.verifications)
+                        }
+                    }
+                } header: {
+                    Text(.confirmation)
+                }
+                Section {
+                    Picker(selection: $draft.city) {
+                        Text(TaskCityFilter.profileCity.title(profileCity: profileCity))
+                            .tag(TaskCityFilter.profileCity)
+                        Text(TaskCityFilter.all.title(profileCity: profileCity))
+                            .tag(TaskCityFilter.all)
+                        ForEach(SupportedCities.all.filter { return $0 != profileCity }, id: \.self) { city in
+                            Text(city)
+                                .tag(TaskCityFilter.city(city))
+                        }
+                    } label: {
+                        Text(.city)
+                    }
+                    .pickerStyle(.menu)
+                    .tint(Palette.forest)
+                }
+                Section {
+                    ForEach(TaskCategory.allCases, id: \.self) { category in
+                        checkRow(
+                            title: category.title,
+                            subtitle: nil,
+                            systemImage: category.systemImage,
+                            isOn: draft.categories.contains(category)
+                        ) {
+                            toggle(category, in: \.categories)
+                        }
+                    }
+                } header: {
+                    Text(.category)
+                }
             }
-            .background(Palette.screenBackground)
+            .tint(Palette.forest)
             .safeAreaInset(edge: .bottom) {
                 AppButton(title: .showTasksCount(resultCount(draft))) {
                     onApply(draft)
@@ -102,21 +115,35 @@ struct TaskFiltersSheet: View {
         }
     }
 
-    private func section<Content: View>(
-        _ title: LocalizedStringResource,
-        @ViewBuilder content: () -> Content
+    private func checkRow(
+        title: LocalizedStringResource,
+        subtitle: LocalizedStringResource?,
+        systemImage: String,
+        isOn: Bool,
+        action: @escaping () -> Void
     ) -> some View {
-        return VStack(alignment: .leading, spacing: Spacing.small) {
-            Text(title)
-                .font(.headline)
-            content()
+        return Button(action: action) {
+            HStack(spacing: Spacing.small) {
+                SymbolTile(systemImage: systemImage, style: isOn ? .prominent : .accent)
+                VStack(alignment: .leading, spacing: Spacing.hairline) {
+                    Text(title)
+                        .foregroundStyle(Color.primary)
+                    if let subtitle {
+                        Text(subtitle)
+                            .font(.footnote)
+                            .foregroundStyle(Palette.secondaryText)
+                    }
+                }
+                Spacer(minLength: Spacing.small)
+                Image(systemName: "checkmark")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Palette.forest)
+                    .opacity(isOn ? 1 : 0)
+            }
+            .contentShape(.rect)
         }
-    }
-
-    private func cityCapsule(_ filter: TaskCityFilter) -> some View {
-        return ChoiceCapsule(title: filter.title(profileCity: profileCity), isSelected: draft.city == filter) {
-            draft.city = filter
-        }
+        .buttonStyle(.plain)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
     }
 
     private func toggle<Value: Hashable>(_ value: Value, in keyPath: WritableKeyPath<TaskFilters, Set<Value>>) {

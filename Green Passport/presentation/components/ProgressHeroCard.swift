@@ -15,21 +15,14 @@ struct ProgressHeroCard: View {
     var body: some View {
         HStack(alignment: .center, spacing: Spacing.small) {
             VStack(alignment: .leading, spacing: Spacing.xxSmall) {
-                HStack(spacing: Spacing.xSmall) {
-                    Text(level.map { return .level($0.number) } ?? .yourBalance)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
-                    if streakDays > 0 {
-                        Label {
-                            Text(.streakDays(streakDays))
-                        } icon: {
-                            Image(systemName: "flame.fill")
-                        }
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(Palette.onLime)
-                        .padding(.horizontal, Spacing.xSmall)
-                        .padding(.vertical, Spacing.hairline)
-                        .background(Palette.lime, in: .capsule)
+                ViewThatFits(in: .horizontal) {
+                    HStack(spacing: Spacing.xSmall) {
+                        levelCaption
+                        streakBadge
+                    }
+                    VStack(alignment: .leading, spacing: Spacing.xxSmall) {
+                        levelCaption
+                        streakBadge
                     }
                 }
                 Label {
@@ -71,6 +64,32 @@ struct ProgressHeroCard: View {
         .accessibilityElement(children: .combine)
     }
 
+    private var levelCaption: some View {
+        return Text(level.map { return .level($0.number) } ?? .yourBalance)
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
+            .lineLimit(1)
+            .fixedSize()
+    }
+
+    @ViewBuilder
+    private var streakBadge: some View {
+        if streakDays > 0 {
+            Label {
+                Text(.streakDays(streakDays))
+            } icon: {
+                Image(systemName: "flame.fill")
+            }
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(Palette.onLime)
+            .lineLimit(1)
+            .fixedSize()
+            .padding(.horizontal, Spacing.xSmall)
+            .padding(.vertical, Spacing.hairline)
+            .background(Palette.lime, in: .capsule)
+        }
+    }
+
     private func progressBar(level: Level) -> some View {
         return GeometryReader { proxy in
             ZStack(alignment: .leading) {
@@ -88,6 +107,7 @@ struct ProgressHeroCard: View {
 #Preview {
     VStack {
         ProgressHeroCard(points: 500, level: Level(lifetimeXp: 2800), streakDays: 5)
+        ProgressHeroCard(points: 12500, level: Level(lifetimeXp: 98000), streakDays: 125)
         ProgressHeroCard(points: 120)
     }
     .padding()

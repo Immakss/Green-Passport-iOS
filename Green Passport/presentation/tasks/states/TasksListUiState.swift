@@ -10,6 +10,9 @@ struct TasksListUiState {
     var filters = TaskFilters()
     var isLoading = true
     var hasError = false
+    var hasLoadedTasks = false
+    var hasLoadedCompletedIds = false
+    var hasLoadedProfile = false
 
     var visibleTasks: [EcoTask] {
         return tasks(for: filters)

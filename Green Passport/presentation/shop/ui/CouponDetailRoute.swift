@@ -19,5 +19,8 @@ struct CouponDetailRoute: View {
                     }
                 }
         }
+        .task {
+            await viewModel.observe()
+        }
     }
 }

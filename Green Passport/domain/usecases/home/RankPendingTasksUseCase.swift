@@ -1,17 +1,10 @@
-final class FetchPendingTasksUseCase {
+final class RankPendingTasksUseCase {
     private static let homeTasksLimit = 3
     private static let cityMatchWeight = 2
     private static let interestMatchWeight = 1
 
-    private let tasksRepository: TasksRepository
-
-    init(tasksRepository: TasksRepository) {
-        self.tasksRepository = tasksRepository
-    }
-
-    func execute(userId: String, profile: UserProfile?) async throws -> [EcoTask] {
-        let completedIds = try await tasksRepository.fetchCompletedTaskIds(userId: userId)
-        let pending = try await tasksRepository.fetchTasks().filter { return !completedIds.contains($0.id) }
+    func execute(tasks: [EcoTask], completedIds: Set<String>, profile: UserProfile?) -> [EcoTask] {
+        let pending = tasks.filter { return !completedIds.contains($0.id) }
         let ranked = pending.enumerated().sorted { lhs, rhs in
             let lhsScore = Self.score(lhs.element, profile: profile)
             let rhsScore = Self.score(rhs.element, profile: profile)

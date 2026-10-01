@@ -277,6 +277,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Config/GreenPassport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				COUPON_SCAN_URL = "https://chatroom-85fb8.web.app/coupon";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
@@ -287,6 +288,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to scan task QR codes and take photos that confirm completed tasks.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The map shows the eco points nearest to you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -315,6 +317,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Config/GreenPassport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				COUPON_SCAN_URL = "https://chatroom-85fb8.web.app/coupon";
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = T4BPBL797M;
 				ENABLE_PREVIEWS = YES;
@@ -325,6 +328,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = "Green Passport";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera is used to scan task QR codes and take photos that confirm completed tasks.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The map shows the eco points nearest to you.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

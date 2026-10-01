@@ -6,11 +6,13 @@ final class ModerationViewModel {
     @ObservationIgnored private let observeIsModerator: ObserveIsModeratorUseCase
     @ObservationIgnored private let observePendingSubmissions: ObservePendingSubmissionsUseCase
     @ObservationIgnored private let observeFlaggedPosts: ObserveFlaggedPostsUseCase
-    @ObservationIgnored private let fetchTasks: FetchTasksUseCase
+    @ObservationIgnored private let observeTasks: ObserveTasksUseCase
     @ObservationIgnored private let fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase
     @ObservationIgnored private let reviewSubmission: ReviewSubmissionUseCase
     @ObservationIgnored private let moderatePost: ModeratePostUseCase
     @ObservationIgnored private let queueTask = LatestTask()
+    @ObservationIgnored private var hasLoadedSubmissions = false
+    @ObservationIgnored private var hasLoadedPosts = false
 
     private(set) var uiState = ModerationUiState()
 
@@ -19,7 +21,7 @@ final class ModerationViewModel {
         observeIsModerator: ObserveIsModeratorUseCase,
         observePendingSubmissions: ObservePendingSubmissionsUseCase,
         observeFlaggedPosts: ObserveFlaggedPostsUseCase,
-        fetchTasks: FetchTasksUseCase,
+        observeTasks: ObserveTasksUseCase,
         fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase,
         reviewSubmission: ReviewSubmissionUseCase,
         moderatePost: ModeratePostUseCase
@@ -28,7 +30,7 @@ final class ModerationViewModel {
         self.observeIsModerator = observeIsModerator
         self.observePendingSubmissions = observePendingSubmissions
         self.observeFlaggedPosts = observeFlaggedPosts
-        self.fetchTasks = fetchTasks
+        self.observeTasks = observeTasks
         self.fetchSubmissionPhotoUrl = fetchSubmissionPhotoUrl
         self.reviewSubmission = reviewSubmission
         self.moderatePost = moderatePost
@@ -42,13 +44,14 @@ final class ModerationViewModel {
         do {
             for try await isModerator in observeIsModerator.execute(userId: userId) {
                 uiState.isModerator = isModerator
-                uiState.isLoading = false
                 if isModerator {
+                    finishLoadingIfReady()
                     queueTask.run { [weak self] in
                         await self?.observeQueues()
                     }
                 } else {
                     queueTask.cancel()
+                    uiState.isLoading = false
                 }
             }
         } catch {
@@ -93,7 +96,7 @@ final class ModerationViewModel {
     }
 
     private func observeSubmissions() async {
-        let taskTitles = Dictionary(((try? await fetchTasks.execute()) ?? []).map { return ($0.id, $0.title) }) { first, _ in
+        let taskTitles = Dictionary(((try? await observeTasks.execute().firstValue()) ?? []).map { return ($0.id, $0.title) }) { first, _ in
             return first
         }
         do {
@@ -108,9 +111,13 @@ final class ModerationViewModel {
                     ))
                 }
                 uiState.submissions = items
+                hasLoadedSubmissions = true
+                finishLoadingIfReady()
             }
         } catch {
             uiState.submissions = []
+            hasLoadedSubmissions = true
+            finishLoadingIfReady()
         }
     }
 
@@ -118,9 +125,20 @@ final class ModerationViewModel {
         do {
             for try await posts in observeFlaggedPosts.execute() {
                 uiState.flaggedPosts = posts
+                hasLoadedPosts = true
+                finishLoadingIfReady()
             }
         } catch {
             uiState.flaggedPosts = []
+            hasLoadedPosts = true
+            finishLoadingIfReady()
         }
+    }
+
+    private func finishLoadingIfReady() {
+        guard hasLoadedSubmissions, hasLoadedPosts else {
+            return
+        }
+        uiState.isLoading = false
     }
 }

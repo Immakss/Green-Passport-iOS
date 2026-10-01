@@ -24,15 +24,15 @@ final class DerivedAchievementsRepository: AchievementsRepository {
     }
 
     func fetchAchievements(userId: String) async throws -> [Achievement] {
-        async let completedTasks = tasksRepository.fetchCompletedTaskIds(userId: userId)
-        async let registeredEvents = eventsRepository.fetchRegisteredEventIds(userId: userId)
-        async let readTips = ecoTipsRepository.fetchReadTipIds(userId: userId)
-        async let lifetimeXp = pointsRepository.fetchLifetimeXp(userId: userId)
+        async let completedTasks = tasksRepository.observeCompletedTaskIds(userId: userId).firstValue()
+        async let registeredEvents = eventsRepository.observeRegisteredEventIds(userId: userId).firstValue()
+        async let readTips = ecoTipsRepository.observeReadTipIds(userId: userId).firstValue()
+        async let wallet = pointsRepository.observeWallet(userId: userId).firstValue()
         let isGroupMember = try await isMemberOfAnyGroup(userId: userId)
-        let completedCount = try await completedTasks.count
-        let hasEvents = try await !registeredEvents.isEmpty
-        let readCount = try await readTips.count
-        let level = try await Level(lifetimeXp: lifetimeXp)
+        let completedCount = try await completedTasks?.count ?? 0
+        let hasEvents = try await !(registeredEvents ?? []).isEmpty
+        let readCount = try await readTips?.count ?? 0
+        let level = try await Level(lifetimeXp: wallet?.lifetimeXp ?? 0)
         return AchievementId.allCases.map { id in
             let isUnlocked: Bool
             switch id {

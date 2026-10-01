@@ -1,4 +1,8 @@
+import Foundation
+
 protocol ShopRepository {
-    func fetchRewards() async throws -> [Reward]
-    func fetchPurchases(userId: String) async throws -> [Coupon]
+    func observeRewards() -> AsyncThrowingStream<[Reward], Error>
+    func observePurchases(userId: String) -> AsyncThrowingStream<[Coupon], Error>
+    func observePurchase(id: String) -> AsyncThrowingStream<Coupon?, Error>
+    func scanUrl(for coupon: Coupon) -> URL?
 }

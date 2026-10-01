@@ -4,8 +4,8 @@ import Observation
 final class TasksListViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
     @ObservationIgnored private let observeUserProfile: ObserveUserProfileUseCase
-    @ObservationIgnored private let fetchTasks: FetchTasksUseCase
-    @ObservationIgnored private let fetchCompletedTaskIds: FetchCompletedTaskIdsUseCase
+    @ObservationIgnored private let observeTasks: ObserveTasksUseCase
+    @ObservationIgnored private let observeCompletedTaskIds: ObserveCompletedTaskIdsUseCase
     @ObservationIgnored private let observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase
     @ObservationIgnored private let toggleTaskFavorite: ToggleTaskFavoriteUseCase
     @ObservationIgnored private let observeTaskSubmissions: ObserveTaskSubmissionsUseCase
@@ -17,16 +17,16 @@ final class TasksListViewModel {
     init(
         observeSession: ObserveSessionUseCase,
         observeUserProfile: ObserveUserProfileUseCase,
-        fetchTasks: FetchTasksUseCase,
-        fetchCompletedTaskIds: FetchCompletedTaskIdsUseCase,
+        observeTasks: ObserveTasksUseCase,
+        observeCompletedTaskIds: ObserveCompletedTaskIdsUseCase,
         observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase,
         toggleTaskFavorite: ToggleTaskFavoriteUseCase,
         observeTaskSubmissions: ObserveTaskSubmissionsUseCase
     ) {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
-        self.fetchTasks = fetchTasks
-        self.fetchCompletedTaskIds = fetchCompletedTaskIds
+        self.observeTasks = observeTasks
+        self.observeCompletedTaskIds = observeCompletedTaskIds
         self.observeFavoriteTaskIds = observeFavoriteTaskIds
         self.toggleTaskFavorite = toggleTaskFavorite
         self.observeTaskSubmissions = observeTaskSubmissions
@@ -35,28 +35,9 @@ final class TasksListViewModel {
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            sessionTask.run { [weak self] in
-                await self?.observeUserData(userId: session?.userId)
-            }
+            start(userId: session?.userId)
         }
         sessionTask.cancel()
-    }
-
-    func refresh() async {
-        uiState.hasError = false
-        do {
-            let tasks = try await fetchTasks.execute()
-            var completedIds: Set<String> = []
-            if let userId {
-                completedIds = try await fetchCompletedTaskIds.execute(userId: userId)
-            }
-            uiState.tasks = tasks
-            uiState.completedTaskIds = completedIds
-            uiState.isLoading = false
-        } catch {
-            uiState.isLoading = false
-            uiState.hasError = true
-        }
     }
 
     func handle(_ action: TasksListUserAction) {
@@ -69,20 +50,71 @@ final class TasksListViewModel {
             break
         case .retry:
             uiState.isLoading = true
-            Task { await refresh() }
+            uiState.hasError = false
+            start(userId: userId)
+        }
+    }
+
+    private func start(userId: String?) {
+        sessionTask.run { [weak self] in
+            await self?.observeUserData(userId: userId)
         }
     }
 
     private func observeUserData(userId: String?) async {
-        await refresh()
         guard let userId else {
+            uiState.completedTaskIds = []
+            await observeTaskList()
             return
         }
         await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.observeTaskList() }
+            group.addTask { await self.observeCompleted(userId: userId) }
             group.addTask { await self.observeSubmissions(userId: userId) }
             group.addTask { await self.observeProfile(userId: userId) }
             group.addTask { await self.observeFavorites(userId: userId) }
         }
+    }
+
+    private func observeTaskList() async {
+        do {
+            for try await tasks in observeTasks.execute() {
+                uiState.tasks = tasks
+                uiState.hasLoadedTasks = true
+                finishLoadingIfReady()
+            }
+        } catch {
+            showError()
+        }
+    }
+
+    private func observeCompleted(userId: String) async {
+        do {
+            for try await completedTaskIds in observeCompletedTaskIds.execute(userId: userId) {
+                uiState.completedTaskIds = completedTaskIds
+                uiState.hasLoadedCompletedIds = true
+                finishLoadingIfReady()
+            }
+        } catch {
+            showError()
+        }
+    }
+
+    private func finishLoadingIfReady() {
+        let hasLoadedUserData = uiState.hasLoadedCompletedIds && uiState.hasLoadedProfile
+        guard uiState.hasLoadedTasks, hasLoadedUserData || userId == nil else {
+            return
+        }
+        uiState.isLoading = false
+        uiState.hasError = false
+    }
+
+    private func showError() {
+        guard !Task.isCancelled else {
+            return
+        }
+        uiState.isLoading = false
+        uiState.hasError = uiState.tasks.isEmpty
     }
 
     private func observeSubmissions(userId: String) async {
@@ -99,9 +131,13 @@ final class TasksListViewModel {
         do {
             for try await profile in observeUserProfile.execute(userId: userId) {
                 uiState.profile = profile
+                uiState.hasLoadedProfile = true
+                finishLoadingIfReady()
             }
         } catch {
             uiState.profile = nil
+            uiState.hasLoadedProfile = true
+            finishLoadingIfReady()
         }
     }
 
