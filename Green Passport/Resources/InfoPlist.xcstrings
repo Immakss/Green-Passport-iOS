@@ -58,6 +58,29 @@
           }
         }
       }
+    },
+    "NSLocationWhenInUseUsageDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "be" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта паказвае бліжэйшыя эка-пункты побач з вамі."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The map shows the eco points nearest to you."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Карта показывает ближайшие эко-точки рядом с вами."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

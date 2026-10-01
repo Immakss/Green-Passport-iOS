@@ -18,16 +18,24 @@ final class FirestoreTasksRepository: TasksRepository {
         self.firestore = firestore
     }
 
-    func fetchTasks() async throws -> [EcoTask] {
-        let snapshot = try await FirestoreCollections.tasks(firestore).getDocuments()
-        return snapshot.documents.compactMap(Self.task(from:))
+    func observeTasks() -> AsyncThrowingStream<[EcoTask], Error> {
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.tasks(firestore))) { snapshot in
+            return snapshot.documents.compactMap(Self.task(from:))
+        }
     }
 
-    func fetchCompletedTaskIds(userId: String) async throws -> Set<String> {
-        let snapshot = try await FirestoreCollections.taskProgress(firestore)
-            .whereField(Self.fieldUserId, isEqualTo: userId)
-            .getDocuments()
-        return Set(snapshot.documents.compactMap { return $0.string(Self.fieldTaskId) })
+    func observeTask(id: String) -> AsyncThrowingStream<EcoTask?, Error> {
+        let document = FirestoreCollections.tasks(firestore).document(id)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: document)) { snapshot in
+            return Self.task(from: snapshot)
+        }
+    }
+
+    func observeCompletedTaskIds(userId: String) -> AsyncThrowingStream<Set<String>, Error> {
+        let query = FirestoreCollections.taskProgress(firestore).whereField(Self.fieldUserId, isEqualTo: userId)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
+            return Set(snapshot.documents.compactMap { return $0.string(Self.fieldTaskId) })
+        }
     }
 
     private static func task(from document: DocumentSnapshot) -> EcoTask? {

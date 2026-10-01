@@ -37,6 +37,7 @@ final class AppDIContainer {
     )
     private lazy var mapPointsRepository: MapPointsRepository = FirestoreMapPointsRepository(firestore: firestore)
     private lazy var savedMapPointsRepository: SavedMapPointsRepository = UserDefaultsSavedMapPointsRepository()
+    private lazy var locationRepository: LocationRepository = CoreLocationRepository()
     private lazy var feedbackRepository: FeedbackRepository = FirestoreFeedbackRepository(firestore: firestore)
     private lazy var gamesRepository: GamesRepository = FirestoreGamesRepository(firestore: firestore)
     private lazy var gameProgressRepository: GameProgressRepository = SwiftDataGameProgressRepository(container: localStore)
@@ -74,17 +75,16 @@ final class AppDIContainer {
     private lazy var observeSessionUseCase = ObserveSessionUseCase(authRepository: authRepository)
     private lazy var observeUserProfileUseCase = ObserveUserProfileUseCase(userProfileRepository: userProfileRepository)
     private lazy var signOutUseCase = SignOutUseCase(authRepository: authRepository)
-    private lazy var fetchPointsBalanceUseCase = FetchPointsBalanceUseCase(pointsRepository: pointsRepository)
-    private lazy var fetchLevelUseCase = FetchLevelUseCase(pointsRepository: pointsRepository)
-    private lazy var fetchTasksUseCase = FetchTasksUseCase(tasksRepository: tasksRepository)
-    private lazy var fetchCompletedTaskIdsUseCase = FetchCompletedTaskIdsUseCase(tasksRepository: tasksRepository)
-    private lazy var fetchEventsUseCase = FetchEventsUseCase(eventsRepository: eventsRepository)
+    private lazy var observeWalletUseCase = ObserveWalletUseCase(pointsRepository: pointsRepository)
+    private lazy var observeTasksUseCase = ObserveTasksUseCase(tasksRepository: tasksRepository)
+    private lazy var observeCompletedTaskIdsUseCase = ObserveCompletedTaskIdsUseCase(tasksRepository: tasksRepository)
+    private lazy var observeEventsUseCase = ObserveEventsUseCase(eventsRepository: eventsRepository)
     private lazy var observeTaskSubmissionsUseCase = ObserveTaskSubmissionsUseCase(
         taskSubmissionsRepository: taskSubmissionsRepository
     )
-    private lazy var fetchEcoTipsUseCase = FetchEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository)
-    private lazy var fetchReadTipIdsUseCase = FetchReadTipIdsUseCase(ecoTipsRepository: ecoTipsRepository)
-    private lazy var fetchCouponsUseCase = FetchCouponsUseCase(shopRepository: shopRepository)
+    private lazy var observeEcoTipsUseCase = ObserveEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var observeReadTipIdsUseCase = ObserveReadTipIdsUseCase(ecoTipsRepository: ecoTipsRepository)
+    private lazy var observeCouponsUseCase = ObserveCouponsUseCase(shopRepository: shopRepository)
     private lazy var observeIsModeratorUseCase = ObserveIsModeratorUseCase(moderationRepository: moderationRepository)
 }
 
@@ -127,11 +127,11 @@ extension AppDIContainer {
         return HomeViewModel(
             observeSession: observeSessionUseCase,
             observeUserProfile: observeUserProfileUseCase,
-            fetchPendingTasks: FetchPendingTasksUseCase(tasksRepository: tasksRepository),
-            fetchPointsBalance: fetchPointsBalanceUseCase,
-            fetchLevel: fetchLevelUseCase,
-            fetchUpcomingEvent: FetchUpcomingEventUseCase(eventsRepository: eventsRepository),
-            fetchStreak: FetchStreakUseCase(pointsRepository: pointsRepository)
+            observeTasks: observeTasksUseCase,
+            observeCompletedTaskIds: observeCompletedTaskIdsUseCase,
+            rankPendingTasks: RankPendingTasksUseCase(),
+            observeWallet: observeWalletUseCase,
+            observeUpcomingEvent: ObserveUpcomingEventUseCase(eventsRepository: eventsRepository)
         )
     }
 
@@ -139,8 +139,8 @@ extension AppDIContainer {
         return TasksListViewModel(
             observeSession: observeSessionUseCase,
             observeUserProfile: observeUserProfileUseCase,
-            fetchTasks: fetchTasksUseCase,
-            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            observeTasks: observeTasksUseCase,
+            observeCompletedTaskIds: observeCompletedTaskIdsUseCase,
             observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
             toggleTaskFavorite: ToggleTaskFavoriteUseCase(favoritesRepository: favoritesRepository),
             observeTaskSubmissions: observeTaskSubmissionsUseCase
@@ -151,8 +151,8 @@ extension AppDIContainer {
         return TaskDetailViewModel(
             taskId: taskId,
             observeSession: observeSessionUseCase,
-            fetchTasks: fetchTasksUseCase,
-            fetchCompletedTaskIds: fetchCompletedTaskIdsUseCase,
+            observeTask: ObserveTaskUseCase(tasksRepository: tasksRepository),
+            observeCompletedTaskIds: observeCompletedTaskIdsUseCase,
             completeSelfTask: CompleteSelfTaskUseCase(rewardsRepository: rewardsRepository),
             redeemTaskCode: RedeemTaskCodeUseCase(rewardsRepository: rewardsRepository),
             submitTaskPhoto: SubmitTaskPhotoUseCase(
@@ -168,13 +168,13 @@ extension AppDIContainer {
         return EventDetailViewModel(
             eventId: eventId,
             observeSession: observeSessionUseCase,
-            fetchEvents: fetchEventsUseCase,
-            fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
+            observeEvents: observeEventsUseCase,
+            observeRegisteredEventIds: ObserveRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
             registerForEvent: RegisterForEventUseCase(
                 eventsRepository: eventsRepository,
                 reminderScheduler: reminderScheduler
             ),
-            fetchAttendedEventIds: FetchAttendedEventIdsUseCase(eventsRepository: eventsRepository),
+            observeAttendedEventIds: ObserveAttendedEventIdsUseCase(eventsRepository: eventsRepository),
             checkInEvent: CheckInEventUseCase(rewardsRepository: rewardsRepository)
         )
     }
@@ -184,8 +184,7 @@ extension AppDIContainer {
             observeSession: observeSessionUseCase,
             observeUserProfile: observeUserProfileUseCase,
             observeIsModerator: observeIsModeratorUseCase,
-            fetchPointsBalance: fetchPointsBalanceUseCase,
-            fetchLevel: fetchLevelUseCase,
+            observeWallet: observeWalletUseCase,
             signOut: signOutUseCase,
             isNotificationsEnabled: IsNotificationsEnabledUseCase(settingsRepository: settingsRepository),
             setNotificationsEnabled: SetNotificationsEnabledUseCase(
@@ -215,30 +214,35 @@ extension AppDIContainer {
     func buildShopViewModel() -> ShopViewModel {
         return ShopViewModel(
             observeSession: observeSessionUseCase,
-            fetchRewards: FetchRewardsUseCase(shopRepository: shopRepository),
-            fetchCoupons: fetchCouponsUseCase,
-            fetchPointsBalance: fetchPointsBalanceUseCase,
+            observeRewards: ObserveRewardsUseCase(shopRepository: shopRepository),
+            observeCoupons: observeCouponsUseCase,
+            observeWallet: observeWalletUseCase,
             purchaseReward: PurchaseRewardUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
         )
     }
 
     func buildCalendarViewModel() -> CalendarViewModel {
-        return CalendarViewModel(fetchEvents: fetchEventsUseCase)
+        return CalendarViewModel(observeEvents: observeEventsUseCase)
     }
 
     func buildMapViewModel() -> MapViewModel {
         return MapViewModel(
-            fetchMapPoints: FetchMapPointsUseCase(mapPointsRepository: mapPointsRepository),
+            observeMapPoints: ObserveMapPointsUseCase(mapPointsRepository: mapPointsRepository),
             savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
-            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            resolveMapFocus: ResolveMapFocusUseCase(
+                locationRepository: locationRepository,
+                authRepository: authRepository,
+                userProfileRepository: userProfileRepository
+            )
         )
     }
 
     func buildFavoritesViewModel() -> FavoritesViewModel {
         return FavoritesViewModel(
             observeSession: observeSessionUseCase,
-            fetchTasks: fetchTasksUseCase,
-            fetchEcoTips: fetchEcoTipsUseCase,
+            observeTasks: observeTasksUseCase,
+            observeEcoTips: observeEcoTipsUseCase,
             observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
             observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
         )
@@ -271,8 +275,8 @@ extension AppDIContainer {
     func buildEcoTipsListViewModel() -> EcoTipsListViewModel {
         return EcoTipsListViewModel(
             observeSession: observeSessionUseCase,
-            fetchEcoTips: fetchEcoTipsUseCase,
-            fetchReadTipIds: fetchReadTipIdsUseCase,
+            observeEcoTips: observeEcoTipsUseCase,
+            observeReadTipIds: observeReadTipIdsUseCase,
             observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository),
             toggleTipBookmark: ToggleTipBookmarkUseCase(favoritesRepository: favoritesRepository)
         )
@@ -282,8 +286,8 @@ extension AppDIContainer {
         return EcoTipDetailViewModel(
             tipId: tipId,
             observeSession: observeSessionUseCase,
-            fetchEcoTips: fetchEcoTipsUseCase,
-            fetchReadTipIds: fetchReadTipIdsUseCase,
+            observeEcoTips: observeEcoTipsUseCase,
+            observeReadTipIds: observeReadTipIdsUseCase,
             markTipRead: MarkTipReadUseCase(rewardsRepository: rewardsRepository)
         )
     }
@@ -302,7 +306,7 @@ extension AppDIContainer {
 extension AppDIContainer {
     func buildGamesHubViewModel() -> GamesHubViewModel {
         return GamesHubViewModel(
-            fetchGames: FetchGamesUseCase(gamesRepository: gamesRepository),
+            observeGames: ObserveGamesUseCase(gamesRepository: gamesRepository),
             fetchBestScores: FetchBestScoresUseCase(gameProgressRepository: gameProgressRepository)
         )
     }
@@ -325,7 +329,7 @@ extension AppDIContainer {
             observeIsModerator: observeIsModeratorUseCase,
             observePendingSubmissions: ObservePendingSubmissionsUseCase(moderationRepository: moderationRepository),
             observeFlaggedPosts: ObserveFlaggedPostsUseCase(moderationRepository: moderationRepository),
-            fetchTasks: fetchTasksUseCase,
+            observeTasks: observeTasksUseCase,
             fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase(taskSubmissionsRepository: taskSubmissionsRepository),
             reviewSubmission: ReviewSubmissionUseCase(moderationRepository: moderationRepository),
             moderatePost: ModeratePostUseCase(moderationRepository: moderationRepository)
@@ -341,12 +345,14 @@ extension AppDIContainer {
 
 extension AppDIContainer {
     func buildCouponsViewModel() -> CouponsViewModel {
-        return CouponsViewModel(observeSession: observeSessionUseCase, fetchCoupons: fetchCouponsUseCase)
+        return CouponsViewModel(observeSession: observeSessionUseCase, observeCoupons: observeCouponsUseCase)
     }
 
     func buildCouponDetailViewModel(item: CouponItem) -> CouponDetailViewModel {
         return CouponDetailViewModel(
             item: item,
+            observeCoupon: ObserveCouponUseCase(shopRepository: shopRepository),
+            couponQrPayload: CouponQrPayloadUseCase(shopRepository: shopRepository),
             markCouponUsed: MarkCouponUsedUseCase(rewardsRepository: rewardsRepository, reminderScheduler: reminderScheduler)
         )
     }

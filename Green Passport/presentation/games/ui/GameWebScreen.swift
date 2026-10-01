@@ -11,6 +11,7 @@ struct GameWebScreen: View {
     let onLoadingChange: (Bool) -> Void
     let onFailure: () -> Void
     let onRetry: () -> Void
+    let onClose: () -> Void
 
     @State private var isBannerVisible = false
 
@@ -21,35 +22,31 @@ struct GameWebScreen: View {
             if let url, !uiState.hasError {
                 GameWebView(url: url, onMessage: onMessage, onLoadingChange: onLoadingChange, onFailure: onFailure)
                     .id(reloadId)
-                    .ignoresSafeArea(edges: .bottom)
             }
             if uiState.hasError || url == nil {
                 StateView(kind: .error(retry: onRetry))
             } else if uiState.isLoading {
                 ProgressView()
-                    .controlSize(.large)
             }
         }
         .overlay(alignment: .top) {
-            if isBannerVisible, let reward = uiState.lastReward {
-                HStack(spacing: Spacing.xSmall) {
-                    PointsBadge(points: reward.points)
-                    if reward.streakBonus > 0 {
-                        Text(.streakBonusMsg(reward.streakBonus))
-                            .font(.footnote.weight(.semibold))
-                            .foregroundStyle(Palette.forest)
-                    }
-                }
-                .padding(.horizontal, Spacing.medium)
-                .padding(.vertical, Spacing.xSmall)
-                .glassEffect(in: .capsule)
-                .padding(.top, Spacing.xSmall)
-                .transition(.move(edge: .top).combined(with: .opacity))
+            if isBannerVisible {
+                banner
+                    .padding(.horizontal, Spacing.medium)
+                    .padding(.vertical, Spacing.xSmall)
+                    .glassEffect(in: .capsule)
+                    .padding(.top, Spacing.xSmall)
+                    .transition(.move(edge: .top).combined(with: .opacity))
             }
         }
         .animation(.snappy, value: isBannerVisible)
         .navigationTitle(title)
-        .sensoryFeedback(.success, trigger: uiState.rewardCount)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(role: .close, action: onClose)
+            }
+        }
+        .sensoryFeedback(uiState.rewardFailure == nil ? .success : .error, trigger: uiState.rewardCount)
         .task(id: uiState.rewardCount) {
             guard uiState.rewardCount > 0 else {
                 return
@@ -57,6 +54,24 @@ struct GameWebScreen: View {
             isBannerVisible = true
             try? await Task.sleep(for: Self.bannerVisibleDuration)
             isBannerVisible = false
+        }
+    }
+
+    @ViewBuilder
+    private var banner: some View {
+        if let failure = uiState.rewardFailure {
+            Text(failure.message)
+                .font(.footnote.weight(.semibold))
+                .foregroundStyle(Palette.error)
+        } else if let reward = uiState.lastReward {
+            HStack(spacing: Spacing.xSmall) {
+                PointsBadge(points: reward.points)
+                if reward.streakBonus > 0 {
+                    Text(.streakBonusMsg(reward.streakBonus))
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(Palette.forest)
+                }
+            }
         }
     }
 }

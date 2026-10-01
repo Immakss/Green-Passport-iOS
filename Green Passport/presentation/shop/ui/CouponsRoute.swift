@@ -16,13 +16,11 @@ struct CouponsRoute: View {
             uiState: viewModel.uiState,
             tab: $viewModel.uiState.tab,
             onCoupon: { selectedCoupon = $0 },
-            onRefresh: viewModel.load
+            onRetry: viewModel.retry
         )
         .task {
             await viewModel.observe()
         }
-        .couponDetailSheet(item: $selectedCoupon, container: container) {
-            Task { await viewModel.load() }
-        }
+        .couponDetailSheet(item: $selectedCoupon, container: container)
     }
 }

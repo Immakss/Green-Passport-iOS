@@ -14,7 +14,7 @@ struct HomeScreen: View {
     let onEvent: (EcoEvent) -> Void
     let onTask: (EcoTask) -> Void
     let onAllTasks: () -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         ScrollView {
@@ -100,7 +100,7 @@ struct HomeScreen: View {
             TaskRowsCard(tasks: EcoTask.placeholders(count: Self.placeholderTaskCount), onTask: { _ in })
                 .redacted(reason: .placeholder)
         } else if uiState.hasTasksError {
-            StateView(kind: .error(retry: { Task { await onRefresh() } }))
+            StateView(kind: .error(retry: onRetry))
         } else if uiState.tasks.isEmpty {
             StateView(kind: .empty(message: .allTasksCompleted))
         } else {
@@ -124,7 +124,7 @@ struct HomeScreen: View {
             onEvent: { _ in },
             onTask: { _ in },
             onAllTasks: {},
-            onRefresh: {}
+            onRetry: {}
         )
     }
 }

@@ -18,6 +18,8 @@ struct GameWebView: UIViewRepresentable {
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.scrollView.bounces = false
+        webView.scrollView.isScrollEnabled = false
+        webView.scrollView.pinchGestureRecognizer?.isEnabled = false
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.load(URLRequest(url: url))
         return webView

@@ -1,3 +1,3 @@
 protocol MapPointsRepository {
-    func fetchPoints() async throws -> [MapPoint]
+    func observePoints() -> AsyncThrowingStream<[MapPoint], Error>
 }

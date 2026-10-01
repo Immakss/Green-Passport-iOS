@@ -11,7 +11,7 @@ struct EcoTipDetailRoute: View {
         EcoTipDetailScreen(
             uiState: viewModel.uiState,
             onMarkRead: viewModel.markRead,
-            onRetry: { Task { await viewModel.load() } }
+            onRetry: viewModel.retry
         )
         .task {
             await viewModel.observe()

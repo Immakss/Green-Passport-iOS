@@ -18,9 +18,6 @@ struct ProfileRoute: View {
             .task {
                 await viewModel.observe()
             }
-            .refreshable {
-                await viewModel.refresh()
-            }
             .fullScreenCover(isPresented: $isEditingProfile) {
                 ProfileSetupRoute(container: container, isEditing: true) {
                     isEditingProfile = false
@@ -47,7 +44,7 @@ struct ProfileRoute: View {
         case .signOut:
             viewModel.performSignOut()
         case .retry:
-            Task { await viewModel.refresh() }
+            viewModel.retry()
         }
     }
 }

@@ -14,23 +14,23 @@ final class FirestorePointsRepository: PointsRepository {
         self.firestore = firestore
     }
 
-    func fetchAvailablePoints(userId: String) async throws -> Int {
-        let snapshot = try await FirestoreCollections.users(firestore).document(userId).getDocument()
-        return snapshot.int(Self.fieldAvailablePoints) ?? 0
+    func observeWallet(userId: String) -> AsyncThrowingStream<Wallet, Error> {
+        let document = FirestoreCollections.users(firestore).document(userId)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: document)) { snapshot in
+            return Wallet(
+                availablePoints: snapshot.int(Self.fieldAvailablePoints) ?? 0,
+                lifetimeXp: snapshot.int(Self.fieldLifetimeXp) ?? 0,
+                streak: Self.streak(from: snapshot)
+            )
+        }
     }
 
-    func fetchStreak(userId: String) async throws -> Streak? {
-        let snapshot = try await FirestoreCollections.users(firestore).document(userId).getDocument()
-        guard let streak = snapshot.get(Self.fieldStreak) as? [String: Any],
-              let count = (streak[Self.fieldStreakCount] as? NSNumber)?.intValue,
-              let lastDay = streak[Self.fieldStreakLastDay] as? String else {
+    private static func streak(from snapshot: DocumentSnapshot) -> Streak? {
+        guard let streak = snapshot.get(fieldStreak) as? [String: Any],
+              let count = (streak[fieldStreakCount] as? NSNumber)?.intValue,
+              let lastDay = streak[fieldStreakLastDay] as? String else {
             return nil
         }
         return Streak(count: count, lastDay: lastDay)
-    }
-
-    func fetchLifetimeXp(userId: String) async throws -> Int {
-        let snapshot = try await FirestoreCollections.users(firestore).document(userId).getDocument()
-        return snapshot.int(Self.fieldLifetimeXp) ?? 0
     }
 }

@@ -43,8 +43,6 @@ struct AppDestinationView: View {
             FeedbackRoute(container: container)
         case .games:
             GamesHubRoute(container: container)
-        case .game(let game):
-            GameWebRoute(game: game, container: container)
         case .moderation:
             ModerationRoute(container: container)
         case .notifications:

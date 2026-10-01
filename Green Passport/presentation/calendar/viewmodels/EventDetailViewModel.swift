@@ -4,10 +4,11 @@ import Observation
 final class EventDetailViewModel {
     @ObservationIgnored private let eventId: String
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
-    @ObservationIgnored private let fetchEvents: FetchEventsUseCase
-    @ObservationIgnored private let fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase
+    @ObservationIgnored private let observeEvents: ObserveEventsUseCase
+    @ObservationIgnored private let observeRegisteredEventIds: ObserveRegisteredEventIdsUseCase
     @ObservationIgnored private let registerForEvent: RegisterForEventUseCase
-    @ObservationIgnored private let fetchAttendedEventIds: FetchAttendedEventIdsUseCase
+    @ObservationIgnored private let observeAttendedEventIds: ObserveAttendedEventIdsUseCase
+    @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private let checkInEvent: CheckInEventUseCase
     @ObservationIgnored private var userId: String?
 
@@ -16,30 +17,33 @@ final class EventDetailViewModel {
     init(
         eventId: String,
         observeSession: ObserveSessionUseCase,
-        fetchEvents: FetchEventsUseCase,
-        fetchRegisteredEventIds: FetchRegisteredEventIdsUseCase,
+        observeEvents: ObserveEventsUseCase,
+        observeRegisteredEventIds: ObserveRegisteredEventIdsUseCase,
         registerForEvent: RegisterForEventUseCase,
-        fetchAttendedEventIds: FetchAttendedEventIdsUseCase,
+        observeAttendedEventIds: ObserveAttendedEventIdsUseCase,
         checkInEvent: CheckInEventUseCase
     ) {
         self.eventId = eventId
         self.observeSession = observeSession
-        self.fetchEvents = fetchEvents
-        self.fetchRegisteredEventIds = fetchRegisteredEventIds
+        self.observeEvents = observeEvents
+        self.observeRegisteredEventIds = observeRegisteredEventIds
         self.registerForEvent = registerForEvent
-        self.fetchAttendedEventIds = fetchAttendedEventIds
+        self.observeAttendedEventIds = observeAttendedEventIds
         self.checkInEvent = checkInEvent
     }
 
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            await load()
+            start(userId: session?.userId)
         }
+        sessionTask.cancel()
     }
 
     func retry() {
-        Task { await load() }
+        uiState.isLoading = true
+        uiState.hasError = false
+        start(userId: userId)
     }
 
     func signUp() {
@@ -80,25 +84,58 @@ final class EventDetailViewModel {
         }
     }
 
-    private func load() async {
-        uiState.isLoading = true
-        uiState.hasError = false
+    private func start(userId: String?) {
+        sessionTask.run { [weak self] in
+            await self?.observeData(userId: userId)
+        }
+    }
+
+    private func observeData(userId: String?) async {
+        guard let userId else {
+            await observeEvent()
+            return
+        }
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.observeEvent() }
+            group.addTask { await self.observeRegistration(userId: userId) }
+            group.addTask { await self.observeAttendance(userId: userId) }
+        }
+    }
+
+    private func observeEvent() async {
         do {
-            let event = try await fetchEvents.execute().first { return $0.id == eventId }
-            var registeredIds: Set<String> = []
-            var attendedIds: Set<String> = []
-            if let userId {
-                registeredIds = try await fetchRegisteredEventIds.execute(userId: userId)
-                attendedIds = try await fetchAttendedEventIds.execute(userId: userId)
+            for try await events in observeEvents.execute() {
+                let event = events.first { return $0.id == eventId }
+                uiState.event = event
+                uiState.isLoading = false
+                uiState.hasError = event == nil
             }
-            uiState.event = event
-            uiState.isRegistered = registeredIds.contains(eventId)
-            uiState.isCheckedIn = attendedIds.contains(eventId)
-            uiState.isLoading = false
-            uiState.hasError = event == nil
         } catch {
+            guard !Task.isCancelled else {
+                return
+            }
             uiState.isLoading = false
-            uiState.hasError = true
+            uiState.hasError = uiState.event == nil
+        }
+    }
+
+    private func observeRegistration(userId: String) async {
+        do {
+            for try await registeredIds in observeRegisteredEventIds.execute(userId: userId) {
+                uiState.isRegistered = uiState.isRegistered || registeredIds.contains(eventId)
+            }
+        } catch {
+            return
+        }
+    }
+
+    private func observeAttendance(userId: String) async {
+        do {
+            for try await attendedIds in observeAttendedEventIds.execute(userId: userId) {
+                uiState.isCheckedIn = uiState.isCheckedIn || attendedIds.contains(eventId)
+            }
+        } catch {
+            return
         }
     }
 }

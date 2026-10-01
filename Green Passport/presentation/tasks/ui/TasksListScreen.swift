@@ -4,7 +4,6 @@ struct TasksListScreen: View {
     private static let mascotSize: CGFloat = 34
 
     let uiState: TasksListUiState
-    let onRefresh: () async -> Void
     let onAction: (TasksListUserAction) -> Void
 
     @State private var isFiltersPresented = false
@@ -28,6 +27,7 @@ struct TasksListScreen: View {
                         ? "line.3.horizontal.decrease.circle.fill"
                         : "line.3.horizontal.decrease.circle")
                 }
+                .badge(uiState.filters.activeCount)
                 .accessibilityLabel(Text(.filters))
             }
         }
@@ -45,9 +45,6 @@ struct TasksListScreen: View {
             overlayState
         }
         .navigationTitle(Text(.homeTileTasks))
-        .refreshable {
-            await onRefresh()
-        }
         .animation(.snappy, value: uiState.filters)
     }
 
@@ -151,7 +148,6 @@ struct TasksListScreen: View {
     NavigationStack {
         TasksListScreen(
             uiState: TasksListUiState(tasks: EcoTask.placeholders(count: 4), isLoading: false),
-            onRefresh: {},
             onAction: { _ in }
         )
     }

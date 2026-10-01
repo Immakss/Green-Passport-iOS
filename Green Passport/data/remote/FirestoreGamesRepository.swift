@@ -20,25 +20,25 @@ final class FirestoreGamesRepository: GamesRepository {
         self.firestore = firestore
     }
 
-    func fetchGames() async throws -> [Game] {
-        let snapshot = try await FirestoreCollections.games(firestore)
-            .whereField(Self.fieldIsActive, isEqualTo: true)
-            .getDocuments()
-        return snapshot.documents
-            .compactMap { document -> Game? in
-                guard let path = document.string(Self.fieldPath) else {
-                    return nil
+    func observeGames() -> AsyncThrowingStream<[Game], Error> {
+        let query = FirestoreCollections.games(firestore).whereField(Self.fieldIsActive, isEqualTo: true)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
+            return snapshot.documents
+                .compactMap { document -> Game? in
+                    guard let path = document.string(Self.fieldPath) else {
+                        return nil
+                    }
+                    return Game(
+                        id: document.documentID,
+                        titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
+                        path: path,
+                        sfSymbol: document.string(Self.fieldSfSymbol) ?? Self.defaultSymbol,
+                        maxPoints: document.int(Self.fieldMaxPoints) ?? Self.defaultMaxPoints,
+                        order: document.int(Self.fieldOrder) ?? Int.max
+                    )
                 }
-                return Game(
-                    id: document.documentID,
-                    titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
-                    path: path,
-                    sfSymbol: document.string(Self.fieldSfSymbol) ?? Self.defaultSymbol,
-                    maxPoints: document.int(Self.fieldMaxPoints) ?? Self.defaultMaxPoints,
-                    order: document.int(Self.fieldOrder) ?? Int.max
-                )
-            }
-            .sorted { return $0.order < $1.order }
+                .sorted { return $0.order < $1.order }
+        }
     }
 
     func url(for game: Game, language: String, theme: String) -> URL? {

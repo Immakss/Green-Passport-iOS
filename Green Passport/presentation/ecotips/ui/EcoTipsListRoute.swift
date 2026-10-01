@@ -14,13 +14,10 @@ struct EcoTipsListRoute: View {
             onFilter: viewModel.select,
             onTip: { router.push(.ecoTipDetail(tipId: $0.id)) },
             onToggleBookmark: viewModel.toggleBookmark,
-            onRefresh: viewModel.load
+            onRetry: viewModel.retry
         )
         .task {
             await viewModel.observe()
-        }
-        .onAppear {
-            Task { await viewModel.reloadIfLoaded() }
         }
     }
 }

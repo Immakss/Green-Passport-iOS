@@ -4,7 +4,7 @@ struct ShopScreen: View {
     let uiState: ShopUiState
     let onPurchase: (Reward) -> Void
     let onCoupons: () -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         ScrollView {
@@ -12,7 +12,7 @@ struct ShopScreen: View {
                 StateView(kind: .loading)
                     .containerRelativeFrame(.vertical)
             } else if uiState.hasError {
-                StateView(kind: .error(retry: { Task { await onRefresh() } }))
+                StateView(kind: .error(retry: onRetry))
                     .containerRelativeFrame(.vertical)
             } else {
                 content
@@ -20,9 +20,6 @@ struct ShopScreen: View {
         }
         .background(Palette.screenBackground)
         .navigationTitle(Text(.shop))
-        .refreshable {
-            await onRefresh()
-        }
     }
 
     private var content: some View {
@@ -123,7 +120,7 @@ struct ShopScreen: View {
             ),
             onPurchase: { _ in },
             onCoupons: {},
-            onRefresh: {}
+            onRetry: {}
         )
     }
 }

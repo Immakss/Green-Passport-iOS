@@ -26,7 +26,8 @@ struct GameWebRoute: View {
                 viewModel.uiState.hasError = false
                 viewModel.uiState.isLoading = true
                 reloadId += 1
-            }
+            },
+            onClose: { dismiss() }
         )
     }
 

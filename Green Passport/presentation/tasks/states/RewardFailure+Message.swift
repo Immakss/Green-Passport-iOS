@@ -12,7 +12,7 @@ extension RewardFailure {
         case .wrongVerification:
             return .taskNeedsOtherConfirmationMsg
         case .network:
-            return .noInternetConnection
+            return .noInternetForPointsMsg
         case .notEnoughPoints, .unknown:
             return .somethingWentWrongMsg
         }

@@ -15,10 +15,10 @@ struct MapRoute: View {
             searchQuery: $viewModel.uiState.searchQuery,
             selectedPointId: $selectedPointId,
             onFilter: { viewModel.uiState.filter = $0 },
-            onRetry: { Task { await viewModel.load() } }
+            onRetry: viewModel.retry
         )
-        .task {
-            await viewModel.load()
+        .task(id: viewModel.observationId) {
+            await viewModel.observe()
         }
         .sheet(item: selectedPoint) { point in
             MapPointSheet(

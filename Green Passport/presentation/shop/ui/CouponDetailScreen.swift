@@ -31,7 +31,7 @@ struct CouponDetailScreen: View {
                 .multilineTextAlignment(.center)
                 if let code = item.coupon.code {
                     VStack(spacing: Spacing.medium) {
-                        QrCodeImage(payload: code)
+                        QrCodeImage(payload: uiState.qrPayload ?? code)
                             .frame(width: Self.qrSize, height: Self.qrSize)
                             .padding(Self.qrPadding)
                             .background(.white, in: .rect(cornerRadius: CornerRadius.medium, style: .continuous))
@@ -44,7 +44,7 @@ struct CouponDetailScreen: View {
                                 .tracking(Self.codeTracking)
                                 .textSelection(.enabled)
                         }
-                        Text(.showCodeToPartnerMsg)
+                        Text(.partnerScansQrMsg)
                             .font(.footnote)
                             .foregroundStyle(Palette.secondaryText)
                             .multilineTextAlignment(.center)

@@ -3,35 +3,59 @@ import Observation
 @Observable
 final class CouponsViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
-    @ObservationIgnored private let fetchCoupons: FetchCouponsUseCase
+    @ObservationIgnored private let observeCoupons: ObserveCouponsUseCase
+    @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var userId: String?
 
     var uiState = CouponsUiState()
 
-    init(observeSession: ObserveSessionUseCase, fetchCoupons: FetchCouponsUseCase) {
+    init(observeSession: ObserveSessionUseCase, observeCoupons: ObserveCouponsUseCase) {
         self.observeSession = observeSession
-        self.fetchCoupons = fetchCoupons
+        self.observeCoupons = observeCoupons
     }
 
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            await load()
+            guard let userId = session?.userId else {
+                sessionTask.cancel()
+                uiState.items = []
+                uiState.isLoading = false
+                continue
+            }
+            start(userId: userId)
+        }
+        sessionTask.cancel()
+    }
+
+    func retry() {
+        guard let userId else {
+            return
+        }
+        uiState.isLoading = true
+        uiState.hasError = false
+        start(userId: userId)
+    }
+
+    private func start(userId: String) {
+        sessionTask.run { [weak self] in
+            await self?.observeItems(userId: userId)
         }
     }
 
-    func load() async {
-        guard let userId else {
-            uiState.items = []
-            uiState.isLoading = false
-            return
-        }
-        uiState.hasError = false
+    private func observeItems(userId: String) async {
         do {
-            uiState.items = try await fetchCoupons.execute(userId: userId)
+            for try await items in observeCoupons.execute(userId: userId) {
+                uiState.items = items
+                uiState.isLoading = false
+                uiState.hasError = false
+            }
         } catch {
-            uiState.hasError = true
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
+            uiState.hasError = uiState.items.isEmpty
         }
-        uiState.isLoading = false
     }
 }

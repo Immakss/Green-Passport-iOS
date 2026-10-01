@@ -3,36 +3,66 @@ import Observation
 
 @Observable
 final class MapViewModel {
-    @ObservationIgnored private let fetchMapPoints: FetchMapPointsUseCase
+    @ObservationIgnored private let observeMapPoints: ObserveMapPointsUseCase
     @ObservationIgnored private let savedMapPointIds: SavedMapPointIdsUseCase
     @ObservationIgnored private let toggleSavedMapPoint: ToggleSavedMapPointUseCase
+    @ObservationIgnored private let resolveMapFocus: ResolveMapFocusUseCase
 
     var uiState = MapUiState()
+    private(set) var observationId = 0
 
     init(
-        fetchMapPoints: FetchMapPointsUseCase,
+        observeMapPoints: ObserveMapPointsUseCase,
         savedMapPointIds: SavedMapPointIdsUseCase,
-        toggleSavedMapPoint: ToggleSavedMapPointUseCase
+        toggleSavedMapPoint: ToggleSavedMapPointUseCase,
+        resolveMapFocus: ResolveMapFocusUseCase
     ) {
-        self.fetchMapPoints = fetchMapPoints
+        self.observeMapPoints = observeMapPoints
         self.savedMapPointIds = savedMapPointIds
         self.toggleSavedMapPoint = toggleSavedMapPoint
+        self.resolveMapFocus = resolveMapFocus
     }
 
-    func load() async {
+    func observe() async {
         uiState.savedPointIds = savedMapPointIds.execute()
-        uiState.hasError = false
-        do {
-            uiState.points = try await fetchMapPoints.execute()
-        } catch {
-            uiState.hasError = true
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.resolveFocus() }
+            group.addTask { await self.observePoints() }
         }
-        uiState.isLoading = false
+    }
+
+    func retry() {
+        uiState.isLoading = true
+        uiState.hasError = false
+        observationId += 1
     }
 
     func toggleSaved(_ point: MapPoint) {
         let isSaved = !uiState.savedPointIds.contains(point.id)
         toggleSavedMapPoint.execute(pointId: point.id, isSaved: isSaved)
         uiState.savedPointIds = savedMapPointIds.execute()
+    }
+
+    private func resolveFocus() async {
+        guard uiState.focus == nil else {
+            return
+        }
+        uiState.focus = await resolveMapFocus.execute()
+    }
+
+    private func observePoints() async {
+        do {
+            for try await points in observeMapPoints.execute() {
+                uiState.points = points
+                uiState.isLoading = false
+                uiState.hasError = false
+            }
+        } catch {
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
+            uiState.hasError = uiState.points.isEmpty
+        }
     }
 }

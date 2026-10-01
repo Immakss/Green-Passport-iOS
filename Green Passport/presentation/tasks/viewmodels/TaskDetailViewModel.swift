@@ -5,13 +5,13 @@ import Observation
 final class TaskDetailViewModel {
     @ObservationIgnored private let taskId: String
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
-    @ObservationIgnored private let fetchTasks: FetchTasksUseCase
-    @ObservationIgnored private let fetchCompletedTaskIds: FetchCompletedTaskIdsUseCase
+    @ObservationIgnored private let observeTask: ObserveTaskUseCase
+    @ObservationIgnored private let observeCompletedTaskIds: ObserveCompletedTaskIdsUseCase
     @ObservationIgnored private let completeSelfTask: CompleteSelfTaskUseCase
     @ObservationIgnored private let redeemTaskCode: RedeemTaskCodeUseCase
     @ObservationIgnored private let submitTaskPhoto: SubmitTaskPhotoUseCase
     @ObservationIgnored private let observeTaskSubmissions: ObserveTaskSubmissionsUseCase
-    @ObservationIgnored private let submissionsTask = LatestTask()
+    @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var userId: String?
 
     private(set) var uiState = TaskDetailUiState()
@@ -19,8 +19,8 @@ final class TaskDetailViewModel {
     init(
         taskId: String,
         observeSession: ObserveSessionUseCase,
-        fetchTasks: FetchTasksUseCase,
-        fetchCompletedTaskIds: FetchCompletedTaskIdsUseCase,
+        observeTask: ObserveTaskUseCase,
+        observeCompletedTaskIds: ObserveCompletedTaskIdsUseCase,
         completeSelfTask: CompleteSelfTaskUseCase,
         redeemTaskCode: RedeemTaskCodeUseCase,
         submitTaskPhoto: SubmitTaskPhotoUseCase,
@@ -28,8 +28,8 @@ final class TaskDetailViewModel {
     ) {
         self.taskId = taskId
         self.observeSession = observeSession
-        self.fetchTasks = fetchTasks
-        self.fetchCompletedTaskIds = fetchCompletedTaskIds
+        self.observeTask = observeTask
+        self.observeCompletedTaskIds = observeCompletedTaskIds
         self.completeSelfTask = completeSelfTask
         self.redeemTaskCode = redeemTaskCode
         self.submitTaskPhoto = submitTaskPhoto
@@ -39,20 +39,15 @@ final class TaskDetailViewModel {
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            await loadTask()
-            guard let userId = session?.userId else {
-                submissionsTask.cancel()
-                continue
-            }
-            submissionsTask.run { [weak self] in
-                await self?.observeSubmissions(userId: userId)
-            }
+            start(userId: session?.userId)
         }
-        submissionsTask.cancel()
+        sessionTask.cancel()
     }
 
     func retry() {
-        Task { await loadTask() }
+        uiState.isLoading = true
+        uiState.hasError = false
+        start(userId: userId)
     }
 
     func completeTask() {
@@ -122,21 +117,47 @@ final class TaskDetailViewModel {
         }
     }
 
-    private func loadTask() async {
-        uiState.isLoading = true
-        uiState.hasError = false
+    private func start(userId: String?) {
+        sessionTask.run { [weak self] in
+            await self?.observeData(userId: userId)
+        }
+    }
+
+    private func observeData(userId: String?) async {
+        guard let userId else {
+            await observeTaskDocument()
+            return
+        }
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.observeTaskDocument() }
+            group.addTask { await self.observeCompletion(userId: userId) }
+            group.addTask { await self.observeSubmissions(userId: userId) }
+        }
+    }
+
+    private func observeTaskDocument() async {
         do {
-            let task = try await fetchTasks.execute().first { return $0.id == taskId }
-            var completedIds: Set<String> = []
-            if let userId {
-                completedIds = try await fetchCompletedTaskIds.execute(userId: userId)
+            for try await task in observeTask.execute(taskId: taskId) {
+                uiState.task = task
+                uiState.isLoading = false
+                uiState.hasError = false
             }
-            uiState.task = task
-            uiState.isCompleted = completedIds.contains(taskId)
-            uiState.isLoading = false
         } catch {
+            guard !Task.isCancelled else {
+                return
+            }
             uiState.isLoading = false
-            uiState.hasError = true
+            uiState.hasError = uiState.task == nil
+        }
+    }
+
+    private func observeCompletion(userId: String) async {
+        do {
+            for try await completedTaskIds in observeCompletedTaskIds.execute(userId: userId) {
+                uiState.isCompleted = uiState.isCompleted || completedTaskIds.contains(taskId)
+            }
+        } catch {
+            return
         }
     }
 }

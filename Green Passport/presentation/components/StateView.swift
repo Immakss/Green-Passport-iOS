@@ -10,7 +10,6 @@ struct StateView: View {
             switch kind {
             case .loading:
                 ProgressView()
-                    .controlSize(.large)
             case .empty(let message):
                 MascotImage(size: Self.mascotSize)
                 Text(message)
