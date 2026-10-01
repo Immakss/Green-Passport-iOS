@@ -20,7 +20,7 @@ struct FavoritesRoute: View {
             segment: $segment,
             onTask: { selectedTask = TaskSheetItem(id: $0.id) },
             onTip: { router.push(.ecoTipDetail(tipId: $0.id)) },
-            onRefresh: viewModel.load
+            onRetry: viewModel.retry
         )
         .task {
             await viewModel.observe()

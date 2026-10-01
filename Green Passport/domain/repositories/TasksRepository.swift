@@ -1,4 +1,5 @@
 protocol TasksRepository {
-    func fetchTasks() async throws -> [EcoTask]
-    func fetchCompletedTaskIds(userId: String) async throws -> Set<String>
+    func observeTasks() -> AsyncThrowingStream<[EcoTask], Error>
+    func observeTask(id: String) -> AsyncThrowingStream<EcoTask?, Error>
+    func observeCompletedTaskIds(userId: String) -> AsyncThrowingStream<Set<String>, Error>
 }

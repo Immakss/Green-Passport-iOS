@@ -5,8 +5,7 @@ final class ProfileViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
     @ObservationIgnored private let observeUserProfile: ObserveUserProfileUseCase
     @ObservationIgnored private let observeIsModerator: ObserveIsModeratorUseCase
-    @ObservationIgnored private let fetchPointsBalance: FetchPointsBalanceUseCase
-    @ObservationIgnored private let fetchLevel: FetchLevelUseCase
+    @ObservationIgnored private let observeWallet: ObserveWalletUseCase
     @ObservationIgnored private let signOut: SignOutUseCase
     @ObservationIgnored private let isNotificationsEnabled: IsNotificationsEnabledUseCase
     @ObservationIgnored private let setNotificationsEnabled: SetNotificationsEnabledUseCase
@@ -20,8 +19,7 @@ final class ProfileViewModel {
         observeSession: ObserveSessionUseCase,
         observeUserProfile: ObserveUserProfileUseCase,
         observeIsModerator: ObserveIsModeratorUseCase,
-        fetchPointsBalance: FetchPointsBalanceUseCase,
-        fetchLevel: FetchLevelUseCase,
+        observeWallet: ObserveWalletUseCase,
         signOut: SignOutUseCase,
         isNotificationsEnabled: IsNotificationsEnabledUseCase,
         setNotificationsEnabled: SetNotificationsEnabledUseCase,
@@ -30,8 +28,7 @@ final class ProfileViewModel {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
         self.observeIsModerator = observeIsModerator
-        self.fetchPointsBalance = fetchPointsBalance
-        self.fetchLevel = fetchLevel
+        self.observeWallet = observeWallet
         self.signOut = signOut
         self.isNotificationsEnabled = isNotificationsEnabled
         self.setNotificationsEnabled = setNotificationsEnabled
@@ -48,18 +45,18 @@ final class ProfileViewModel {
             self.session = session
             uiState.email = session.email
             uiState.isAnonymous = session.isAnonymous
-            sessionTask.run { [weak self] in
-                await self?.observeUserData(userId: session.userId)
-            }
+            start(userId: session.userId)
         }
         sessionTask.cancel()
     }
 
-    func refresh() async {
+    func retry() {
         guard let session else {
             return
         }
-        await loadPoints(userId: session.userId)
+        uiState.isLoading = true
+        uiState.hasError = false
+        start(userId: session.userId)
     }
 
     func toggleNotifications(_ isEnabled: Bool) {
@@ -78,25 +75,35 @@ final class ProfileViewModel {
         try? signOut.execute()
     }
 
+    private func start(userId: String) {
+        sessionTask.run { [weak self] in
+            await self?.observeUserData(userId: userId)
+        }
+    }
+
     private func observeUserData(userId: String) async {
         await withTaskGroup(of: Void.self) { group in
-            group.addTask { await self.loadPoints(userId: userId) }
+            group.addTask { await self.observeWalletData(userId: userId) }
             group.addTask { await self.observeProfile(userId: userId) }
             group.addTask { await self.observeModerator(userId: userId) }
         }
     }
 
-    private func loadPoints(userId: String) async {
+    private func observeWalletData(userId: String) async {
         do {
-            async let points = fetchPointsBalance.execute(userId: userId)
-            async let level = fetchLevel.execute(userId: userId)
-            uiState.points = try await points
-            uiState.level = try await level
-            uiState.hasError = false
+            for try await wallet in observeWallet.execute(userId: userId) {
+                uiState.points = wallet.availablePoints
+                uiState.level = wallet.level
+                uiState.isLoading = false
+                uiState.hasError = false
+            }
         } catch {
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
             uiState.hasError = true
         }
-        uiState.isLoading = false
     }
 
     private func observeProfile(userId: String) async {

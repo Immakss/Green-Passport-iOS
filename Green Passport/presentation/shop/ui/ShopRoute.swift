@@ -21,7 +21,7 @@ struct ShopRoute: View {
                 }
             },
             onCoupons: { router.push(.coupons) },
-            onRefresh: viewModel.refresh
+            onRetry: viewModel.retry
         )
         .task {
             await viewModel.observe()
@@ -41,8 +41,6 @@ struct ShopRoute: View {
             Text(.exchangePointsForRewardMsg(reward.pointsCost, reward.title))
         }
         .sensoryFeedback(.success, trigger: viewModel.purchaseCount)
-        .couponDetailSheet(item: $viewModel.purchasedCoupon, container: container) {
-            Task { await viewModel.refresh() }
-        }
+        .couponDetailSheet(item: $viewModel.purchasedCoupon, container: container)
     }
 }

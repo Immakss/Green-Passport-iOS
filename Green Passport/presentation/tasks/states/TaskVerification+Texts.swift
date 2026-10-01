@@ -4,7 +4,7 @@ extension TaskVerification {
     var title: LocalizedStringResource {
         switch self {
         case .selfReported:
-            return .honorSystem
+            return .noProofNeeded
         case .photo:
             return .photoConfirmation
         case .qr:

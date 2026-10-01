@@ -15,10 +15,10 @@ struct CalendarRoute: View {
         CalendarScreen(
             uiState: viewModel.uiState,
             onEvent: { selectedEvent = EventSheetItem(id: $0.id) },
-            onRefresh: viewModel.load
+            onRetry: viewModel.retry
         )
-        .task {
-            await viewModel.load()
+        .task(id: viewModel.observationId) {
+            await viewModel.observe()
         }
         .eventDetailSheet(item: $selectedEvent, container: container)
     }

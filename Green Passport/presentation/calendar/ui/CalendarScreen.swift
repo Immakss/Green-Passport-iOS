@@ -5,7 +5,7 @@ struct CalendarScreen: View {
 
     let uiState: ListUiState<EcoEvent>
     let onEvent: (EcoEvent) -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         Group {
@@ -13,7 +13,7 @@ struct CalendarScreen: View {
             case .loading:
                 StateView(kind: .loading)
             case .error:
-                StateView(kind: .error(retry: { Task { await onRefresh() } }))
+                StateView(kind: .error(retry: onRetry))
             case .success(let events) where events.isEmpty:
                 StateView(kind: .empty(message: .calendarEmpty))
             case .success(let events):
@@ -36,9 +36,6 @@ struct CalendarScreen: View {
                     .padding(.horizontal, Spacing.screenHorizontal)
                     .padding(.bottom, Spacing.large)
                 }
-                .refreshable {
-                    await onRefresh()
-                }
             }
         }
         .background(Palette.screenBackground)
@@ -48,6 +45,6 @@ struct CalendarScreen: View {
 
 #Preview {
     NavigationStack {
-        CalendarScreen(uiState: .success(data: []), onEvent: { _ in }, onRefresh: {})
+        CalendarScreen(uiState: .success(data: []), onEvent: { _ in }, onRetry: {})
     }
 }

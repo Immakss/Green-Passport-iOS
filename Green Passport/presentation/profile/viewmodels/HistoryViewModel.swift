@@ -22,7 +22,6 @@ final class HistoryViewModel {
 
     func load() async {
         guard let userId else {
-            uiState = .success(data: [])
             return
         }
         do {

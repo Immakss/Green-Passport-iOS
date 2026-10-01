@@ -4,10 +4,11 @@ import Observation
 @Observable
 final class ShopViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
-    @ObservationIgnored private let fetchRewards: FetchRewardsUseCase
-    @ObservationIgnored private let fetchCoupons: FetchCouponsUseCase
-    @ObservationIgnored private let fetchPointsBalance: FetchPointsBalanceUseCase
+    @ObservationIgnored private let observeRewards: ObserveRewardsUseCase
+    @ObservationIgnored private let observeCoupons: ObserveCouponsUseCase
+    @ObservationIgnored private let observeWallet: ObserveWalletUseCase
     @ObservationIgnored private let purchaseReward: PurchaseRewardUseCase
+    @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var userId: String?
 
     private(set) var uiState = ShopUiState()
@@ -16,45 +17,30 @@ final class ShopViewModel {
 
     init(
         observeSession: ObserveSessionUseCase,
-        fetchRewards: FetchRewardsUseCase,
-        fetchCoupons: FetchCouponsUseCase,
-        fetchPointsBalance: FetchPointsBalanceUseCase,
+        observeRewards: ObserveRewardsUseCase,
+        observeCoupons: ObserveCouponsUseCase,
+        observeWallet: ObserveWalletUseCase,
         purchaseReward: PurchaseRewardUseCase
     ) {
         self.observeSession = observeSession
-        self.fetchRewards = fetchRewards
-        self.fetchCoupons = fetchCoupons
-        self.fetchPointsBalance = fetchPointsBalance
+        self.observeRewards = observeRewards
+        self.observeCoupons = observeCoupons
+        self.observeWallet = observeWallet
         self.purchaseReward = purchaseReward
     }
 
     func observe() async {
         for await session in observeSession.execute() {
             userId = session?.userId
-            await refresh()
+            start(userId: session?.userId)
         }
+        sessionTask.cancel()
     }
 
-    func refresh() async {
+    func retry() {
+        uiState.isLoading = true
         uiState.hasError = false
-        do {
-            let rewards = try await fetchRewards.execute()
-            var points = 0
-            var activeCouponCount = 0
-            if let userId {
-                points = try await fetchPointsBalance.execute(userId: userId)
-                let now = Date()
-                activeCouponCount = try await fetchCoupons.execute(userId: userId)
-                    .filter { return $0.coupon.status(at: now) == .active }
-                    .count
-            }
-            uiState.rewards = rewards
-            uiState.points = points
-            uiState.activeCouponCount = activeCouponCount
-        } catch {
-            uiState.hasError = true
-        }
-        uiState.isLoading = false
+        start(userId: userId)
     }
 
     func canAfford(_ reward: Reward) -> Bool {
@@ -72,11 +58,67 @@ final class ShopViewModel {
             do {
                 purchasedCoupon = try await purchaseReward.execute(reward: reward)
                 purchaseCount += 1
-                await refresh()
             } catch {
                 uiState.hasInsufficientPoints = true
             }
             uiState.purchasingRewardId = nil
+        }
+    }
+
+    private func start(userId: String?) {
+        sessionTask.run { [weak self] in
+            await self?.observeData(userId: userId)
+        }
+    }
+
+    private func observeData(userId: String?) async {
+        guard let userId else {
+            uiState.points = 0
+            uiState.activeCouponCount = 0
+            await observeRewardList()
+            return
+        }
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask { await self.observeRewardList() }
+            group.addTask { await self.observeBalance(userId: userId) }
+            group.addTask { await self.observeActiveCoupons(userId: userId) }
+        }
+    }
+
+    private func observeRewardList() async {
+        do {
+            for try await rewards in observeRewards.execute() {
+                uiState.rewards = rewards
+                uiState.isLoading = false
+                uiState.hasError = false
+            }
+        } catch {
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
+            uiState.hasError = uiState.rewards.isEmpty
+        }
+    }
+
+    private func observeBalance(userId: String) async {
+        do {
+            for try await wallet in observeWallet.execute(userId: userId) {
+                uiState.points = wallet.availablePoints
+            }
+        } catch {
+            return
+        }
+    }
+
+    private func observeActiveCoupons(userId: String) async {
+        do {
+            for try await coupons in observeCoupons.execute(userId: userId) {
+                let now = Date()
+                uiState.activeCouponCount = coupons.filter { return $0.coupon.status(at: now) == .active }.count
+            }
+        } catch {
+            return
         }
     }
 }

@@ -6,7 +6,7 @@ struct CouponsScreen: View {
     let uiState: CouponsUiState
     @Binding var tab: CouponsTab
     let onCoupon: (CouponItem) -> Void
-    let onRefresh: () async -> Void
+    let onRetry: () -> Void
 
     var body: some View {
         let now = Date()
@@ -17,7 +17,7 @@ struct CouponsScreen: View {
                     StateView(kind: .loading)
                         .containerRelativeFrame(.vertical)
                 } else if uiState.hasError {
-                    StateView(kind: .error(retry: { Task { await onRefresh() } }))
+                    StateView(kind: .error(retry: onRetry))
                 } else if items.isEmpty {
                     StateView(kind: .empty(message: tab.emptyMessage))
                 } else {
@@ -43,9 +43,6 @@ struct CouponsScreen: View {
             .padding(.vertical, Spacing.xSmall)
         }
         .navigationTitle(Text(.myCoupons))
-        .refreshable {
-            await onRefresh()
-        }
         .animation(.snappy, value: tab)
     }
 
@@ -86,6 +83,6 @@ struct CouponsScreen: View {
 
 #Preview {
     NavigationStack {
-        CouponsScreen(uiState: CouponsUiState(isLoading: false), tab: .constant(.active), onCoupon: { _ in }, onRefresh: {})
+        CouponsScreen(uiState: CouponsUiState(isLoading: false), tab: .constant(.active), onCoupon: { _ in }, onRetry: {})
     }
 }

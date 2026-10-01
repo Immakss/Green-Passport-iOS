@@ -3,4 +3,5 @@ struct GameWebUiState {
     var hasError = false
     var lastReward: RewardResult?
     var rewardCount = 0
+    var rewardFailure: RewardFailure?
 }

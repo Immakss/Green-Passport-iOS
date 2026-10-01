@@ -25,13 +25,13 @@ final class FirestoreHistoryRepository: HistoryRepository {
     }
 
     func fetchHistory(userId: String) async throws -> [HistoryEntry] {
-        let taskTitles = Dictionary(try await tasksRepository.fetchTasks().map { return ($0.id, $0.title) }) { first, _ in
+        let taskTitles = Dictionary((try await tasksRepository.observeTasks().firstValue() ?? []).map { return ($0.id, $0.title) }) { first, _ in
             return first
         }
-        let eventTitles = Dictionary(try await eventsRepository.fetchEvents().map { return ($0.id, $0.title) }) { first, _ in
+        let eventTitles = Dictionary((try await eventsRepository.observeEvents().firstValue() ?? []).map { return ($0.id, $0.title) }) { first, _ in
             return first
         }
-        let rewardTitles = Dictionary(try await shopRepository.fetchRewards().map { return ($0.id, $0.title) }) { first, _ in
+        let rewardTitles = Dictionary((try await shopRepository.observeRewards().firstValue() ?? []).map { return ($0.id, $0.title) }) { first, _ in
             return first
         }
         let taskEntries = try await FirestoreCollections.taskProgress(firestore)
@@ -66,7 +66,7 @@ final class FirestoreHistoryRepository: HistoryRepository {
                     timestamp: registeredAt
                 )
             }
-        let rewardEntries = try await shopRepository.fetchPurchases(userId: userId).map { coupon in
+        let rewardEntries = (try await shopRepository.observePurchases(userId: userId).firstValue() ?? []).map { coupon in
             return HistoryEntry(
                 id: coupon.id,
                 type: .rewardRedeemed,

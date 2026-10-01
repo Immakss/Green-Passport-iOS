@@ -58,15 +58,29 @@ struct EcoTipDetailScreen: View {
         .safeAreaInset(edge: .bottom) {
             Group {
                 if uiState.isRead {
-                    Label {
-                        Text(.ecotipDetailReadLabel)
-                    } icon: {
-                        Image(systemName: "checkmark.circle.fill")
+                    VStack(spacing: Spacing.xxSmall) {
+                        Label {
+                            Text(.ecotipDetailReadLabel)
+                        } icon: {
+                            Image(systemName: "checkmark.circle.fill")
+                        }
+                        .font(.headline)
+                        .foregroundStyle(Palette.forest)
+                        if uiState.streakBonus > 0 {
+                            Text(.streakBonusMsg(uiState.streakBonus))
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(Palette.forest)
+                        }
                     }
-                    .font(.headline)
-                    .foregroundStyle(Palette.forest)
                 } else {
-                    AppButton(title: .ecotipDetailMarkReadButton, isLoading: uiState.isSubmitting, action: onMarkRead)
+                    VStack(spacing: Spacing.small) {
+                        if let failure = uiState.failure {
+                            Text(failure.message)
+                                .font(.footnote)
+                                .foregroundStyle(Palette.error)
+                        }
+                        AppButton(title: .ecotipDetailMarkReadButton, isLoading: uiState.isSubmitting, action: onMarkRead)
+                    }
                 }
             }
             .padding(.horizontal, Spacing.screenHorizontal)

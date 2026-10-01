@@ -9,12 +9,12 @@ final class SubmitGameResultUseCase {
         self.authRepository = authRepository
     }
 
-    func execute(gameId: String, score: Int) async -> RewardResult? {
+    func execute(gameId: String, score: Int) async throws -> RewardResult? {
         gameProgressRepository.recordScore(gameId: gameId, score: score)
-        guard await isSignedIn() else {
+        guard score > 0, await isSignedIn() else {
             return nil
         }
-        return try? await rewardsRepository.recordGameResult(gameId: gameId, score: score)
+        return try await rewardsRepository.recordGameResult(gameId: gameId, score: score)
     }
 
     private func isSignedIn() async -> Bool {

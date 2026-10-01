@@ -1,4 +1,4 @@
 protocol EcoTipsRepository {
-    func fetchTips() async throws -> [EcoTip]
-    func fetchReadTipIds(userId: String) async throws -> Set<String>
+    func observeTips() -> AsyncThrowingStream<[EcoTip], Error>
+    func observeReadTipIds(userId: String) -> AsyncThrowingStream<Set<String>, Error>
 }

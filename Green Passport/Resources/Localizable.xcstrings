@@ -599,18 +599,6 @@
         }
       }
     },
-    "belarusian_language_name": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Беларуская"
-          }
-        }
-      },
-      "shouldTranslate": false
-    },
     "bookmarks_empty": {
       "extractionState": "manual",
       "localizations": {
@@ -630,29 +618,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пока нет закладок — отметьте совет закладкой на экране эко-советов"
-          }
-        }
-      }
-    },
-    "bookmarks_screen_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Закладкі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bookmarks"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Закладки"
           }
         }
       }
@@ -2037,18 +2002,6 @@
         }
       }
     },
-    "english_language_name": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "English"
-          }
-        }
-      },
-      "shouldTranslate": false
-    },
     "enter_valid_email": {
       "extractionState": "manual",
       "localizations": {
@@ -2739,29 +2692,6 @@
         }
       }
     },
-    "for_you": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для цябе"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "For you"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Для тебя"
-          }
-        }
-      }
-    },
     "forum_draft_label": {
       "extractionState": "manual",
       "localizations": {
@@ -2827,121 +2757,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отправить"
-          }
-        }
-      }
-    },
-    "game_eco_maze_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эка-лабірынт"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eco Maze"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эко-лабиринт"
-          }
-        }
-      }
-    },
-    "game_eco_puzzle_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эка-галаваломка"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eco Puzzle"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эко-головоломка"
-          }
-        }
-      }
-    },
-    "game_eco_quiz_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эка-віктарына"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Eco Quiz"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Эко-викторина"
-          }
-        }
-      }
-    },
-    "game_play_again": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гуляць зноў"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Play again"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Играть снова"
-          }
-        }
-      }
-    },
-    "game_waste_sorting_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сартаванне адходаў"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Waste Sorting"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сортировка отходов"
           }
         }
       }
@@ -3452,52 +3267,6 @@
         }
       }
     },
-    "home_tile_calendar": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каляндар падзей"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Event calendar"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Календарь событий"
-          }
-        }
-      }
-    },
-    "home_tile_community": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Супольнасць"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Community"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сообщество"
-          }
-        }
-      }
-    },
     "home_tile_ecotips": {
       "extractionState": "manual",
       "localizations": {
@@ -3521,121 +3290,6 @@
         }
       }
     },
-    "home_tile_feedback": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зваротная сувязь"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Feedback"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обратная связь"
-          }
-        }
-      }
-    },
-    "home_tile_games": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Міні-гульні"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Mini-games"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мини-игры"
-          }
-        }
-      }
-    },
-    "home_tile_map": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карта"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Map"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Карта"
-          }
-        }
-      }
-    },
-    "home_tile_profile": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мой профіль"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My profile"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мой профиль"
-          }
-        }
-      }
-    },
-    "home_tile_shop": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Крама"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Shop"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Магазин"
-          }
-        }
-      }
-    },
     "home_tile_tasks": {
       "extractionState": "manual",
       "localizations": {
@@ -3655,29 +3309,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Задания"
-          }
-        }
-      }
-    },
-    "honor_system": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пад сумленнае слова"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Honor system"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Под честное слово"
           }
         }
       }
@@ -3958,29 +3589,6 @@
         }
       }
     },
-    "map_route_unavailable": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пабудова маршруту пакуль недаступная"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Route directions aren't available yet"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Построение маршрута пока недоступно"
-          }
-        }
-      }
-    },
     "map_search_placeholder": {
       "extractionState": "manual",
       "localizations": {
@@ -4138,52 +3746,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отметить купон использованным? Отменить это нельзя"
-          }
-        }
-      }
-    },
-    "maze_finished_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вы прайшлі лабірынт! Ачкі: %1$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You made it through the maze! Score: %1$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вы прошли лабиринт! Очки: %1$lld"
-          }
-        }
-      }
-    },
-    "maze_score_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ачкі: %1$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Score: %1$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очки: %1$lld"
           }
         }
       }
@@ -4510,6 +4072,29 @@
         }
       }
     },
+    "no_internet_for_points_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Каб атрымаць балы, патрэбны інтэрнэт"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You need an internet connection to get points"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Нужен интернет, чтобы получить очки"
+          }
+        }
+      }
+    },
     "no_name": {
       "extractionState": "manual",
       "localizations": {
@@ -4552,6 +4137,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Нет фото на проверке"
+          }
+        }
+      }
+    },
+    "no_proof_needed": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без пацвярджэння"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No proof needed"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Без подтверждения"
           }
         }
       }
@@ -4621,29 +4229,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Использованных купонов пока нет"
-          }
-        }
-      }
-    },
-    "notification_channel_rewards_name": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Узнагароды і напаміны"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Rewards and reminders"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Награды и напоминания"
           }
         }
       }
@@ -4828,6 +4413,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Другое"
+          }
+        }
+      }
+    },
+    "partner_scans_qr_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Партнёр скануе QR-код камерай — купон пагасіцца аўтаматычна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The partner scans the QR code with a camera and the coupon is redeemed automatically"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Партнёр сканирует QR-код камерой — купон погасится автоматически"
           }
         }
       }
@@ -5384,52 +4992,6 @@
         }
       }
     },
-    "puzzle_finished_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гатова! Хадоў: %1$lld, ачкі: %2$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Done! Moves: %1$lld, score: %2$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Готово! Ходов: %1$lld, очки: %2$lld"
-          }
-        }
-      }
-    },
-    "puzzle_instructions": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Знайдзіце пары аднолькавых картак"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Find matching pairs of cards"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Найдите пары одинаковых карточек"
-          }
-        }
-      }
-    },
     "qr_code_on_site": {
       "extractionState": "manual",
       "localizations": {
@@ -5472,627 +5034,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сканер QR-кодов недоступен на этом устройстве"
-          }
-        }
-      }
-    },
-    "quiz_finished_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Віктарына скончана! Правільных адказаў: %1$lld з %2$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Quiz complete! Correct answers: %1$lld of %2$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Викторина окончена! Правильных ответов: %1$lld из %2$lld"
-          }
-        }
-      }
-    },
-    "quiz_options_1_0": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шкляная бутэлька"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glass bottle"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Стеклянная бутылка"
-          }
-        }
-      }
-    },
-    "quiz_options_1_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Алюмініевая бляшанка"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aluminum can"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Алюминиевая банка"
-          }
-        }
-      }
-    },
-    "quiz_options_1_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выкарыстаная жуйка"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Used chewing gum"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Использованная жвачка"
-          }
-        }
-      }
-    },
-    "quiz_options_1_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кардон"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cardboard"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картон"
-          }
-        }
-      }
-    },
-    "quiz_options_2_0": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Аднаразовы посуд"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Disposable tableware"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Одноразовая посуда"
-          }
-        }
-      }
-    },
-    "quiz_options_2_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шматразовыя сумкі для пакупак"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Reusable shopping bags"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Многоразовые сумки для покупок"
-          }
-        }
-      }
-    },
-    "quiz_options_2_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Частая замена тэхнікі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Frequently replacing devices"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Частая замена техники"
-          }
-        }
-      }
-    },
-    "quiz_options_2_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лішняя ўпакоўка тавараў"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Excess product packaging"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Лишняя упаковка товаров"
-          }
-        }
-      }
-    },
-    "quiz_options_3_0": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кісларод"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oxygen"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кислород"
-          }
-        }
-      }
-    },
-    "quiz_options_3_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вуглякіслы газ"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Carbon dioxide"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Углекислый газ"
-          }
-        }
-      }
-    },
-    "quiz_options_3_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Азот"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Nitrogen"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Азот"
-          }
-        }
-      }
-    },
-    "quiz_options_3_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вадарод"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Hydrogen"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Водород"
-          }
-        }
-      }
-    },
-    "quiz_options_4_0": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вугаль"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Coal"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Уголь"
-          }
-        }
-      }
-    },
-    "quiz_options_4_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нафта"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Oil"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Нефть"
-          }
-        }
-      }
-    },
-    "quiz_options_4_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Сонечная энергія"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Solar energy"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Солнечная энергия"
-          }
-        }
-      }
-    },
-    "quiz_options_4_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Прыродны газ"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Natural gas"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Природный газ"
-          }
-        }
-      }
-    },
-    "quiz_options_5_0": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каб смецця было больш"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To create more waste"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чтобы мусора было больше"
-          }
-        }
-      }
-    },
-    "quiz_options_5_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каб спрасціць перапрацоўку"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To make recycling easier"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чтобы упростить переработку"
-          }
-        }
-      }
-    },
-    "quiz_options_5_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Каб ускладніць вываз"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "To make collection harder"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Чтобы усложнить вывоз"
-          }
-        }
-      }
-    },
-    "quiz_options_5_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гэта не мае значэння"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "It doesn't matter"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Это не имеет значения"
-          }
-        }
-      }
-    },
-    "quiz_question_1": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Што з пералічанага НЕ перапрацоўваецца паўторна?"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Which of these is NOT recyclable?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Что из перечисленного НЕ перерабатывается повторно?"
-          }
-        }
-      }
-    },
-    "quiz_question_2": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Што дапамагае скараціць колькасць адходаў?"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "What helps reduce the amount of waste?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Что помогает сократить количество отходов?"
-          }
-        }
-      }
-    },
-    "quiz_question_3": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Які газ паглынаюць дрэвы, дапамагаючы змагацца са зменай клімату?"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Which gas do trees absorb, helping fight climate change?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Какой газ поглощают деревья, помогая бороться с изменением климата?"
-          }
-        }
-      }
-    },
-    "quiz_question_4": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Што з гэтага — прыклад аднаўляльнай крыніцы энергіі?"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Which of these is an example of a renewable energy source?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Что из этого — пример возобновляемого источника энергии?"
-          }
-        }
-      }
-    },
-    "quiz_question_5": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Навошта патрэбна сартаванне смецця?"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Why does waste sorting matter?"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Зачем нужна сортировка мусора?"
-          }
-        }
-      }
-    },
-    "quiz_score_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пытанне %1$lld з %2$lld · Ачкі: %3$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Question %1$lld of %2$lld · Score: %3$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вопрос %1$lld из %2$lld · Очки: %3$lld"
           }
         }
       }
@@ -6534,18 +5475,6 @@
         }
       }
     },
-    "russian_language_name": {
-      "extractionState": "manual",
-      "localizations": {
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Русский"
-          }
-        }
-      },
-      "shouldTranslate": false
-    },
     "save": {
       "extractionState": "manual",
       "localizations": {
@@ -6707,29 +5636,6 @@
         }
       }
     },
-    "shop_empty_purchases": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вы яшчэ не абменьвалі балы на купоны"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You haven't redeemed any points yet"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Вы ещё не обменивали баллы на купоны"
-          }
-        }
-      }
-    },
     "shop_empty_rewards": {
       "extractionState": "manual",
       "localizations": {
@@ -6749,29 +5655,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Пока нет доступных купонов"
-          }
-        }
-      }
-    },
-    "shop_history_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мае пакупкі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My purchases"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мои покупки"
           }
         }
       }
@@ -6818,29 +5701,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Обменять"
-          }
-        }
-      }
-    },
-    "show_code_to_partner_msg": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пакажыце код або QR-код на касе партнёра"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Show the code or the QR code at the partner's checkout"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Покажите код или QR-код на кассе партнёра"
           }
         }
       }
@@ -7006,374 +5866,6 @@
         }
       }
     },
-    "sorting_bin_glass": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шкло"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glass"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Стекло"
-          }
-        }
-      }
-    },
-    "sorting_bin_metal": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Метал"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Metal"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Металл"
-          }
-        }
-      }
-    },
-    "sorting_bin_paper": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Папера"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Paper"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бумага"
-          }
-        }
-      }
-    },
-    "sorting_bin_plastic": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластык"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plastic"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластик"
-          }
-        }
-      }
-    },
-    "sorting_finished_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Гульня скончана! Ачкі: %1$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Game over! Score: %1$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Игра окончена! Очки: %1$lld"
-          }
-        }
-      }
-    },
-    "sorting_instructions": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выберыце правільны кантэйнер для адходу"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Pick the right bin for the item"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Выберите правильный контейнер для отхода"
-          }
-        }
-      }
-    },
-    "sorting_item_cardboard_box": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Кардонная скрынка"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Cardboard box"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Картонная коробка"
-          }
-        }
-      }
-    },
-    "sorting_item_foil": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Алюмініевая фальга"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Aluminum foil"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Алюминиевая фольга"
-          }
-        }
-      }
-    },
-    "sorting_item_glass_bottle": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шкляная бутэлька"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glass bottle"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Стеклянная бутылка"
-          }
-        }
-      }
-    },
-    "sorting_item_glass_jar": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Шкляны слоік"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Glass jar"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Стеклянная банка"
-          }
-        }
-      }
-    },
-    "sorting_item_newspaper": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Газета"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Newspaper"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Газета"
-          }
-        }
-      }
-    },
-    "sorting_item_plastic_bag": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластыкавы пакет"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plastic bag"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластиковый пакет"
-          }
-        }
-      }
-    },
-    "sorting_item_plastic_bottle": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластыкавая бутэлька"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Plastic bottle"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Пластиковая бутылка"
-          }
-        }
-      }
-    },
-    "sorting_item_soda_can": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Бляшанка з-пад газіроўкі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Soda can"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Банка из-под газировки"
-          }
-        }
-      }
-    },
-    "sorting_score_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Ачкі: %1$lld"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Score: %1$lld"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Очки: %1$lld"
-          }
-        }
-      }
-    },
-    "sorting_time_format": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Засталося: %1$lld с"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Time left: %1$llds"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Осталось: %1$lld с"
-          }
-        }
-      }
-    },
     "spam": {
       "extractionState": "manual",
       "localizations": {
@@ -7485,29 +5977,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld дн. подряд"
-          }
-        }
-      }
-    },
-    "system_language": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Як у сістэме"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "System default"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Как в системе"
           }
         }
       }

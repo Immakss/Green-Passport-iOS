@@ -3,31 +3,44 @@ import Observation
 
 @Observable
 final class MapViewModel {
-    @ObservationIgnored private let fetchMapPoints: FetchMapPointsUseCase
+    @ObservationIgnored private let observeMapPoints: ObserveMapPointsUseCase
     @ObservationIgnored private let savedMapPointIds: SavedMapPointIdsUseCase
     @ObservationIgnored private let toggleSavedMapPoint: ToggleSavedMapPointUseCase
 
     var uiState = MapUiState()
+    private(set) var observationId = 0
 
     init(
-        fetchMapPoints: FetchMapPointsUseCase,
+        observeMapPoints: ObserveMapPointsUseCase,
         savedMapPointIds: SavedMapPointIdsUseCase,
         toggleSavedMapPoint: ToggleSavedMapPointUseCase
     ) {
-        self.fetchMapPoints = fetchMapPoints
+        self.observeMapPoints = observeMapPoints
         self.savedMapPointIds = savedMapPointIds
         self.toggleSavedMapPoint = toggleSavedMapPoint
     }
 
-    func load() async {
+    func observe() async {
         uiState.savedPointIds = savedMapPointIds.execute()
-        uiState.hasError = false
         do {
-            uiState.points = try await fetchMapPoints.execute()
+            for try await points in observeMapPoints.execute() {
+                uiState.points = points
+                uiState.isLoading = false
+                uiState.hasError = false
+            }
         } catch {
-            uiState.hasError = true
+            guard !Task.isCancelled else {
+                return
+            }
+            uiState.isLoading = false
+            uiState.hasError = uiState.points.isEmpty
         }
-        uiState.isLoading = false
+    }
+
+    func retry() {
+        uiState.isLoading = true
+        uiState.hasError = false
+        observationId += 1
     }
 
     func toggleSaved(_ point: MapPoint) {

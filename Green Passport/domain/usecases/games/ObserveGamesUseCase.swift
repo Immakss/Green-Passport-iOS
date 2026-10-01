@@ -1,11 +1,11 @@
-final class FetchGamesUseCase {
+final class ObserveGamesUseCase {
     private let gamesRepository: GamesRepository
 
     init(gamesRepository: GamesRepository) {
         self.gamesRepository = gamesRepository
     }
 
-    func execute() async throws -> [Game] {
-        return try await gamesRepository.fetchGames()
+    func execute() -> AsyncThrowingStream<[Game], Error> {
+        return gamesRepository.observeGames()
     }
 }

@@ -12,7 +12,7 @@ struct TasksListRoute: View {
     }
 
     var body: some View {
-        TasksListScreen(uiState: viewModel.uiState, onRefresh: viewModel.refresh) { action in
+        TasksListScreen(uiState: viewModel.uiState) { action in
             if case .taskSelected(let task) = action {
                 selectedTask = TaskSheetItem(id: task.id)
             }
@@ -21,8 +21,6 @@ struct TasksListRoute: View {
         .task {
             await viewModel.observe()
         }
-        .taskDetailSheet(item: $selectedTask, container: container) {
-            Task { await viewModel.refresh() }
-        }
+        .taskDetailSheet(item: $selectedTask, container: container)
     }
 }

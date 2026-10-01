@@ -37,7 +37,6 @@ struct MapScreen: View {
         .overlay {
             if uiState.isLoading {
                 ProgressView()
-                    .controlSize(.large)
             } else if uiState.hasError {
                 StateView(kind: .error(retry: onRetry))
                     .background(.regularMaterial)

@@ -17,31 +17,32 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
         self.firestore = firestore
     }
 
-    func fetchTips() async throws -> [EcoTip] {
-        let snapshot = try await FirestoreCollections.ecoTips(firestore).getDocuments()
-        return snapshot.documents.compactMap { document in
-            guard let category = document.string(Self.fieldCategory).flatMap(EcoTipCategory.init(rawValue:)),
-                  let title = document.string(Self.fieldTitle),
-                  let body = document.string(Self.fieldBody) else {
-                return nil
+    func observeTips() -> AsyncThrowingStream<[EcoTip], Error> {
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.ecoTips(firestore))) { snapshot in
+            return snapshot.documents.compactMap { document in
+                guard let category = document.string(Self.fieldCategory).flatMap(EcoTipCategory.init(rawValue:)),
+                      let title = document.string(Self.fieldTitle),
+                      let body = document.string(Self.fieldBody) else {
+                    return nil
+                }
+                return EcoTip(
+                    id: document.documentID,
+                    category: category,
+                    title: title,
+                    body: body,
+                    mediaUrl: document.string(Self.fieldMediaUrl),
+                    isDailyTip: document.bool(Self.fieldIsDailyTip) ?? false,
+                    rewardPoints: document.int(Self.fieldRewardPoints) ?? 0,
+                    rewardXp: document.int(Self.fieldRewardXp) ?? 0
+                )
             }
-            return EcoTip(
-                id: document.documentID,
-                category: category,
-                title: title,
-                body: body,
-                mediaUrl: document.string(Self.fieldMediaUrl),
-                isDailyTip: document.bool(Self.fieldIsDailyTip) ?? false,
-                rewardPoints: document.int(Self.fieldRewardPoints) ?? 0,
-                rewardXp: document.int(Self.fieldRewardXp) ?? 0
-            )
         }
     }
 
-    func fetchReadTipIds(userId: String) async throws -> Set<String> {
-        let snapshot = try await FirestoreCollections.ecoTipReads(firestore)
-            .whereField(Self.fieldUserId, isEqualTo: userId)
-            .getDocuments()
-        return Set(snapshot.documents.compactMap { return $0.string(Self.fieldTipId) })
+    func observeReadTipIds(userId: String) -> AsyncThrowingStream<Set<String>, Error> {
+        let query = FirestoreCollections.ecoTipReads(firestore).whereField(Self.fieldUserId, isEqualTo: userId)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
+            return Set(snapshot.documents.compactMap { return $0.string(Self.fieldTipId) })
+        }
     }
 }
