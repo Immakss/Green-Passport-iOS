@@ -268,7 +268,25 @@ extension AppDIContainer {
             observeSession: observeSessionUseCase,
             observeGroups: ObserveGroupsUseCase(communityRepository: communityRepository),
             createGroup: CreateGroupUseCase(communityRepository: communityRepository, textModerator: textModerator),
-            joinGroup: JoinGroupUseCase(communityRepository: communityRepository)
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository),
+            joinGroupByCode: JoinGroupByCodeUseCase(communityRepository: communityRepository)
+        )
+    }
+
+    func buildGroupDetailViewModel(groupId: String) -> GroupDetailViewModel {
+        return GroupDetailViewModel(
+            groupId: groupId,
+            observeSession: observeSessionUseCase,
+            observeGroup: ObserveGroupUseCase(communityRepository: communityRepository),
+            observeMessages: ObserveGroupMessagesUseCase(communityRepository: communityRepository),
+            sendMessage: SendGroupMessageUseCase(
+                communityRepository: communityRepository,
+                userProfileRepository: userProfileRepository,
+                textModerator: textModerator
+            ),
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository),
+            leaveGroup: LeaveGroupUseCase(communityRepository: communityRepository),
+            fetchMembers: FetchGroupMembersUseCase(communityRepository: communityRepository)
         )
     }
 

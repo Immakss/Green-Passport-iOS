@@ -1,9 +1,6 @@
 # План: группы с чатом и приглашениями, починка отправки на форуме
 
 
-## 0. Предусловие: место на диске
-Диск заполнен (`ENOSPC`): не выполняется ни одна shell-команда, сборка тоже не пройдёт. До начала работ пользователь освобождает место, например удаляет `~/Library/Developer/Xcode/DerivedData` и старые симуляторы/архивы.
-
 ## Контекст
 - Экрана группы, добавления людей и сообщений в группах никогда не было, ни на iOS, ни на Android. По спеке 6.14 группы — это только «создать / вступить». В `firestore.rules` заготовлены `chats/{chatId}/messages`, но клиентского кода нет.
 - Дыра в правилах: `groups` разрешает любому пользователю переписать `memberIds` чужой группы, то есть выкинуть всех.
@@ -113,6 +110,21 @@ func fetchMembers(ids: [String]) async throws -> [GroupMember]
 - Спека 6.14: экран группы, чат только для участников, приглашение по коду, выход из группы, ошибка отправки.
 - Android backlog: тот же экран группы и чат, «Вступить по коду», показ ошибки отправки на форуме.
 - Код Android в этой задаче не меняется. Меняются только общие правила, тесты правил и скрипт миграции в Android-репо.
+
+
+## 6a. Совместимость Android с новыми правилами
+`allow create` для `groups` требует `ownerId` и `inviteCode`, а Android `FirestoreCommunityRepository.createGroup` пишет только `name` и `memberIds`. После деплоя правил создание группы на Android упадёт с `PERMISSION_DENIED`. Поэтому в этой же задаче Android минимально правится без UI: `createGroup` пишет `ownerId`, `createdAtEpochMillis` и `inviteCode` (генератор `InviteCodeGenerator` в `core`, порт `couponCode.ts`), а мёртвый код чата переходит с `sentAtEpochMillis` на `createdAtEpochMillis`.
+```kotlin
+object InviteCodeGenerator {
+    private const val ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
+    private const val LENGTH = 6
+
+    fun generate(): String {
+        val random = SecureRandom()
+        return (1..LENGTH).map { ALPHABET[random.nextInt(ALPHABET.length)] }.joinToString("")
+    }
+}
+```
 
 ## Проверка
 ```bash

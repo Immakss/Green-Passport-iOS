@@ -10,6 +10,16 @@ final class FirestoreCommunityRepository: CommunityRepository {
     private static let fieldReportCount = "reportCount"
     private static let fieldName = "name"
     private static let fieldMemberIds = "memberIds"
+    private static let fieldOwnerId = "ownerId"
+    private static let fieldInviteCode = "inviteCode"
+    private static let fieldSenderId = "senderId"
+    private static let fieldSenderName = "senderName"
+    private static let fieldSenderAvatar = "senderAvatar"
+    private static let fieldFirstName = "firstName"
+    private static let fieldLastName = "lastName"
+    private static let fieldAvatar = "avatar"
+    private static let messagesLimit = 200
+    private static let membersQueryChunkSize = 30
 
     private let firestore: Firestore
 
@@ -37,17 +47,23 @@ final class FirestoreCommunityRepository: CommunityRepository {
 
     func observeGroups() -> AsyncThrowingStream<[CommunityGroup], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.groups(firestore))) { snapshot in
-            return snapshot.documents.compactMap { document in
-                guard let name = document.string(Self.fieldName) else {
-                    return nil
-                }
-                return CommunityGroup(id: document.documentID, name: name, memberIds: document.strings(Self.fieldMemberIds))
-            }
+            return snapshot.documents.compactMap(Self.group(from:))
         }
     }
 
+    func observeGroup(id: String) -> AsyncThrowingStream<CommunityGroup?, Error> {
+        let document = FirestoreCollections.groups(firestore).document(id)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: document), transform: Self.group(from:))
+    }
+
     func createGroup(name: String, creatorId: String) async throws {
-        let data: [String: Any] = [Self.fieldName: name, Self.fieldMemberIds: [creatorId]]
+        let data: [String: Any] = [
+            Self.fieldName: name,
+            Self.fieldMemberIds: [creatorId],
+            Self.fieldOwnerId: creatorId,
+            Self.fieldCreatedAt: EpochMillis.now,
+            Self.fieldInviteCode: InviteCodeGenerator.generate(),
+        ]
         _ = try await FirestoreCollections.groups(firestore).addDocument(data: data)
     }
 
@@ -55,6 +71,96 @@ final class FirestoreCommunityRepository: CommunityRepository {
         try await FirestoreCollections.groups(firestore)
             .document(groupId)
             .updateData([Self.fieldMemberIds: FieldValue.arrayUnion([userId])])
+    }
+
+    func leaveGroup(groupId: String, userId: String) async throws {
+        try await FirestoreCollections.groups(firestore)
+            .document(groupId)
+            .updateData([Self.fieldMemberIds: FieldValue.arrayRemove([userId])])
+    }
+
+    func findGroup(inviteCode: String) async throws -> CommunityGroup? {
+        let snapshot = try await FirestoreCollections.groups(firestore)
+            .whereField(Self.fieldInviteCode, isEqualTo: inviteCode)
+            .limit(to: 1)
+            .getDocuments()
+        return snapshot.documents.first.flatMap(Self.group(from:))
+    }
+
+    func observeMessages(groupId: String) -> AsyncThrowingStream<[GroupMessage], Error> {
+        let query = FirestoreCollections.chatMessages(firestore, chatId: groupId)
+            .order(by: Self.fieldCreatedAt)
+            .limit(toLast: Self.messagesLimit)
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
+            return snapshot.documents.compactMap(Self.message(from:))
+        }
+    }
+
+    func sendMessage(groupId: String, senderId: String, senderName: String?, senderAvatar: AvatarStyle?, text: String) async throws {
+        let data: [String: Any] = [
+            Self.fieldSenderId: senderId,
+            Self.fieldSenderName: senderName ?? NSNull(),
+            Self.fieldSenderAvatar: senderAvatar?.rawValue ?? NSNull(),
+            Self.fieldText: text,
+            Self.fieldCreatedAt: EpochMillis.now,
+        ]
+        _ = try await FirestoreCollections.chatMessages(firestore, chatId: groupId).addDocument(data: data)
+    }
+
+    func fetchMembers(ids: [String]) async throws -> [GroupMember] {
+        let chunks = stride(from: 0, to: ids.count, by: Self.membersQueryChunkSize).map { start in
+            return Array(ids[start..<min(start + Self.membersQueryChunkSize, ids.count)])
+        }
+        let users = FirestoreCollections.users(firestore)
+        var membersById: [String: GroupMember] = [:]
+        for chunk in chunks {
+            let snapshot = try await users.whereField(FieldPath.documentID(), in: chunk).getDocuments()
+            for document in snapshot.documents {
+                membersById[document.documentID] = Self.member(from: document)
+            }
+        }
+        return ids.map { id in
+            return membersById[id] ?? GroupMember(id: id, name: nil, avatar: .lime)
+        }
+    }
+
+    private static func group(from document: DocumentSnapshot) -> CommunityGroup? {
+        guard let name = document.string(fieldName) else {
+            return nil
+        }
+        return CommunityGroup(
+            id: document.documentID,
+            name: name,
+            memberIds: document.strings(fieldMemberIds),
+            ownerId: document.string(fieldOwnerId),
+            inviteCode: document.string(fieldInviteCode)
+        )
+    }
+
+    private static func message(from document: DocumentSnapshot) -> GroupMessage? {
+        guard let senderId = document.string(fieldSenderId),
+              let text = document.string(fieldText),
+              let sentAt = document.date(fieldCreatedAt) else {
+            return nil
+        }
+        return GroupMessage(
+            id: document.documentID,
+            senderId: senderId,
+            senderName: document.string(fieldSenderName),
+            senderAvatar: document.string(fieldSenderAvatar).flatMap(AvatarStyle.init(rawValue:)),
+            text: text,
+            sentAt: sentAt
+        )
+    }
+
+    private static func member(from document: DocumentSnapshot) -> GroupMember {
+        let name = "\(document.string(fieldFirstName) ?? "") \(document.string(fieldLastName) ?? "")"
+            .trimmingCharacters(in: .whitespaces)
+        return GroupMember(
+            id: document.documentID,
+            name: name.isEmpty ? nil : name,
+            avatar: document.string(fieldAvatar).flatMap(AvatarStyle.init(rawValue:)) ?? .lime
+        )
     }
 
     static func post(from document: DocumentSnapshot) -> ForumPost? {

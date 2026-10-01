@@ -35,6 +35,8 @@ struct AppDestinationView: View {
             ForumRoute(container: container)
         case .groups:
             GroupsRoute(container: container)
+        case .group(let id):
+            GroupDetailRoute(groupId: id, container: container)
         case .ecoTips:
             EcoTipsListRoute(container: container)
         case .ecoTipDetail(let tipId):

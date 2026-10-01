@@ -2,7 +2,6 @@ import SwiftUI
 
 struct ForumScreen: View {
     private static let avatarSize: CGFloat = 36
-    private static let composerLineLimit = 1...5
 
     let uiState: ForumUiState
     @Binding var draft: String
@@ -26,42 +25,25 @@ struct ForumScreen: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            composer
+            MessageComposer(
+                draft: $draft,
+                placeholder: .forumDraftLabel,
+                isSending: uiState.isPosting,
+                errorMessage: composerError,
+                onSend: onPost
+            )
         }
         .navigationTitle(Text(.communityForumTitle))
     }
 
-    private var composer: some View {
-        VStack(alignment: .leading, spacing: Spacing.xxSmall) {
-            if uiState.isTextRejected {
-                Text(.textContainsBannedWords)
-                    .font(.footnote)
-                    .foregroundStyle(Palette.error)
-                    .padding(.horizontal, Spacing.medium)
-            }
-            HStack(alignment: .bottom, spacing: Spacing.xSmall) {
-                TextField(String(localized: .forumDraftLabel), text: $draft, axis: .vertical)
-                    .lineLimit(Self.composerLineLimit)
-                    .padding(.horizontal, Spacing.medium)
-                    .padding(.vertical, Spacing.small)
-                    .glassEffect(in: .rect(cornerRadius: CornerRadius.large))
-                Button(action: onPost) {
-                    if uiState.isPosting {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "arrow.up")
-                            .font(.headline)
-                    }
-                }
-                .buttonStyle(.glassProminent)
-                .buttonBorderShape(.circle)
-                .controlSize(.large)
-                .disabled(draft.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || uiState.isPosting)
-                .accessibilityLabel(Text(.forumPostButton))
-            }
+    private var composerError: LocalizedStringResource? {
+        if uiState.isTextRejected {
+            return .textContainsBannedWords
         }
-        .padding(.horizontal, Spacing.screenHorizontal)
-        .padding(.bottom, Spacing.xSmall)
+        if uiState.isSendFailed {
+            return .messageNotSentMsg
+        }
+        return nil
     }
 
     private func postRow(_ post: ForumPost) -> some View {

@@ -2830,6 +2830,98 @@
         }
       }
     },
+    "group_chat_empty_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Паведамленняў пакуль няма. Напішыце першым!"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No messages yet. Be the first to write!"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сообщений пока нет. Напишите первым!"
+          }
+        }
+      }
+    },
+    "group_invite_share_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучайся да групы «%1$@» у Зялёным пашпарце. Код: %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join the “%1$@” group in Green Passport. Code: %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Присоединяйся к группе «%1$@» в Зелёном паспорте. Код: %2$@"
+          }
+        }
+      }
+    },
+    "group_members": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удзельнікі"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Members"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Участники"
+          }
+        }
+      }
+    },
+    "group_not_found_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Група з такім кодам не знойдзена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No group found with this code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Группа с таким кодом не найдена"
+          }
+        }
+      }
+    },
     "groups_create_button": {
       "extractionState": "manual",
       "localizations": {
@@ -3382,6 +3474,98 @@
         }
       }
     },
+    "invite": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запрасіць"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пригласить"
+          }
+        }
+      }
+    },
+    "invite_code": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код запрашэння"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код приглашения"
+          }
+        }
+      }
+    },
+    "join_by_code": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучыцца па кодзе"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join by code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вступить по коду"
+          }
+        }
+      }
+    },
+    "join_group_to_chat_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучыцеся да групы, каб чытаць і пісаць у чат"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join the group to read and write in the chat"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вступите в группу, чтобы читать и писать в чат"
+          }
+        }
+      }
+    },
     "language": {
       "extractionState": "manual",
       "localizations": {
@@ -3424,6 +3608,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Фамилия"
+          }
+        }
+      }
+    },
+    "leave_group": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пакінуць групу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave group"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Покинуть группу"
+          }
+        }
+      }
+    },
+    "leave_group_confirm_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чат групы стане недаступны. Вярнуцца можна па кодзе запрашэння."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will lose access to the group chat. You can come back with the invite code."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чат группы станет недоступен. Вернуться можно по коду приглашения."
           }
         }
       }
@@ -3750,6 +3980,29 @@
         }
       }
     },
+    "message_not_sent_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не ўдалося адправіць. Праверце інтэрнэт і паспрабуйце яшчэ раз"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't send. Check your connection and try again"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось отправить. Проверьте интернет и попробуйте ещё раз"
+          }
+        }
+      }
+    },
     "moderation": {
       "extractionState": "manual",
       "localizations": {
@@ -3815,6 +4068,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Этот раздел доступен только модераторам"
+          }
+        }
+      }
+    },
+    "more": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Яшчэ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ещё"
           }
         }
       }
