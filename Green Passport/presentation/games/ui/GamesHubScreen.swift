@@ -18,7 +18,7 @@ struct GamesHubScreen: View {
             case .success(let games):
                 ScrollView {
                     LazyVGrid(
-                        columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: Self.columnCount),
+                        columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.medium, alignment: .top), count: Self.columnCount),
                         alignment: .leading,
                         spacing: Spacing.large
                     ) {

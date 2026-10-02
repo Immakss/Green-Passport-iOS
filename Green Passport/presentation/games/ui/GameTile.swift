@@ -11,26 +11,11 @@ struct GameTile: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: Spacing.xSmall) {
-            RoundedRectangle(cornerRadius: CornerRadius.large, style: .continuous)
-                .fill(LinearGradient(colors: game.gradientColors, startPoint: .topLeading, endPoint: .bottomTrailing))
-                .aspectRatio(1, contentMode: .fit)
-                .overlay {
-                    GeometryReader { proxy in
-                        Text(game.tileEmoji)
-                            .font(.system(size: proxy.size.width * Self.emojiScale))
-                            .phaseAnimator([1, Self.breathScale]) { content, scale in
-                                content.scaleEffect(scale)
-                            } animation: { _ in
-                                return .easeInOut(duration: Self.breathDuration)
-                            }
-                            .frame(width: proxy.size.width, height: proxy.size.height)
-                    }
-                    .accessibilityHidden(true)
-                }
+            artwork
             Text(game.title)
                 .font(.headline)
                 .foregroundStyle(Color.primary)
-                .lineLimit(Self.titleLineLimit)
+                .lineLimit(Self.titleLineLimit, reservesSpace: true)
             if let bestScore {
                 Text(.gamesBestScoreFormat(bestScore))
                     .font(.footnote)
@@ -40,6 +25,38 @@ struct GameTile: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(.rect)
         .accessibilityElement(children: .combine)
+    }
+
+    private var artwork: some View {
+        return RoundedRectangle(cornerRadius: CornerRadius.large, style: .continuous)
+            .fill(LinearGradient(colors: game.gradientColors, startPoint: .topLeading, endPoint: .bottomTrailing))
+            .aspectRatio(1, contentMode: .fit)
+            .overlay {
+                AsyncImage(url: game.iconUrl) { phase in
+                    if case .success(let image) = phase {
+                        image
+                            .resizable()
+                            .scaledToFill()
+                    } else {
+                        emojiFallback
+                    }
+                }
+            }
+            .clipShape(.rect(cornerRadius: CornerRadius.large, style: .continuous))
+            .accessibilityHidden(true)
+    }
+
+    private var emojiFallback: some View {
+        return GeometryReader { proxy in
+            Text(game.tileEmoji)
+                .font(.system(size: proxy.size.width * Self.emojiScale))
+                .phaseAnimator([1, Self.breathScale]) { content, scale in
+                    content.scaleEffect(scale)
+                } animation: { _ in
+                    return .easeInOut(duration: Self.breathDuration)
+                }
+                .frame(width: proxy.size.width, height: proxy.size.height)
+        }
     }
 }
 
