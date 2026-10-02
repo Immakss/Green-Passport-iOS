@@ -5,7 +5,9 @@ extension View {
         return background {
             Color.clear
                 .contentShape(.rect)
-                .onTapGesture(perform: Keyboard.dismiss)
+                .onTapGesture {
+                    Keyboard.dismiss()
+                }
         }
     }
 
@@ -14,7 +16,9 @@ extension View {
             .toolbar {
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button(action: Keyboard.dismiss) {
+                    Button {
+                        Keyboard.dismiss()
+                    } label: {
                         Image(systemName: "keyboard.chevron.compact.down")
                     }
                     .accessibilityLabel(Text(.hideKeyboard))

@@ -20,7 +20,7 @@ final class FirestoreEventsRepository: EventsRepository {
 
     func observeEvents() -> AsyncThrowingStream<[EcoEvent], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.events(firestore))) { snapshot in
-            return snapshot.documents.compactMap(Self.event(from:))
+            return snapshot.documents.compactMap { return Self.event(from: $0) }
         }
     }
 

@@ -30,7 +30,7 @@ final class FirestoreCommunityRepository: CommunityRepository {
     func observeForumPosts() -> AsyncThrowingStream<[ForumPost], Error> {
         let query = FirestoreCollections.posts(firestore).order(by: Self.fieldCreatedAt, descending: true)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.post(from:)).filter { return !$0.isHidden }
+            return snapshot.documents.compactMap { return Self.post(from: $0) }.filter { return !$0.isHidden }
         }
     }
 
@@ -47,13 +47,15 @@ final class FirestoreCommunityRepository: CommunityRepository {
 
     func observeGroups() -> AsyncThrowingStream<[CommunityGroup], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.groups(firestore))) { snapshot in
-            return snapshot.documents.compactMap(Self.group(from:))
+            return snapshot.documents.compactMap { return Self.group(from: $0) }
         }
     }
 
     func observeGroup(id: String) -> AsyncThrowingStream<CommunityGroup?, Error> {
         let document = FirestoreCollections.groups(firestore).document(id)
-        return FirestoreStream.mapped(FirestoreStream.snapshots(of: document), transform: Self.group(from:))
+        return FirestoreStream.mapped(FirestoreStream.snapshots(of: document)) { snapshot in
+            return Self.group(from: snapshot)
+        }
     }
 
     func createGroup(name: String, creatorId: String) async throws {
@@ -84,7 +86,7 @@ final class FirestoreCommunityRepository: CommunityRepository {
             .whereField(Self.fieldInviteCode, isEqualTo: inviteCode)
             .limit(to: 1)
             .getDocuments()
-        return snapshot.documents.first.flatMap(Self.group(from:))
+        return snapshot.documents.first.flatMap { return Self.group(from: $0) }
     }
 
     func observeMessages(groupId: String) -> AsyncThrowingStream<[GroupMessage], Error> {
@@ -92,7 +94,7 @@ final class FirestoreCommunityRepository: CommunityRepository {
             .order(by: Self.fieldCreatedAt)
             .limit(toLast: Self.messagesLimit)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.message(from:))
+            return snapshot.documents.compactMap { return Self.message(from: $0) }
         }
     }
 

@@ -37,7 +37,7 @@ final class FirestoreShopRepository: ShopRepository {
     func observePurchases(userId: String) -> AsyncThrowingStream<[Coupon], Error> {
         let query = FirestoreCollections.purchases(firestore).whereField(Self.fieldUserId, isEqualTo: userId)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.coupon(from:))
+            return snapshot.documents.compactMap { return Self.coupon(from: $0) }
         }
     }
 

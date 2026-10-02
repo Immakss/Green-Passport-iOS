@@ -20,7 +20,7 @@ final class FirestoreTasksRepository: TasksRepository {
 
     func observeTasks() -> AsyncThrowingStream<[EcoTask], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.tasks(firestore))) { snapshot in
-            return snapshot.documents.compactMap(Self.task(from:))
+            return snapshot.documents.compactMap { return Self.task(from: $0) }
         }
     }
 
