@@ -24,12 +24,9 @@ struct MessageComposer: View {
                     .padding(.vertical, Spacing.small)
                     .glassEffect(in: .rect(cornerRadius: CornerRadius.large))
                 Button(action: onSend) {
-                    if isSending {
-                        ProgressView()
-                    } else {
-                        Image(systemName: "arrow.up")
-                            .font(.headline)
-                    }
+                    Image(systemName: "arrow.up")
+                        .font(.headline)
+                        .loadingOverlay(isSending, tint: Palette.onForest)
                 }
                 .buttonStyle(.glassProminent)
                 .buttonBorderShape(.circle)

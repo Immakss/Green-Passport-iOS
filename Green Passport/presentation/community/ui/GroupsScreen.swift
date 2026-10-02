@@ -20,16 +20,13 @@ struct GroupsScreen: View {
                     TextField(String(localized: .groupsDraftLabel), text: $draftName)
                         .submitLabel(.done)
                         .onSubmit(onCreate)
-                    if uiState.isCreating {
-                        ProgressView()
-                    } else {
-                        Button(action: onCreate) {
-                            Text(.groupsCreateButton)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .disabled(draftName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button(action: onCreate) {
+                        Text(.groupsCreateButton)
+                            .loadingOverlay(uiState.isCreating, tint: Palette.onForest)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .disabled(draftName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || uiState.isCreating)
                 }
             } footer: {
                 if uiState.isNameRejected {
@@ -59,15 +56,13 @@ struct GroupsScreen: View {
         .navigationTitle(Text(.communityGroupsTitle))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                if uiState.isJoiningByCode {
-                    ProgressView()
-                } else {
-                    Button {
-                        isCodePromptPresented = true
-                    } label: {
-                        Label(String(localized: .joinByCode), systemImage: "number")
-                    }
+                Button {
+                    isCodePromptPresented = true
+                } label: {
+                    Label(String(localized: .joinByCode), systemImage: "number")
+                        .loadingOverlay(uiState.isJoiningByCode)
                 }
+                .disabled(uiState.isJoiningByCode)
             }
         }
         .alert(Text(.joinByCode), isPresented: $isCodePromptPresented) {
@@ -102,16 +97,16 @@ struct GroupsScreen: View {
                 Text(.groupsJoinedLabel)
                     .font(.subheadline)
                     .foregroundStyle(Palette.forest)
-            } else if uiState.joiningGroupId == group.id {
-                ProgressView()
             } else {
                 Button {
                     onJoin(group)
                 } label: {
                     Text(.groupsJoinButton)
+                        .loadingOverlay(uiState.joiningGroupId == group.id)
                 }
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.capsule)
+                .disabled(uiState.joiningGroupId == group.id)
             }
         }
         .onTapGesture {

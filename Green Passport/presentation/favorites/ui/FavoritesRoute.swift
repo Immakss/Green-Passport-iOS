@@ -5,13 +5,12 @@ struct FavoritesRoute: View {
 
     @Environment(TabRouter.self) private var router
     @State private var viewModel: FavoritesViewModel
-    @State private var segment: FavoritesSegment
+    @State private var segment = FavoritesSegment.tasks
     @State private var selectedTask: TaskSheetItem?
 
-    init(container: AppDIContainer, initialSegment: FavoritesSegment = .tasks) {
+    init(container: AppDIContainer) {
         self.container = container
         _viewModel = State(initialValue: container.buildFavoritesViewModel())
-        _segment = State(initialValue: initialSegment)
     }
 
     var body: some View {

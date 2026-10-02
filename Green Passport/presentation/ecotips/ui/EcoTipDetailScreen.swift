@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct EcoTipDetailScreen: View {
+    private static let coverHeight: CGFloat = 220
+    private static let metaSeparator = " · "
+
     let uiState: EcoTipDetailUiState
     let onMarkRead: () -> Void
     let onRetry: () -> Void
@@ -23,37 +26,59 @@ struct EcoTipDetailScreen: View {
         }
     }
 
+    @ViewBuilder
+    private func media(url: URL, mediaUrl: String, isVideo: Bool) -> some View {
+        if isVideo {
+            Link(destination: url) {
+                Label {
+                    Text(.watchVideo)
+                } icon: {
+                    Image(systemName: "play.fill")
+                }
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.glass)
+            .controlSize(.large)
+        } else {
+            Link(destination: url) {
+                Label {
+                    Text(mediaUrl)
+                        .lineLimit(1)
+                } icon: {
+                    Image(systemName: "link")
+                }
+            }
+            .font(.subheadline.weight(.medium))
+        }
+    }
+
     private func content(tip: EcoTip) -> some View {
         return ScrollView {
             VStack(alignment: .leading, spacing: Spacing.medium) {
+                ArticleCoverImage(tip: tip)
+                    .frame(height: Self.coverHeight)
+                    .clipShape(.rect(cornerRadius: CornerRadius.large, style: .continuous))
                 Label {
-                    Text(tip.category.title)
+                    Text([String(localized: tip.category.title), String(localized: .ecotipReadMinutesFormat(tip.readMinutes))].joined(separator: Self.metaSeparator))
                 } icon: {
                     Image(systemName: tip.category.systemImage)
                 }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Palette.forest)
-                Text(tip.title)
+                Text(tip.localizedTitle)
                     .font(.largeTitle.bold())
-                Text(tip.body)
-                    .font(.body)
+                MarkdownArticleView(markdown: tip.localizedBody)
                 if let mediaUrl = tip.mediaUrl, let url = URL(string: mediaUrl) {
-                    Link(destination: url) {
-                        Label {
-                            Text(mediaUrl)
-                                .lineLimit(1)
-                        } icon: {
-                            Image(systemName: tip.category == .video ? "play.circle.fill" : "link")
-                        }
-                    }
-                    .font(.subheadline.weight(.medium))
+                    media(url: url, mediaUrl: mediaUrl, isVideo: tip.category == .video)
                 }
                 Text(.ecotipDetailRewardFormat(tip.rewardPoints, tip.rewardXp))
                     .font(.subheadline)
                     .foregroundStyle(Palette.secondaryText)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(Spacing.screenHorizontal)
+            .padding(.horizontal, Spacing.screenHorizontal)
+            .padding(.bottom, Spacing.large)
         }
         .safeAreaInset(edge: .bottom) {
             Group {
@@ -93,7 +118,7 @@ struct EcoTipDetailScreen: View {
     NavigationStack {
         EcoTipDetailScreen(
             uiState: EcoTipDetailUiState(
-                tip: EcoTip(id: "1", category: .video, title: "Как сортировать пластик", body: "Смотрите на маркировку на упаковке.", mediaUrl: "https://example.com", isDailyTip: false, rewardPoints: 10, rewardXp: 20),
+                tip: EcoTip(id: "1", category: .video, title: "Как сортировать пластик", body: "Смотрите на маркировку на упаковке.\n\n## Что означают цифры\n\n- **1 PET** — бутылки\n- **2 HDPE** — канистры", mediaUrl: "https://example.com", isDailyTip: false, rewardPoints: 10, rewardXp: 20),
                 isLoading: false
             ),
             onMarkRead: {},

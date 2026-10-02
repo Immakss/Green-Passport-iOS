@@ -8,16 +8,10 @@ struct AppButton: View {
 
     var body: some View {
         Button(action: action) {
-            ZStack {
-                Text(title)
-                    .font(.headline)
-                    .opacity(isLoading ? 0 : 1)
-                if isLoading {
-                    ProgressView()
-                        .tint(Palette.onForest)
-                }
-            }
-            .frame(maxWidth: .infinity)
+            Text(title)
+                .font(.headline)
+                .loadingOverlay(isLoading, tint: Palette.onForest)
+                .frame(maxWidth: .infinity)
         }
         .buttonStyle(.glassProminent)
         .controlSize(.large)

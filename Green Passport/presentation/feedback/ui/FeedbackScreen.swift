@@ -176,6 +176,7 @@ struct FeedbackScreen: View {
                 if isLoading {
                     Spacer()
                     ProgressView()
+                        .controlSize(.small)
                 }
             }
         }

@@ -4,6 +4,9 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
     private static let fieldCategory = "category"
     private static let fieldTitle = "title"
     private static let fieldBody = "body"
+    private static let fieldTitles = "titles"
+    private static let fieldBodies = "bodies"
+    private static let fieldImageUrl = "imageUrl"
     private static let fieldMediaUrl = "mediaUrl"
     private static let fieldIsDailyTip = "isDailyTip"
     private static let fieldRewardPoints = "rewardPoints"
@@ -30,6 +33,9 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
                     category: category,
                     title: title,
                     body: body,
+                    titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
+                    bodies: document.get(Self.fieldBodies) as? [String: String] ?? [:],
+                    imageUrl: document.string(Self.fieldImageUrl),
                     mediaUrl: document.string(Self.fieldMediaUrl),
                     isDailyTip: document.bool(Self.fieldIsDailyTip) ?? false,
                     rewardPoints: document.int(Self.fieldRewardPoints) ?? 0,

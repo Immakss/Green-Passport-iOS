@@ -231,6 +231,29 @@
         }
       }
     },
+    "achievement_progress_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld з %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld из %2$lld"
+          }
+        }
+      }
+    },
     "achievement_task_master_description": {
       "extractionState": "manual",
       "localizations": {
@@ -277,6 +300,29 @@
         }
       }
     },
+    "achievement_unlocked_label": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Атрымана"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlocked"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Получено"
+          }
+        }
+      }
+    },
     "achievements_screen_title": {
       "extractionState": "manual",
       "localizations": {
@@ -296,6 +342,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Мои достижения"
+          }
+        }
+      }
+    },
+    "achievements_unlocked_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адкрыта %1$lld з %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld unlocked"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыто %1$lld из %2$lld"
           }
         }
       }
@@ -691,6 +760,29 @@
         }
       }
     },
+    "calendar_no_events_on_day": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У гэты дзень мерапрыемстваў няма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No events on this day"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В этот день событий нет"
+          }
+        }
+      }
+    },
     "calendar_registered_label": {
       "extractionState": "manual",
       "localizations": {
@@ -733,52 +825,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отмена"
-          }
-        }
-      }
-    },
-    "cards_locked_label": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заблакавана"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locked"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заблокировано"
-          }
-        }
-      }
-    },
-    "cards_screen_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мае карткі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My cards"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мои карты"
           }
         }
       }
@@ -1795,6 +1841,29 @@
         }
       }
     },
+    "ecotip_read_minutes_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld хв чытання"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld min read"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld мин чтения"
+          }
+        }
+      }
+    },
     "ecotips_category_article": {
       "extractionState": "manual",
       "localizations": {
@@ -2136,52 +2205,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Обменять %1$lld баллов на «%2$@»?"
-          }
-        }
-      }
-    },
-    "exchange_screen_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен карткамі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Card exchange"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен картами"
-          }
-        }
-      }
-    },
-    "exchange_unavailable_message": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен карткамі з’явіцца, калі ў праграме можна будзе знайсці іншага гульца — пакуль няма спіса або пошуку карыстальнікаў"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Card exchange will become available once the app can find another player — there's no user list or search yet"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен картами появится, когда в приложении будет возможность найти другого игрока — пока нет списка или поиска пользователей"
           }
         }
       }
@@ -5130,52 +5153,6 @@
         }
       }
     },
-    "profile_cards": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мае карткі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My cards"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мои карты"
-          }
-        }
-      }
-    },
-    "profile_exchange": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exchange"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен"
-          }
-        }
-      }
-    },
     "profile_favorites": {
       "extractionState": "manual",
       "localizations": {
@@ -6828,6 +6805,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Виден · жалоб: %1$lld"
+          }
+        }
+      }
+    },
+    "watch_video": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Глядзець відэа"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch video"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Смотреть видео"
           }
         }
       }

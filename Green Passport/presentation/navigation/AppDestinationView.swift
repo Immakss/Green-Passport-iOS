@@ -19,16 +19,10 @@ struct AppDestinationView: View {
             ProfileRoute(container: container)
         case .achievements:
             AchievementsRoute(container: container)
-        case .cards:
-            CardsRoute(container: container)
         case .history:
             HistoryRoute(container: container)
-        case .exchange:
-            ExchangeScreen()
         case .calendar:
             CalendarRoute(container: container)
-        case .favorites(let segment):
-            FavoritesRoute(container: container, initialSegment: segment)
         case .community:
             CommunityHubScreen()
         case .forum:

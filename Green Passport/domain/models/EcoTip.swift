@@ -3,6 +3,9 @@ nonisolated struct EcoTip: Identifiable, Hashable, Sendable {
     let category: EcoTipCategory
     let title: String
     let body: String
+    var titles: [String: String] = [:]
+    var bodies: [String: String] = [:]
+    var imageUrl: String?
     let mediaUrl: String?
     let isDailyTip: Bool
     let rewardPoints: Int

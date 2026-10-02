@@ -79,18 +79,15 @@ struct ShopScreen: View {
                     .foregroundStyle(Palette.forest)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            if uiState.purchasingRewardId == reward.id {
-                ProgressView()
-            } else {
-                Button {
-                    onPurchase(reward)
-                } label: {
-                    Text(.shopPurchaseButton)
-                }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.capsule)
-                .disabled(uiState.purchasingRewardId != nil)
+            Button {
+                onPurchase(reward)
+            } label: {
+                Text(.shopPurchaseButton)
+                    .loadingOverlay(uiState.purchasingRewardId == reward.id, tint: Palette.onForest)
             }
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.capsule)
+            .disabled(uiState.purchasingRewardId != nil)
         }
         .padding(.vertical, Spacing.small)
     }

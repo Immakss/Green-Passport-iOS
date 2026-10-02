@@ -4,6 +4,8 @@ struct CalendarScreen: View {
     private static let cardHeight: CGFloat = 160
 
     let uiState: ListUiState<EcoEvent>
+    let selectedDay: DateComponents
+    let onSelectDay: (DateComponents) -> Void
     let onEvent: (EcoEvent) -> Void
     let onRetry: () -> Void
 
@@ -17,9 +19,35 @@ struct CalendarScreen: View {
             case .success(let events) where events.isEmpty:
                 StateView(kind: .empty(message: .calendarEmpty))
             case .success(let events):
-                ScrollView {
+                content(events: events)
+            }
+        }
+        .background(Palette.screenBackground)
+        .navigationTitle(Text(.calendar))
+    }
+
+    private func content(events: [EcoEvent]) -> some View {
+        let dayEvents = events.filter { return $0.day == selectedDay }
+        return ScrollView {
+            VStack(alignment: .leading, spacing: Spacing.medium) {
+                EventCalendarView(
+                    eventDays: Set(events.map(\.day)),
+                    selectedDay: selectedDay,
+                    onSelectDay: onSelectDay
+                )
+                .padding(.horizontal, Spacing.xSmall)
+                .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
+                if let date = selectedDay.startDate {
+                    Text(date, format: .dateTime.weekday(.wide).day().month(.wide))
+                        .font(.title3.bold())
+                }
+                if dayEvents.isEmpty {
+                    Text(.calendarNoEventsOnDay)
+                        .font(.subheadline)
+                        .foregroundStyle(Palette.secondaryText)
+                } else {
                     LazyVStack(spacing: Spacing.small) {
-                        ForEach(events) { event in
+                        ForEach(dayEvents) { event in
                             Button {
                                 onEvent(event)
                             } label: {
@@ -33,18 +61,25 @@ struct CalendarScreen: View {
                             .buttonStyle(.plain)
                         }
                     }
-                    .padding(.horizontal, Spacing.screenHorizontal)
-                    .padding(.bottom, Spacing.large)
                 }
             }
+            .padding(.horizontal, Spacing.screenHorizontal)
+            .padding(.bottom, Spacing.large)
+            .animation(.default, value: selectedDay)
         }
-        .background(Palette.screenBackground)
-        .navigationTitle(Text(.calendar))
     }
 }
 
 #Preview {
     NavigationStack {
-        CalendarScreen(uiState: .success(data: []), onEvent: { _ in }, onRetry: {})
+        CalendarScreen(
+            uiState: .success(data: [
+                EcoEvent(id: "1", title: "Субботник в парке", description: "", location: "Парк Горького", city: "Минск", startAt: .now, imageUrl: nil, rewardPoints: 50),
+            ]),
+            selectedDay: DateComponents.day(containing: .now),
+            onSelectDay: { _ in },
+            onEvent: { _ in },
+            onRetry: {}
+        )
     }
 }
