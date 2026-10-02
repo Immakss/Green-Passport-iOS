@@ -7,6 +7,7 @@ struct ProgressHeroCard: View {
     private static let trackOpacity: Double = 0.22
     private static let captionOpacity: Double = 0.8
     private static let bubbleMaxWidth: CGFloat = 132
+    private static let bubbleMinimumScale: CGFloat = 0.8
 
     let points: Int
     var level: Level?
@@ -58,7 +59,8 @@ struct ProgressHeroCard: View {
                     Text(.xpLeftToLevel(level.xpLeft, level.number + 1))
                         .font(.caption2.weight(.medium))
                         .foregroundStyle(Color.primary)
-                        .multilineTextAlignment(.center)
+                        .lineLimit(1)
+                        .minimumScaleFactor(Self.bubbleMinimumScale)
                         .padding(.horizontal, Spacing.xSmall)
                         .padding(.vertical, Spacing.xxSmall)
                         .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.small))
