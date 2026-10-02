@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct GamesHubScreen: View {
-    private static let tileSize: CGFloat = 44
+    private static let columnCount = 2
 
     let uiState: ListUiState<Game>
     let bestScores: [String: Int]
@@ -17,44 +17,39 @@ struct GamesHubScreen: View {
                 StateView(kind: .error(retry: onRetry))
             case .success(let games):
                 ScrollView {
-                    VStack(spacing: Spacing.small) {
+                    LazyVGrid(
+                        columns: Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: Self.columnCount),
+                        alignment: .leading,
+                        spacing: Spacing.large
+                    ) {
                         ForEach(games) { game in
-                            row(game)
+                            Button {
+                                onGame(game)
+                            } label: {
+                                GameTile(game: game, bestScore: bestScores[game.id])
+                            }
+                            .buttonStyle(GameTileButtonStyle())
                         }
                     }
                     .padding(.horizontal, Spacing.screenHorizontal)
                     .padding(.vertical, Spacing.xSmall)
+                    .padding(.bottom, Spacing.large)
                 }
             }
         }
         .background(Palette.screenBackground)
         .navigationTitle(Text(.games))
     }
-
-    private func row(_ game: Game) -> some View {
-        return Button {
-            onGame(game)
-        } label: {
-            ListRow(title: game.title, subtitle: bestScores[game.id].map { return String(localized: .gamesBestScoreFormat($0)) }) {
-                SymbolTile(systemImage: game.sfSymbol, size: Self.tileSize)
-            } trailing: {
-                Image(systemName: "chevron.right")
-                    .font(.footnote.weight(.semibold))
-                    .foregroundStyle(Color(.tertiaryLabel))
-            }
-            .padding(.horizontal, Spacing.medium)
-            .padding(.vertical, Spacing.xSmall)
-            .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
 }
 
 #Preview {
     NavigationStack {
         GamesHubScreen(
-            uiState: .success(data: [Game(id: "eco_quiz", titles: ["ru": "Эко-викторина"], path: "eco_quiz/index.html", sfSymbol: "questionmark.bubble.fill", maxPoints: 30, order: 1)]),
-            bestScores: ["eco_quiz": 80],
+            uiState: .success(data: [
+                Game(id: "eco_runner", titles: ["ru": "Эко-забег"], path: "eco_runner/index.html", sfSymbol: "figure.run", iconEmoji: "🏃", iconColors: ["#34C77B", "#1F6B47"], maxPoints: 30, order: 1),
+                Game(id: "bee_garden", titles: ["ru": "Опылитель"], path: "bee_garden/index.html", sfSymbol: "leaf.fill", iconEmoji: "🐝", iconColors: ["#FFB703", "#FB8500"], maxPoints: 30, order: 2),
+            ]),
+            bestScores: ["eco_runner": 18],
             onGame: { _ in },
             onRetry: {}
         )

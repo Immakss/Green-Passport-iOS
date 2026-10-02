@@ -31,11 +31,11 @@ struct CalendarScreen: View {
         return ScrollView {
             VStack(alignment: .leading, spacing: Spacing.medium) {
                 EventCalendarView(
-                    eventDays: Set(events.map(\.day)),
+                    eventCounts: Dictionary(grouping: events, by: \.day).mapValues(\.count),
                     selectedDay: selectedDay,
                     onSelectDay: onSelectDay
                 )
-                .padding(.horizontal, Spacing.xSmall)
+                .padding(Spacing.small)
                 .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
                 if let date = selectedDay.startDate {
                     Text(date, format: .dateTime.weekday(.wide).day().month(.wide))

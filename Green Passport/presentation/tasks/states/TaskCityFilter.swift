@@ -8,11 +8,11 @@ enum TaskCityFilter: Hashable {
     func title(profileCity: String?) -> String {
         switch self {
         case .profileCity:
-            return profileCity ?? String(localized: .myCity)
+            return profileCity.map { return CityName.title($0) } ?? String(localized: .myCity)
         case .all:
             return String(localized: .allCities)
         case .city(let name):
-            return name
+            return CityName.title(name)
         }
     }
 

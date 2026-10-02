@@ -5,6 +5,8 @@ final class FirestoreFeedbackRepository: FeedbackRepository {
     private static let surveyQueryLimit = 1
     private static let fieldQuestion = "question"
     private static let fieldOptions = "options"
+    private static let fieldQuestions = "questions"
+    private static let fieldOptionLists = "optionLists"
     private static let fieldIsActive = "isActive"
 
     private let firestore: Firestore
@@ -19,8 +21,11 @@ final class FirestoreFeedbackRepository: FeedbackRepository {
             .limit(to: Self.surveyQueryLimit)
             .getDocuments()
         guard let document = snapshot.documents.first,
-              let question = document.string(Self.fieldQuestion),
-              let options = document.get(Self.fieldOptions) as? [String] else {
+              let question = document.localizedString(Self.fieldQuestion, translations: Self.fieldQuestions) else {
+            return nil
+        }
+        let options = document.localizedStrings(Self.fieldOptions, translations: Self.fieldOptionLists)
+        guard !options.isEmpty else {
             return nil
         }
         return SurveyQuestion(id: document.documentID, question: question, options: options)

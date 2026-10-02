@@ -4,6 +4,9 @@ final class FirestoreEventsRepository: EventsRepository {
     private static let fieldTitle = "title"
     private static let fieldDescription = "description"
     private static let fieldLocation = "location"
+    private static let fieldTitles = "titles"
+    private static let fieldDescriptions = "descriptions"
+    private static let fieldLocations = "locations"
     private static let fieldCity = "city"
     private static let fieldStartAt = "startAtEpochMillis"
     private static let fieldImageUrl = "imageUrl"
@@ -51,9 +54,9 @@ final class FirestoreEventsRepository: EventsRepository {
     }
 
     private static func event(from document: DocumentSnapshot) -> EcoEvent? {
-        guard let title = document.string(fieldTitle),
-              let description = document.string(fieldDescription),
-              let location = document.string(fieldLocation),
+        guard let title = document.localizedString(fieldTitle, translations: fieldTitles),
+              let description = document.localizedString(fieldDescription, translations: fieldDescriptions),
+              let location = document.localizedString(fieldLocation, translations: fieldLocations),
               let city = document.string(fieldCity),
               let startAt = document.date(fieldStartAt) else {
             return nil

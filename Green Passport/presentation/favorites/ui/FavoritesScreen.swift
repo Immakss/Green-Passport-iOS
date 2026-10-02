@@ -30,7 +30,7 @@ struct FavoritesScreen: View {
                     Button {
                         onTip(tip)
                     } label: {
-                        ListRow(title: tip.localizedTitle, subtitle: String(localized: tip.category.title)) {
+                        ListRow(title: tip.title, subtitle: String(localized: tip.category.title)) {
                             SymbolTile(systemImage: tip.category.systemImage)
                         } trailing: {
                             Image(systemName: "chevron.right")

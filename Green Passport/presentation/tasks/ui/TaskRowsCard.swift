@@ -12,7 +12,7 @@ struct TaskRowsCard: View {
                 Button {
                     onTask(task)
                 } label: {
-                    ListRow(title: task.title, subtitle: task.city.isEmpty ? nil : task.city) {
+                    ListRow(title: task.title, subtitle: task.city.isEmpty ? nil : CityName.title(task.city)) {
                         MascotImage(size: Self.mascotSize)
                     } trailing: {
                         PointsBadge(points: task.rewardPoints)

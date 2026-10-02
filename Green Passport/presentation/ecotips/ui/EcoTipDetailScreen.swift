@@ -66,9 +66,9 @@ struct EcoTipDetailScreen: View {
                 }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Palette.forest)
-                Text(tip.localizedTitle)
+                Text(tip.title)
                     .font(.largeTitle.bold())
-                MarkdownArticleView(markdown: tip.localizedBody)
+                MarkdownArticleView(markdown: tip.body)
                 if let mediaUrl = tip.mediaUrl, let url = URL(string: mediaUrl) {
                     media(url: url, mediaUrl: mediaUrl, isVideo: tip.category == .video)
                 }

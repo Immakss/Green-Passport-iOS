@@ -5,29 +5,21 @@ extension EcoTip {
     private static let minimumReadMinutes = 1
     private static let paragraphSeparator = "\n\n"
 
-    var localizedTitle: String {
-        return titles[AppLanguage.currentCode] ?? title
-    }
-
-    var localizedBody: String {
-        return bodies[AppLanguage.currentCode] ?? body
-    }
-
     var readMinutes: Int {
-        let wordCount = localizedBody.split(whereSeparator: \.isWhitespace).count
+        let wordCount = body.split(whereSeparator: \.isWhitespace).count
         let minutes = (Double(wordCount) / Double(Self.wordsPerMinute)).rounded(.up)
         return max(Self.minimumReadMinutes, Int(minutes))
     }
 
     var preview: String {
-        let paragraph = localizedBody
+        let paragraph = body
             .components(separatedBy: Self.paragraphSeparator)
             .first { paragraph in
                 guard let block = ArticleBlock.parse(paragraph).first, case .paragraph = block else {
                     return false
                 }
                 return true
-            } ?? localizedBody
+            } ?? body
         guard let attributed = try? AttributedString(markdown: paragraph) else {
             return paragraph
         }

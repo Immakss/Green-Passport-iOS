@@ -24,8 +24,8 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.ecoTips(firestore))) { snapshot in
             return snapshot.documents.compactMap { document in
                 guard let category = document.string(Self.fieldCategory).flatMap(EcoTipCategory.init(rawValue:)),
-                      let title = document.string(Self.fieldTitle),
-                      let body = document.string(Self.fieldBody) else {
+                      let title = document.localizedString(Self.fieldTitle, translations: Self.fieldTitles),
+                      let body = document.localizedString(Self.fieldBody, translations: Self.fieldBodies) else {
                     return nil
                 }
                 return EcoTip(
@@ -33,8 +33,6 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
                     category: category,
                     title: title,
                     body: body,
-                    titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
-                    bodies: document.get(Self.fieldBodies) as? [String: String] ?? [:],
                     imageUrl: document.string(Self.fieldImageUrl),
                     mediaUrl: document.string(Self.fieldMediaUrl),
                     isDailyTip: document.bool(Self.fieldIsDailyTip) ?? false,

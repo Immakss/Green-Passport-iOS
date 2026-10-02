@@ -60,7 +60,7 @@ struct EcoTipsListScreen: View {
                 }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Palette.forest)
-                Text(tip.localizedTitle)
+                Text(tip.title)
                     .font(.headline)
                     .foregroundStyle(Color.primary)
                 Text(tip.preview)
@@ -86,7 +86,7 @@ struct EcoTipsListScreen: View {
                     .frame(width: Self.thumbnailSize, height: Self.thumbnailSize)
                     .clipShape(.rect(cornerRadius: CornerRadius.tile, style: .continuous))
                 VStack(alignment: .leading, spacing: Spacing.xxSmall) {
-                    Text(tip.localizedTitle)
+                    Text(tip.title)
                         .font(.headline)
                         .foregroundStyle(Color.primary)
                         .lineLimit(Self.previewLineLimit)

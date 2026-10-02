@@ -5,6 +5,8 @@ final class FirestoreGamesRepository: GamesRepository {
     private static let fieldTitles = "titles"
     private static let fieldPath = "path"
     private static let fieldSfSymbol = "sfSymbol"
+    private static let fieldIconEmoji = "iconEmoji"
+    private static let fieldIconColors = "iconColors"
     private static let fieldMaxPoints = "maxPoints"
     private static let fieldOrder = "order"
     private static let fieldIsActive = "isActive"
@@ -33,6 +35,8 @@ final class FirestoreGamesRepository: GamesRepository {
                         titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
                         path: path,
                         sfSymbol: document.string(Self.fieldSfSymbol) ?? Self.defaultSymbol,
+                        iconEmoji: document.string(Self.fieldIconEmoji),
+                        iconColors: document.strings(Self.fieldIconColors),
                         maxPoints: document.int(Self.fieldMaxPoints) ?? Self.defaultMaxPoints,
                         order: document.int(Self.fieldOrder) ?? Int.max
                     )

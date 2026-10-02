@@ -4,6 +4,8 @@ import Foundation
 final class FirestoreShopRepository: ShopRepository {
     private static let fieldTitle = "title"
     private static let fieldPartnerName = "partnerName"
+    private static let fieldTitles = "titles"
+    private static let fieldPartnerNames = "partnerNames"
     private static let fieldPointsCost = "pointsCost"
     private static let fieldUserId = "userId"
     private static let fieldRewardId = "rewardId"
@@ -24,8 +26,8 @@ final class FirestoreShopRepository: ShopRepository {
     func observeRewards() -> AsyncThrowingStream<[Reward], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.shopItems(firestore))) { snapshot in
             return snapshot.documents.compactMap { document in
-                guard let title = document.string(Self.fieldTitle),
-                      let partnerName = document.string(Self.fieldPartnerName),
+                guard let title = document.localizedString(Self.fieldTitle, translations: Self.fieldTitles),
+                      let partnerName = document.localizedString(Self.fieldPartnerName, translations: Self.fieldPartnerNames),
                       let pointsCost = document.int(Self.fieldPointsCost) else {
                     return nil
                 }

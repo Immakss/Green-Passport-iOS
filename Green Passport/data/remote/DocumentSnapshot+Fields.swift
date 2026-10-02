@@ -25,4 +25,14 @@ extension DocumentSnapshot {
     func strings(_ field: String) -> [String] {
         return get(field) as? [String] ?? []
     }
+
+    func localizedString(_ field: String, translations: String) -> String? {
+        let localized = get(translations) as? [String: String]
+        return localized?[ContentLanguage.current] ?? string(field)
+    }
+
+    func localizedStrings(_ field: String, translations: String) -> [String] {
+        let localized = get(translations) as? [String: [String]]
+        return localized?[ContentLanguage.current] ?? strings(field)
+    }
 }
