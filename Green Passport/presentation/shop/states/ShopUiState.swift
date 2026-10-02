@@ -3,7 +3,7 @@ struct ShopUiState {
     var rewards: [Reward] = []
     var activeCouponCount = 0
     var purchasingRewardId: String?
-    var hasInsufficientPoints = false
+    var purchaseFailure: RewardFailure?
     var isLoading = true
     var hasError = false
 }

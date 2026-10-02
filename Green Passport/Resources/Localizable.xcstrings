@@ -5521,6 +5521,52 @@
         }
       }
     },
+    "qr_code_limit_reached_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гэты QR-код ужо адсканавалі максімальную колькасць разоў"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This QR code has already been scanned the maximum number of times"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот QR-код уже отсканировали максимальное число раз"
+          }
+        }
+      }
+    },
+    "qr_code_not_active_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR-код зараз не дзейнічае. Правер тэрміны задання"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This QR code is not active right now. Check the task dates"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR-код сейчас не действует. Проверь сроки задания"
+          }
+        }
+      }
+    },
     "qr_code_on_site": {
       "extractionState": "manual",
       "localizations": {
@@ -6000,6 +6046,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Задание выполнено"
+          }
+        }
+      }
+    },
+    "reward_sold_out": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Купоны гэтай акцыі скончыліся"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This reward is sold out"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Купоны этой акции закончились"
           }
         }
       }

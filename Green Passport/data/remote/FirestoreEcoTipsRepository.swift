@@ -11,6 +11,7 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
     private static let fieldIsDailyTip = "isDailyTip"
     private static let fieldRewardPoints = "rewardPoints"
     private static let fieldRewardXp = "rewardXp"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldTipId = "tipId"
 
@@ -37,7 +38,8 @@ final class FirestoreEcoTipsRepository: EcoTipsRepository {
                     mediaUrl: document.string(Self.fieldMediaUrl),
                     isDailyTip: document.bool(Self.fieldIsDailyTip) ?? false,
                     rewardPoints: document.int(Self.fieldRewardPoints) ?? 0,
-                    rewardXp: document.int(Self.fieldRewardXp) ?? 0
+                    rewardXp: document.int(Self.fieldRewardXp) ?? 0,
+                    isActive: document.bool(Self.fieldIsActive) ?? true
                 )
             }
         }

@@ -8,4 +8,5 @@ nonisolated struct EcoTip: Identifiable, Hashable, Sendable {
     let isDailyTip: Bool
     let rewardPoints: Int
     let rewardXp: Int
+    var isActive = true
 }

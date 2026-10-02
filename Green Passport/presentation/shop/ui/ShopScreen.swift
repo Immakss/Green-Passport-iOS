@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ShopScreen: View {
+    private static let rewardThumbnailSize: CGFloat = 56
+
     let uiState: ShopUiState
     let onPurchase: (Reward) -> Void
     let onCoupons: () -> Void
@@ -26,8 +28,8 @@ struct ShopScreen: View {
         VStack(alignment: .leading, spacing: Spacing.large) {
             VStack(alignment: .leading, spacing: Spacing.xSmall) {
                 ProgressHeroCard(points: uiState.points)
-                if uiState.hasInsufficientPoints {
-                    Text(.shopInsufficientPoints)
+                if let purchaseFailure = uiState.purchaseFailure {
+                    Text(purchaseFailure.purchaseMessage)
                         .font(.footnote)
                         .foregroundStyle(Palette.error)
                 }
@@ -68,6 +70,11 @@ struct ShopScreen: View {
 
     private func rewardRow(_ reward: Reward) -> some View {
         return HStack(spacing: Spacing.small) {
+            if let imageUrl = reward.imageUrl {
+                RemoteImage(url: URL(string: imageUrl))
+                    .frame(width: Self.rewardThumbnailSize, height: Self.rewardThumbnailSize)
+                    .clipShape(.rect(cornerRadius: CornerRadius.medium, style: .continuous))
+            }
             VStack(alignment: .leading, spacing: Spacing.hairline) {
                 Text(reward.title)
                     .font(.headline)

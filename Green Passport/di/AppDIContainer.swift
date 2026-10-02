@@ -169,7 +169,7 @@ extension AppDIContainer {
         return EventDetailViewModel(
             eventId: eventId,
             observeSession: observeSessionUseCase,
-            observeEvents: observeEventsUseCase,
+            observeEvents: ObserveEventsUseCase(eventsRepository: eventsRepository, includesArchived: true),
             observeRegisteredEventIds: ObserveRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
             registerForEvent: RegisterForEventUseCase(
                 eventsRepository: eventsRepository,
@@ -306,7 +306,7 @@ extension AppDIContainer {
         return EcoTipDetailViewModel(
             tipId: tipId,
             observeSession: observeSessionUseCase,
-            observeEcoTips: observeEcoTipsUseCase,
+            observeEcoTips: ObserveEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository, includesArchived: true),
             observeReadTipIds: observeReadTipIdsUseCase,
             markTipRead: MarkTipReadUseCase(rewardsRepository: rewardsRepository)
         )
@@ -349,7 +349,7 @@ extension AppDIContainer {
             observeIsModerator: observeIsModeratorUseCase,
             observePendingSubmissions: ObservePendingSubmissionsUseCase(moderationRepository: moderationRepository),
             observeFlaggedPosts: ObserveFlaggedPostsUseCase(moderationRepository: moderationRepository),
-            observeTasks: observeTasksUseCase,
+            observeTasks: ObserveTasksUseCase(tasksRepository: tasksRepository, includesArchived: true),
             fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase(taskSubmissionsRepository: taskSubmissionsRepository),
             reviewSubmission: ReviewSubmissionUseCase(moderationRepository: moderationRepository),
             moderatePost: ModeratePostUseCase(moderationRepository: moderationRepository)

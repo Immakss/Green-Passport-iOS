@@ -11,6 +11,7 @@ final class FirestoreEventsRepository: EventsRepository {
     private static let fieldStartAt = "startAtEpochMillis"
     private static let fieldImageUrl = "imageUrl"
     private static let fieldRewardPoints = "rewardPoints"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldEventId = "eventId"
     private static let fieldRegisteredAt = "registeredAtEpochMillis"
@@ -69,7 +70,8 @@ final class FirestoreEventsRepository: EventsRepository {
             city: city,
             startAt: startAt,
             imageUrl: document.string(fieldImageUrl),
-            rewardPoints: document.int(fieldRewardPoints) ?? 0
+            rewardPoints: document.int(fieldRewardPoints) ?? 0,
+            isActive: document.bool(fieldIsActive) ?? true
         )
     }
 }

@@ -45,7 +45,7 @@ final class ShopViewModel {
 
     func canAfford(_ reward: Reward) -> Bool {
         let canAfford = uiState.points >= reward.pointsCost
-        uiState.hasInsufficientPoints = !canAfford
+        uiState.purchaseFailure = canAfford ? nil : .notEnoughPoints
         return canAfford
     }
 
@@ -59,7 +59,7 @@ final class ShopViewModel {
                 purchasedCoupon = try await purchaseReward.execute(reward: reward)
                 purchaseCount += 1
             } catch {
-                uiState.hasInsufficientPoints = true
+                uiState.purchaseFailure = (error as? RewardFailureError)?.failure ?? .unknown
             }
             uiState.purchasingRewardId = nil
         }

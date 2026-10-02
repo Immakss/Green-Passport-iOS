@@ -10,6 +10,7 @@ final class FirestoreMapPointsRepository: MapPointsRepository {
     private static let fieldCity = "city"
     private static let fieldLatitude = "latitude"
     private static let fieldLongitude = "longitude"
+    private static let fieldIsActive = "isActive"
 
     private let firestore: Firestore
 
@@ -35,7 +36,8 @@ final class FirestoreMapPointsRepository: MapPointsRepository {
                     address: address,
                     city: city,
                     latitude: latitude,
-                    longitude: longitude
+                    longitude: longitude,
+                    isActive: document.bool(Self.fieldIsActive) ?? true
                 )
             }
         }

@@ -11,7 +11,7 @@ final class ObserveUpcomingEventUseCase {
         return StreamCombiner.mapped(eventsRepository.observeEvents()) { events in
             let now = Date()
             return events
-                .filter { return $0.startAt > now }
+                .filter { return $0.isActive && $0.startAt > now }
                 .min { return $0.startAt < $1.startAt }
         }
     }

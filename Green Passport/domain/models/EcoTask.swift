@@ -8,4 +8,5 @@ nonisolated struct EcoTask: Identifiable, Hashable, Sendable {
     let rewardXp: Int
     let imageUrl: String?
     let verification: TaskVerification
+    var isActive = true
 }

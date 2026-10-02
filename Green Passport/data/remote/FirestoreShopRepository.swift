@@ -7,6 +7,8 @@ final class FirestoreShopRepository: ShopRepository {
     private static let fieldTitles = "titles"
     private static let fieldPartnerNames = "partnerNames"
     private static let fieldPointsCost = "pointsCost"
+    private static let fieldImageUrl = "imageUrl"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldRewardId = "rewardId"
     private static let fieldRedeemedAt = "redeemedAtEpochMillis"
@@ -31,7 +33,14 @@ final class FirestoreShopRepository: ShopRepository {
                       let pointsCost = document.int(Self.fieldPointsCost) else {
                     return nil
                 }
-                return Reward(id: document.documentID, title: title, partnerName: partnerName, pointsCost: pointsCost)
+                return Reward(
+                    id: document.documentID,
+                    title: title,
+                    partnerName: partnerName,
+                    pointsCost: pointsCost,
+                    imageUrl: document.string(Self.fieldImageUrl),
+                    isActive: document.bool(Self.fieldIsActive) ?? true
+                )
             }
         }
     }

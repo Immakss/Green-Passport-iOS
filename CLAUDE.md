@@ -122,7 +122,11 @@ The simulator is named `iPhone 17 Simulator` (not `iPhone 17`). There is **no te
 
 ### Coupons
 
-The coupon QR is a link, `COUPON_SCAN_URL` (build setting → `Config/Info.plist` `CouponScanURL`) `?id=<couponId>&code=<code>`. A partner scans it with any camera; the Hosting rewrite `/coupon` calls the `scanCoupon` HTTP function (Android repo `functions/src/shop.ts`), which marks the coupon `USED` (or answers already used / expired / not found) and shows a result page. `CouponDetailViewModel` observes the purchase document, so the open sheet switches to «used» by itself.
+The coupon QR is a link, `COUPON_SCAN_URL` (build setting → `Config/Info.plist` `CouponScanURL`) `?id=<couponId>&code=<code>`. A partner's cashier scans it with any camera; the Hosting rewrite `/coupon` calls the `scanCoupon` HTTP function (Android repo `functions/src/shop.ts`), which redirects to the partner cabinet of the web admin panel (`greenpassport-admin` repo, `/redeem`), where the cashier redeems it. `CouponDetailViewModel` observes the purchase document, so the open sheet switches to «used» by itself.
+
+### Content from the admin panel
+
+Content is edited in the web admin panel. Archiving there sets `isActive: false`: models carry `isActive` (missing means active), catalog use cases hide archived items, and screens that resolve a document by id (moderation, event and tip sheets, coupons, history) get the use case with `includesArchived: true` from `AppDIContainer`. Server errors `qr_not_active`, `qr_limit_reached` and `reward_sold_out` map to their own `RewardFailure` cases in `FunctionsErrorMapper`. Plan: `claude/admin-apps-plan.ru.md`.
 
 ## Known limitations
 

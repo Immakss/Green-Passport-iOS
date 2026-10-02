@@ -9,4 +9,5 @@ nonisolated struct EcoEvent: Identifiable, Hashable, Sendable {
     let startAt: Date
     let imageUrl: String?
     let rewardPoints: Int
+    var isActive = true
 }

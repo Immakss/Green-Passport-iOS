@@ -11,6 +11,7 @@ final class FirestoreTasksRepository: TasksRepository {
     private static let fieldRewardXp = "rewardXp"
     private static let fieldImageUrl = "imageUrl"
     private static let fieldVerification = "verification"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldTaskId = "taskId"
 
@@ -56,7 +57,8 @@ final class FirestoreTasksRepository: TasksRepository {
             rewardPoints: document.int(fieldRewardPoints) ?? 0,
             rewardXp: document.int(fieldRewardXp) ?? 0,
             imageUrl: document.string(fieldImageUrl),
-            verification: document.string(fieldVerification).flatMap(TaskVerification.init(rawValue:)) ?? .selfReported
+            verification: document.string(fieldVerification).flatMap(TaskVerification.init(rawValue:)) ?? .selfReported,
+            isActive: document.bool(fieldIsActive) ?? true
         )
     }
 }
