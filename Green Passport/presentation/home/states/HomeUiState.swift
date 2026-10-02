@@ -1,3 +1,5 @@
+import Foundation
+
 struct HomeUiState {
     var isLoading = true
     var hasTasksError = false
@@ -5,7 +7,11 @@ struct HomeUiState {
     var avatar: AvatarStyle = .lime
     var points = 0
     var level: Level?
-    var streakDays = 0
+    var streak: Streak?
     var upcomingEvent: EcoEvent?
     var tasks: [EcoTask] = []
+
+    var streakDays: Int {
+        return streak?.currentCount(at: Date()) ?? 0
+    }
 }

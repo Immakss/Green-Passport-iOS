@@ -131,7 +131,8 @@ extension AppDIContainer {
             observeCompletedTaskIds: observeCompletedTaskIdsUseCase,
             rankPendingTasks: RankPendingTasksUseCase(),
             observeWallet: observeWalletUseCase,
-            observeUpcomingEvent: ObserveUpcomingEventUseCase(eventsRepository: eventsRepository)
+            observeUpcomingEvent: ObserveUpcomingEventUseCase(eventsRepository: eventsRepository),
+            updateStreakReminder: UpdateStreakReminderUseCase(reminderScheduler: reminderScheduler)
         )
     }
 
@@ -189,7 +190,8 @@ extension AppDIContainer {
             isNotificationsEnabled: IsNotificationsEnabledUseCase(settingsRepository: settingsRepository),
             setNotificationsEnabled: SetNotificationsEnabledUseCase(
                 settingsRepository: settingsRepository,
-                notificationPermission: notificationPermission
+                notificationPermission: notificationPermission,
+                reminderScheduler: reminderScheduler
             ),
             appTheme: AppThemeUseCase(settingsRepository: settingsRepository)
         )

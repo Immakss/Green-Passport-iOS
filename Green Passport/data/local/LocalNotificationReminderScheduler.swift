@@ -4,6 +4,7 @@ import UserNotifications
 final class LocalNotificationReminderScheduler: ReminderScheduler {
     private static let identifierPrefix = "event_reminder_"
     private static let couponIdentifierPrefix = "coupon_expiring_"
+    private static let streakIdentifier = "streak_reminder"
     private static let couponReminderLeadTime: TimeInterval = 24 * 60 * 60
 
     private let settingsRepository: SettingsRepository
@@ -49,8 +50,25 @@ final class LocalNotificationReminderScheduler: ReminderScheduler {
         center.removePendingNotificationRequests(withIdentifiers: [Self.couponIdentifierPrefix + couponId])
     }
 
+    func scheduleStreakReminder(streakDays: Int, at date: Date) async {
+        await deliver(
+            identifier: Self.streakIdentifier,
+            title: String(localized: .streakReminderTitle),
+            body: String(localized: .streakReminderBody(streakDays)),
+            at: date
+        )
+    }
+
+    func cancelStreakReminder() {
+        center.removePendingNotificationRequests(withIdentifiers: [Self.streakIdentifier])
+    }
+
     private func schedule(identifier: String, title: String, body: String, at fireDate: Date) async {
         notificationLogRepository.log(title: title, body: body, sentAt: fireDate)
+        await deliver(identifier: identifier, title: title, body: body, at: fireDate)
+    }
+
+    private func deliver(identifier: String, title: String, body: String, at fireDate: Date) async {
         guard settingsRepository.isNotificationsEnabled, await notificationPermission.requestIfNeeded() else {
             return
         }

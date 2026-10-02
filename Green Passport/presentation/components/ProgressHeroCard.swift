@@ -11,9 +11,22 @@ struct ProgressHeroCard: View {
     let points: Int
     var level: Level?
     var streakDays = 0
+    var onTap: (() -> Void)?
 
     var body: some View {
-        HStack(alignment: .center, spacing: Spacing.small) {
+        if let onTap {
+            Button(action: onTap) {
+                card
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text(.streakOpenHint))
+        } else {
+            card
+        }
+    }
+
+    private var card: some View {
+        return HStack(alignment: .center, spacing: Spacing.small) {
             VStack(alignment: .leading, spacing: Spacing.xxSmall) {
                 ViewThatFits(in: .horizontal) {
                     HStack(spacing: Spacing.xSmall) {
@@ -37,9 +50,6 @@ struct ProgressHeroCard: View {
                 if let level {
                     progressBar(level: level)
                         .padding(.top, Spacing.small)
-                    Text(.xpProgress(level.currentXp, level.xpForNextLevel))
-                        .font(.caption.weight(.medium))
-                        .foregroundStyle(Palette.onForest.opacity(Self.captionOpacity))
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -76,10 +86,11 @@ struct ProgressHeroCard: View {
     private var streakBadge: some View {
         if streakDays > 0 {
             Label {
-                Text(.streakDays(streakDays))
+                Text(streakDays, format: .number)
             } icon: {
                 Image(systemName: "flame.fill")
             }
+            .accessibilityLabel(Text(.streakDays(streakDays)))
             .font(.caption.weight(.semibold))
             .foregroundStyle(Palette.onLime)
             .lineLimit(1)

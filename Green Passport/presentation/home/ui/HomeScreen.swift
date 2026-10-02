@@ -10,6 +10,7 @@ struct HomeScreen: View {
 
     let uiState: HomeUiState
     let onProfile: () -> Void
+    let onStreak: () -> Void
     let onQuickAction: (HomeQuickAction) -> Void
     let onEvent: (EcoEvent) -> Void
     let onTask: (EcoTask) -> Void
@@ -20,7 +21,7 @@ struct HomeScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.large) {
                 header
-                ProgressHeroCard(points: uiState.points, level: uiState.level, streakDays: uiState.streakDays)
+                ProgressHeroCard(points: uiState.points, level: uiState.level, streakDays: uiState.streakDays, onTap: onStreak)
                     .redacted(reason: uiState.isLoading ? .placeholder : [])
                 quickActions
                 if let event = uiState.upcomingEvent {
@@ -120,6 +121,7 @@ struct HomeScreen: View {
                 tasks: EcoTask.placeholders(count: 3)
             ),
             onProfile: {},
+            onStreak: {},
             onQuickAction: { _ in },
             onEvent: { _ in },
             onTask: { _ in },

@@ -10,6 +10,7 @@ final class HomeViewModel {
     @ObservationIgnored private let rankPendingTasks: RankPendingTasksUseCase
     @ObservationIgnored private let observeWallet: ObserveWalletUseCase
     @ObservationIgnored private let observeUpcomingEvent: ObserveUpcomingEventUseCase
+    @ObservationIgnored private let updateStreakReminder: UpdateStreakReminderUseCase
     @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var session: AuthSession?
     @ObservationIgnored private var tasks: [EcoTask]?
@@ -25,7 +26,8 @@ final class HomeViewModel {
         observeCompletedTaskIds: ObserveCompletedTaskIdsUseCase,
         rankPendingTasks: RankPendingTasksUseCase,
         observeWallet: ObserveWalletUseCase,
-        observeUpcomingEvent: ObserveUpcomingEventUseCase
+        observeUpcomingEvent: ObserveUpcomingEventUseCase,
+        updateStreakReminder: UpdateStreakReminderUseCase
     ) {
         self.observeSession = observeSession
         self.observeUserProfile = observeUserProfile
@@ -34,6 +36,7 @@ final class HomeViewModel {
         self.rankPendingTasks = rankPendingTasks
         self.observeWallet = observeWallet
         self.observeUpcomingEvent = observeUpcomingEvent
+        self.updateStreakReminder = updateStreakReminder
     }
 
     func observe() async {
@@ -90,7 +93,8 @@ final class HomeViewModel {
             for try await wallet in observeWallet.execute(userId: userId) {
                 uiState.points = wallet.availablePoints
                 uiState.level = wallet.level
-                uiState.streakDays = wallet.streak?.currentCount(at: Date()) ?? 0
+                uiState.streak = wallet.streak
+                await updateStreakReminder.execute(streak: wallet.streak, now: Date())
             }
         } catch {
             return

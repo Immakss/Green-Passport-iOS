@@ -80,6 +80,7 @@ struct ProfileScreen: View {
                     } icon: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                     }
+                    .foregroundStyle(Palette.error)
                 }
             }
         }
