@@ -1,7 +1,12 @@
 import PhotosUI
 import SwiftUI
+import UIKit
 
 struct TaskDetailRoute: View {
+    private static let minSheetHeight: CGFloat = 320
+    private static let sheetChromeHeight: CGFloat = 80
+    private static let maxSheetHeightFraction: CGFloat = 0.9
+
     @Environment(\.dismiss) private var dismiss
     @State private var viewModel: TaskDetailViewModel
     @State private var isPhotoSourcePresented = false
@@ -9,6 +14,7 @@ struct TaskDetailRoute: View {
     @State private var isCameraPresented = false
     @State private var isScannerPresented = false
     @State private var libraryItem: PhotosPickerItem?
+    @State private var measuredContentHeight: CGFloat = 0
 
     init(taskId: String, container: AppDIContainer) {
         _viewModel = State(initialValue: container.buildTaskDetailViewModel(taskId: taskId))
@@ -29,6 +35,9 @@ struct TaskDetailRoute: View {
                 }
             }
         }
+        .onPreferenceChange(ContentHeightPreferenceKey.self) { measuredContentHeight = $0 }
+        .presentationDetents([.height(sheetHeight)])
+        .presentationDragIndicator(.visible)
         .task {
             await viewModel.observe()
         }
@@ -71,6 +80,11 @@ struct TaskDetailRoute: View {
                 onClose: { isScannerPresented = false }
             )
         }
+    }
+
+    private var sheetHeight: CGFloat {
+        let maxHeight = UIScreen.main.bounds.height * Self.maxSheetHeightFraction
+        return min(max(measuredContentHeight + Self.sheetChromeHeight, Self.minSheetHeight), maxHeight)
     }
 
     private func confirm() {

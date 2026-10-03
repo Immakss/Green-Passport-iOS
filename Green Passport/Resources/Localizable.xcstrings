@@ -553,6 +553,29 @@
         }
       }
     },
+    "apple_sign_in_coming_soon_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уваход праз Apple ID пакуль недаступны. Скарыстайцеся поштай або Google."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple isn’t available yet. Please use email or Google instead."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вход через Apple ID пока недоступен. Воспользуйтесь почтой или Google."
+          }
+        }
+      }
+    },
     "approve": {
       "extractionState": "manual",
       "localizations": {
@@ -674,19 +697,19 @@
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пакуль няма закладак — адзначце параду закладкай на экране эка-парад"
+            "value": "Пакуль няма абраных парад — адзначце параду сардэчкам на экране эка-парад"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No bookmarks yet — bookmark a tip on the eco tips screen"
+            "value": "No favorite tips yet — tap the heart on the eco tips screen"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пока нет закладок — отметьте совет закладкой на экране эко-советов"
+            "value": "Пока нет избранных советов — отметьте совет сердечком на экране эко-советов"
           }
         }
       }
@@ -1538,6 +1561,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Подтверждение"
+          }
+        }
+      }
+    },
+    "continue_with_apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Працягнуць з Apple"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Apple"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить с Apple"
           }
         }
       }
@@ -5222,6 +5268,29 @@
         }
       }
     },
+    "places": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Месцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Places"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Места"
+          }
+        }
+      }
+    },
     "point_camera_at_event_qr_code_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -6115,6 +6184,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сохранено"
+          }
+        }
+      }
+    },
+    "saved_places_empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пакуль няма захаваных месцаў — адзначце сардэчкам кропку на карце"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No saved places yet — tap the heart on a point on the map"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет сохранённых мест — отметьте сердечком точку на карте"
           }
         }
       }

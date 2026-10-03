@@ -109,7 +109,7 @@ struct EcoTipsListScreen: View {
                 Button {
                     onToggleBookmark(tip)
                 } label: {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                    Image(systemName: isBookmarked ? "heart.fill" : "heart")
                         .foregroundStyle(isBookmarked ? Palette.forest : Palette.secondaryText)
                         .contentTransition(.symbolEffect(.replace))
                 }

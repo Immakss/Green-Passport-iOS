@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CalendarScreen: View {
     private static let cardHeight: CGFloat = 160
+    private static let dayTitleAnchorId = "dayTitle"
 
     let uiState: ListUiState<EcoEvent>
     let selectedDay: DateComponents
@@ -28,44 +29,52 @@ struct CalendarScreen: View {
 
     private func content(events: [EcoEvent]) -> some View {
         let dayEvents = events.filter { return $0.day == selectedDay }
-        return ScrollView {
-            VStack(alignment: .leading, spacing: Spacing.medium) {
-                EventCalendarView(
-                    eventCounts: Dictionary(grouping: events, by: \.day).mapValues(\.count),
-                    selectedDay: selectedDay,
-                    onSelectDay: onSelectDay
-                )
-                .padding(Spacing.small)
-                .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
-                if let date = selectedDay.startDate {
-                    Text(date, format: .dateTime.weekday(.wide).day().month(.wide))
-                        .font(.title3.bold())
-                }
-                if dayEvents.isEmpty {
-                    Text(.calendarNoEventsOnDay)
-                        .font(.subheadline)
-                        .foregroundStyle(Palette.secondaryText)
-                } else {
-                    LazyVStack(spacing: Spacing.small) {
-                        ForEach(dayEvents) { event in
-                            Button {
-                                onEvent(event)
-                            } label: {
-                                HeroImageCard(
-                                    imageUrl: event.imageUrl,
-                                    title: event.title,
-                                    subtitle: String(localized: .dateTime(event.dateText, event.timeText)),
-                                    height: Self.cardHeight
-                                )
+        return ScrollViewReader { proxy in
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.medium) {
+                    EventCalendarView(
+                        eventCounts: Dictionary(grouping: events, by: \.day).mapValues(\.count),
+                        selectedDay: selectedDay,
+                        onSelectDay: onSelectDay
+                    )
+                    .padding(Spacing.small)
+                    .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
+                    if let date = selectedDay.startDate {
+                        Text(date, format: .dateTime.weekday(.wide).day().month(.wide))
+                            .font(.title3.bold())
+                            .id(Self.dayTitleAnchorId)
+                    }
+                    if dayEvents.isEmpty {
+                        Text(.calendarNoEventsOnDay)
+                            .font(.subheadline)
+                            .foregroundStyle(Palette.secondaryText)
+                    } else {
+                        LazyVStack(spacing: Spacing.small) {
+                            ForEach(dayEvents) { event in
+                                Button {
+                                    onEvent(event)
+                                } label: {
+                                    HeroImageCard(
+                                        imageUrl: event.imageUrl,
+                                        title: event.title,
+                                        subtitle: String(localized: .dateTime(event.dateText, event.timeText)),
+                                        height: Self.cardHeight
+                                    )
+                                }
+                                .buttonStyle(.plain)
                             }
-                            .buttonStyle(.plain)
                         }
                     }
                 }
+                .padding(.horizontal, Spacing.screenHorizontal)
+                .padding(.bottom, Spacing.large)
+                .animation(.default, value: selectedDay)
             }
-            .padding(.horizontal, Spacing.screenHorizontal)
-            .padding(.bottom, Spacing.large)
-            .animation(.default, value: selectedDay)
+            .onChange(of: selectedDay) {
+                withAnimation {
+                    proxy.scrollTo(Self.dayTitleAnchorId, anchor: .top)
+                }
+            }
         }
     }
 }

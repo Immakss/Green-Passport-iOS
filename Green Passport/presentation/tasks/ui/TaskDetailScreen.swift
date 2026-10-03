@@ -26,36 +26,47 @@ struct TaskDetailScreen: View {
     }
 
     private func content(task: EcoTask) -> some View {
-        return ScrollView {
-            VStack(alignment: .leading, spacing: Spacing.large) {
-                HStack(spacing: Spacing.medium) {
-                    MascotImage(size: Self.mascotSize)
-                    VStack(alignment: .leading, spacing: Spacing.xSmall) {
-                        Text(task.title)
-                            .font(.title2.bold())
-                        HStack(spacing: Spacing.xSmall) {
-                            PointsBadge(points: task.rewardPoints)
-                            Label {
-                                Text(task.verification.title)
-                            } icon: {
-                                Image(systemName: task.verification.systemImage)
+        return VStack(spacing: 0) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: Spacing.large) {
+                    HStack(spacing: Spacing.medium) {
+                        MascotImage(size: Self.mascotSize)
+                        VStack(alignment: .leading, spacing: Spacing.xSmall) {
+                            Text(task.title)
+                                .font(.title2.bold())
+                            HStack(spacing: Spacing.xSmall) {
+                                PointsBadge(points: task.rewardPoints)
+                                Label {
+                                    Text(task.verification.title)
+                                } icon: {
+                                    Image(systemName: task.verification.systemImage)
+                                }
+                                .font(.footnote.weight(.medium))
+                                .foregroundStyle(Palette.secondaryText)
                             }
-                            .font(.footnote.weight(.medium))
-                            .foregroundStyle(Palette.secondaryText)
                         }
                     }
+                    Text(task.description)
+                        .font(.body)
+                        .foregroundStyle(Palette.secondaryText)
                 }
-                Text(task.description)
-                    .font(.body)
-                    .foregroundStyle(Palette.secondaryText)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(Spacing.screenHorizontal)
+                .background {
+                    GeometryReader { proxy in
+                        Color.clear.preference(key: ContentHeightPreferenceKey.self, value: proxy.size.height)
+                    }
+                }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(Spacing.screenHorizontal)
-        }
-        .safeAreaInset(edge: .bottom) {
+            .scrollBounceBehavior(.basedOnSize)
             confirmation(task: task)
                 .padding(.horizontal, Spacing.screenHorizontal)
                 .padding(.bottom, Spacing.medium)
+                .background {
+                    GeometryReader { proxy in
+                        Color.clear.preference(key: ContentHeightPreferenceKey.self, value: proxy.size.height)
+                    }
+                }
         }
     }
 

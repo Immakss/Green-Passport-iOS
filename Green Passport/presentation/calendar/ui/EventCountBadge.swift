@@ -11,7 +11,7 @@ enum EventCountBadge {
         label.font = UIFont.preferredFont(forTextStyle: .caption2).bold()
         label.textColor = UIColor(Palette.onForest)
         label.textAlignment = .center
-        label.backgroundColor = UIColor(Palette.forest)
+        label.backgroundColor = UIColor(Palette.error)
         label.layer.masksToBounds = true
         let size = label.intrinsicContentSize
         let side = max(Self.minimumSide, size.height)

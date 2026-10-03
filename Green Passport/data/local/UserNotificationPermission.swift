@@ -19,4 +19,14 @@ final class UserNotificationPermission: NotificationPermission {
             return false
         }
     }
+
+    func isAuthorized() async -> Bool {
+        let settings = await center.notificationSettings()
+        switch settings.authorizationStatus {
+        case .authorized, .provisional, .ephemeral:
+            return true
+        default:
+            return false
+        }
+    }
 }

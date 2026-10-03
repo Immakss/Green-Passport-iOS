@@ -3,7 +3,7 @@ import SwiftUI
 struct HomeScreen: View {
     private static let headerAvatarSize: CGFloat = 44
     private static let quickActionTileSize: CGFloat = 56
-    private static let quickActionSymbolScale: CGFloat = 0.38
+    private static let quickActionSymbolScale: CGFloat = 0.28
     private static let taskMascotSize: CGFloat = 34
     private static let placeholderTaskCount = 3
     private static let labelMinimumScale: CGFloat = 0.8
@@ -83,10 +83,10 @@ struct HomeScreen: View {
                     VStack(spacing: Spacing.xSmall) {
                         SymbolTile(systemImage: action.systemImage, size: Self.quickActionTileSize, symbolScale: Self.quickActionSymbolScale)
                         Text(action.title)
-                            .font(.caption.weight(.medium))
+                            .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.primary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(Self.labelMinimumScale)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
                     }
                     .frame(maxWidth: .infinity)
                 }

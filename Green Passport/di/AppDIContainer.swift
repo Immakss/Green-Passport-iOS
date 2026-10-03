@@ -193,6 +193,7 @@ extension AppDIContainer {
                 notificationPermission: notificationPermission,
                 reminderScheduler: reminderScheduler
             ),
+            notificationPermission: notificationPermission,
             appTheme: AppThemeUseCase(settingsRepository: settingsRepository)
         )
     }
@@ -245,8 +246,11 @@ extension AppDIContainer {
             observeSession: observeSessionUseCase,
             observeTasks: observeTasksUseCase,
             observeEcoTips: observeEcoTipsUseCase,
+            observeMapPoints: ObserveMapPointsUseCase(mapPointsRepository: mapPointsRepository),
             observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
-            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository),
+            savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
         )
     }
 }

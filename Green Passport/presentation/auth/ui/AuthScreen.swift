@@ -2,6 +2,7 @@ import AuthenticationServices
 import SwiftUI
 
 struct AuthScreen: View {
+    private static let isAppleSignInAvailable = false // включить, когда будет оформлен платный Apple Developer Program
     private static let mascotSize: CGFloat = 120
     private static let registerStepCount = 5
     private static let socialButtonHeight: CGFloat = 50
@@ -13,6 +14,7 @@ struct AuthScreen: View {
     let onAppleCompletion: (Result<ASAuthorization, Error>) -> Void
 
     @Environment(\.colorScheme) private var colorScheme
+    @State private var isAppleComingSoonPresented = false
 
     var body: some View {
         ScrollView {
@@ -88,11 +90,7 @@ struct AuthScreen: View {
 
     private var socialButtons: some View {
         VStack(spacing: Spacing.small) {
-            SignInWithAppleButton(.continue, onRequest: onAppleRequest, onCompletion: onAppleCompletion)
-                .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
-                .frame(height: Self.socialButtonHeight)
-                .clipShape(.capsule)
-                .disabled(uiState.isLoading)
+            appleButton
             Button {
                 onAction(.continueWithGoogle)
             } label: {
@@ -112,6 +110,39 @@ struct AuthScreen: View {
             }
             .buttonStyle(.plain)
             .disabled(uiState.isLoading)
+        }
+    }
+
+    @ViewBuilder
+    private var appleButton: some View {
+        if Self.isAppleSignInAvailable {
+            SignInWithAppleButton(.continue, onRequest: onAppleRequest, onCompletion: onAppleCompletion)
+                .signInWithAppleButtonStyle(colorScheme == .dark ? .white : .black)
+                .frame(height: Self.socialButtonHeight)
+                .clipShape(.capsule)
+                .disabled(uiState.isLoading)
+        } else {
+            Button {
+                isAppleComingSoonPresented = true
+            } label: {
+                HStack(spacing: Spacing.small) {
+                    Image(systemName: "apple.logo")
+                    Text(.continueWithApple)
+                        .font(.headline)
+                }
+                .frame(maxWidth: .infinity, minHeight: Self.socialButtonHeight)
+                .foregroundStyle(colorScheme == .dark ? Color.black : Color.white)
+                .background(colorScheme == .dark ? Color.white : Color.black, in: .capsule)
+            }
+            .buttonStyle(.plain)
+            .disabled(uiState.isLoading)
+            .alert(Text(.appleSignInComingSoonMsg), isPresented: $isAppleComingSoonPresented) {
+                Button(role: .cancel) {
+                    isAppleComingSoonPresented = false
+                } label: {
+                    Text(.close)
+                }
+            }
         }
     }
 
