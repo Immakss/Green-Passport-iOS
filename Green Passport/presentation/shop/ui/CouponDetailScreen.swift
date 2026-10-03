@@ -4,6 +4,8 @@ struct CouponDetailScreen: View {
     private static let qrSize: CGFloat = 200
     private static let qrPadding: CGFloat = 12
     private static let codeTracking: CGFloat = 4
+    private static let secondaryOnForestOpacity: Double = 0.8
+    private static let cardGradientEndOpacity: Double = 0.7
 
     let uiState: CouponDetailUiState
     let onMarkUsed: () -> Void
@@ -38,16 +40,27 @@ struct CouponDetailScreen: View {
                         VStack(spacing: Spacing.xxSmall) {
                             Text(.couponCode)
                                 .font(.caption.weight(.medium))
-                                .foregroundStyle(Palette.secondaryText)
+                                .foregroundStyle(Palette.onForest.opacity(Self.secondaryOnForestOpacity))
                             Text(code)
                                 .font(.title.monospaced().bold())
                                 .tracking(Self.codeTracking)
+                                .foregroundStyle(Palette.onForest)
                                 .textSelection(.enabled)
                         }
                         Text(.partnerScansQrMsg)
                             .font(.footnote)
-                            .foregroundStyle(Palette.secondaryText)
+                            .foregroundStyle(Palette.onForest.opacity(Self.secondaryOnForestOpacity))
                             .multilineTextAlignment(.center)
+                    }
+                    .padding(Spacing.large)
+                    .frame(maxWidth: .infinity)
+                    .background {
+                        RoundedRectangle(cornerRadius: CornerRadius.large, style: .continuous)
+                            .fill(LinearGradient(
+                                colors: [Palette.forest, Palette.forest.opacity(Self.cardGradientEndOpacity)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
                     }
                     .opacity(status == .active ? 1 : Palette.disabledOpacity)
                 }

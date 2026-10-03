@@ -5,4 +5,6 @@ protocol ReminderScheduler {
     func cancelEventReminder(eventId: String)
     func scheduleCouponReminder(couponId: String, title: String, expiresAt: Date) async
     func cancelCouponReminder(couponId: String)
+    func scheduleStreakReminder(streakDays: Int, at date: Date) async
+    func cancelStreakReminder()
 }

@@ -46,7 +46,7 @@ final class FirebaseModerationRepository: ModerationRepository {
             .whereField(Self.fieldStatus, isEqualTo: SubmissionStatus.pending.rawValue)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
             return snapshot.documents
-                .compactMap(FirebaseTaskSubmissionsRepository.submission(from:))
+                .compactMap { return FirebaseTaskSubmissionsRepository.submission(from: $0) }
                 .sorted { return $0.createdAt < $1.createdAt }
         }
     }
@@ -59,10 +59,10 @@ final class FirebaseModerationRepository: ModerationRepository {
                 continuation.yield(posts)
             }
             let hiddenRegistration = hiddenQuery.addSnapshotListener { snapshot, _ in
-                buffer.update(hidden: snapshot?.documents.compactMap(FirestoreCommunityRepository.post(from:)) ?? [])
+                buffer.update(hidden: snapshot?.documents.compactMap { return FirestoreCommunityRepository.post(from: $0) } ?? [])
             }
             let reportedRegistration = reportedQuery.addSnapshotListener { snapshot, _ in
-                buffer.update(reported: snapshot?.documents.compactMap(FirestoreCommunityRepository.post(from:)) ?? [])
+                buffer.update(reported: snapshot?.documents.compactMap { return FirestoreCommunityRepository.post(from: $0) } ?? [])
             }
             continuation.onTermination = { _ in
                 hiddenRegistration.remove()

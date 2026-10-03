@@ -1,18 +1,32 @@
 import Foundation
 
 extension Streak {
-    private static let serverTimeZone = "Europe/Minsk"
-    private static let dayFormat = "yyyy-MM-dd"
-    private static let dayLength: TimeInterval = 24 * 60 * 60
+    nonisolated private static let dayFormat = "yyyy-MM-dd"
+    nonisolated private static let posixLocale = "en_US_POSIX"
 
-    func currentCount(at date: Date) -> Int {
+    nonisolated static func dayKey(of date: Date) -> String {
+        return dayFormatter().string(from: date)
+    }
+
+    nonisolated static func date(ofDayKey key: String) -> Date? {
+        return dayFormatter().date(from: key)
+    }
+
+    nonisolated func currentCount(at date: Date) -> Int {
+        let yesterday = Calendar.minsk.date(byAdding: .day, value: -1, to: date) ?? date
+        return lastDay == Self.dayKey(of: date) || lastDay == Self.dayKey(of: yesterday) ? count : 0
+    }
+
+    nonisolated func isCounted(on date: Date) -> Bool {
+        return lastDay == Self.dayKey(of: date)
+    }
+
+    private nonisolated static func dayFormatter() -> DateFormatter {
         let formatter = DateFormatter()
         formatter.calendar = Calendar(identifier: .gregorian)
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(identifier: Self.serverTimeZone)
-        formatter.dateFormat = Self.dayFormat
-        let today = formatter.string(from: date)
-        let yesterday = formatter.string(from: date.addingTimeInterval(-Self.dayLength))
-        return lastDay == today || lastDay == yesterday ? count : 0
+        formatter.locale = Locale(identifier: posixLocale)
+        formatter.timeZone = Calendar.minsk.timeZone
+        formatter.dateFormat = dayFormat
+        return formatter
     }
 }

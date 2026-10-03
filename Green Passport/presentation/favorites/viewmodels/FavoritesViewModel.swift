@@ -5,8 +5,11 @@ final class FavoritesViewModel {
     @ObservationIgnored private let observeSession: ObserveSessionUseCase
     @ObservationIgnored private let observeTasks: ObserveTasksUseCase
     @ObservationIgnored private let observeEcoTips: ObserveEcoTipsUseCase
+    @ObservationIgnored private let observeMapPoints: ObserveMapPointsUseCase
     @ObservationIgnored private let observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase
     @ObservationIgnored private let observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase
+    @ObservationIgnored private let savedMapPointIds: SavedMapPointIdsUseCase
+    @ObservationIgnored private let toggleSavedMapPoint: ToggleSavedMapPointUseCase
     @ObservationIgnored private let sessionTask = LatestTask()
     @ObservationIgnored private var userId: String?
     @ObservationIgnored private var loadedSources: Set<FavoritesSource> = []
@@ -17,14 +20,30 @@ final class FavoritesViewModel {
         observeSession: ObserveSessionUseCase,
         observeTasks: ObserveTasksUseCase,
         observeEcoTips: ObserveEcoTipsUseCase,
+        observeMapPoints: ObserveMapPointsUseCase,
         observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase,
-        observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase
+        observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase,
+        savedMapPointIds: SavedMapPointIdsUseCase,
+        toggleSavedMapPoint: ToggleSavedMapPointUseCase
     ) {
         self.observeSession = observeSession
         self.observeTasks = observeTasks
         self.observeEcoTips = observeEcoTips
+        self.observeMapPoints = observeMapPoints
         self.observeFavoriteTaskIds = observeFavoriteTaskIds
         self.observeBookmarkedTipIds = observeBookmarkedTipIds
+        self.savedMapPointIds = savedMapPointIds
+        self.toggleSavedMapPoint = toggleSavedMapPoint
+    }
+
+    func refreshSavedPlaces() {
+        uiState.savedMapPointIds = savedMapPointIds.execute()
+    }
+
+    func toggleSavedPlace(_ point: MapPoint) {
+        let isSaved = !uiState.savedMapPointIds.contains(point.id)
+        toggleSavedMapPoint.execute(pointId: point.id, isSaved: isSaved)
+        uiState.savedMapPointIds = savedMapPointIds.execute()
     }
 
     func observe() async {
@@ -51,6 +70,7 @@ final class FavoritesViewModel {
 
     private func start(userId: String) {
         loadedSources = []
+        uiState.savedMapPointIds = savedMapPointIds.execute()
         sessionTask.run { [weak self] in
             await self?.observeUserData(userId: userId)
         }
@@ -60,6 +80,7 @@ final class FavoritesViewModel {
         await withTaskGroup(of: Void.self) { group in
             group.addTask { await self.observeTaskList() }
             group.addTask { await self.observeTipList() }
+            group.addTask { await self.observePlaceList() }
             group.addTask { await self.observeFavorites(userId: userId) }
             group.addTask { await self.observeBookmarks(userId: userId) }
         }
@@ -81,6 +102,17 @@ final class FavoritesViewModel {
             for try await tips in observeEcoTips.execute() {
                 uiState.tips = tips
                 markLoaded(.tips)
+            }
+        } catch {
+            showError()
+        }
+    }
+
+    private func observePlaceList() async {
+        do {
+            for try await points in observeMapPoints.execute() {
+                uiState.mapPoints = points
+                markLoaded(.places)
             }
         } catch {
             showError()

@@ -6,4 +6,5 @@ nonisolated struct MapPoint: Identifiable, Hashable, Sendable {
     let city: String
     let latitude: Double
     let longitude: Double
+    var isActive = true
 }

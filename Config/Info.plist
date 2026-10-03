@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CouponScanURL</key>
-	<string>$(COUPON_SCAN_URL)</string>
-	<key>GamesBaseURL</key>
-	<string>$(GAMES_BASE_URL)</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>ru</string>
@@ -23,5 +19,9 @@
 			</array>
 		</dict>
 	</array>
+	<key>CouponScanURL</key>
+	<string>$(COUPON_SCAN_URL)</string>
+	<key>GamesBaseURL</key>
+	<string>$(GAMES_BASE_URL)</string>
 </dict>
 </plist>

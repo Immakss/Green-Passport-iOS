@@ -5,6 +5,9 @@ final class FirestoreGamesRepository: GamesRepository {
     private static let fieldTitles = "titles"
     private static let fieldPath = "path"
     private static let fieldSfSymbol = "sfSymbol"
+    private static let fieldIconPath = "iconPath"
+    private static let fieldIconEmoji = "iconEmoji"
+    private static let fieldIconColors = "iconColors"
     private static let fieldMaxPoints = "maxPoints"
     private static let fieldOrder = "order"
     private static let fieldIsActive = "isActive"
@@ -33,6 +36,9 @@ final class FirestoreGamesRepository: GamesRepository {
                         titles: document.get(Self.fieldTitles) as? [String: String] ?? [:],
                         path: path,
                         sfSymbol: document.string(Self.fieldSfSymbol) ?? Self.defaultSymbol,
+                        iconUrl: document.string(Self.fieldIconPath).flatMap { return Self.hostedUrl(path: $0) },
+                        iconEmoji: document.string(Self.fieldIconEmoji),
+                        iconColors: document.strings(Self.fieldIconColors),
                         maxPoints: document.int(Self.fieldMaxPoints) ?? Self.defaultMaxPoints,
                         order: document.int(Self.fieldOrder) ?? Int.max
                     )
@@ -42,15 +48,22 @@ final class FirestoreGamesRepository: GamesRepository {
     }
 
     func url(for game: Game, language: String, theme: String) -> URL? {
-        guard let base = Bundle.main.object(forInfoDictionaryKey: Self.baseUrlInfoKey) as? String,
-              let baseUrl = URL(string: base) else {
+        guard let gameUrl = Self.hostedUrl(path: game.path) else {
             return nil
         }
-        var components = URLComponents(url: baseUrl.appending(path: game.path), resolvingAgainstBaseURL: false)
+        var components = URLComponents(url: gameUrl, resolvingAgainstBaseURL: false)
         components?.queryItems = [
             URLQueryItem(name: Self.languageParameter, value: language),
             URLQueryItem(name: Self.themeParameter, value: theme),
         ]
         return components?.url
+    }
+
+    private static func hostedUrl(path: String) -> URL? {
+        guard let base = Bundle.main.object(forInfoDictionaryKey: baseUrlInfoKey) as? String,
+              let baseUrl = URL(string: base) else {
+            return nil
+        }
+        return baseUrl.appending(path: path)
     }
 }

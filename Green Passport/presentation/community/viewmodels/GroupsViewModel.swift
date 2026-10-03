@@ -7,6 +7,7 @@ final class GroupsViewModel {
     @ObservationIgnored private let observeGroups: ObserveGroupsUseCase
     @ObservationIgnored private let createGroup: CreateGroupUseCase
     @ObservationIgnored private let joinGroup: JoinGroupUseCase
+    @ObservationIgnored private let joinGroupByCode: JoinGroupByCodeUseCase
 
     private(set) var uiState = GroupsUiState()
 
@@ -14,12 +15,14 @@ final class GroupsViewModel {
         observeSession: ObserveSessionUseCase,
         observeGroups: ObserveGroupsUseCase,
         createGroup: CreateGroupUseCase,
-        joinGroup: JoinGroupUseCase
+        joinGroup: JoinGroupUseCase,
+        joinGroupByCode: JoinGroupByCodeUseCase
     ) {
         self.observeSession = observeSession
         self.observeGroups = observeGroups
         self.createGroup = createGroup
         self.joinGroup = joinGroup
+        self.joinGroupByCode = joinGroupByCode
     }
 
     func observe() async {
@@ -61,6 +64,32 @@ final class GroupsViewModel {
         Task {
             try? await joinGroup.execute(groupId: group.id, userId: userId)
             uiState.joiningGroupId = nil
+        }
+    }
+
+    func updateInviteCodeDraft(_ code: String) {
+        uiState.inviteCodeDraft = code
+    }
+
+    func dismissInviteCodeNotFound() {
+        uiState.isInviteCodeNotFound = false
+    }
+
+    func joinByCode() async -> String? {
+        guard let userId = uiState.currentUserId, !uiState.isJoiningByCode else {
+            return nil
+        }
+        uiState.isJoiningByCode = true
+        defer {
+            uiState.isJoiningByCode = false
+            uiState.inviteCodeDraft = ""
+        }
+        do {
+            let group = try await joinGroupByCode.execute(code: uiState.inviteCodeDraft, userId: userId)
+            return group.id
+        } catch {
+            uiState.isInviteCodeNotFound = true
+            return nil
         }
     }
 

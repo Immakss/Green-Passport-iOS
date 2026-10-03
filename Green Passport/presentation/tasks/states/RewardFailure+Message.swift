@@ -11,9 +11,13 @@ extension RewardFailure {
             return .codeDoesNotMatchMsg
         case .wrongVerification:
             return .taskNeedsOtherConfirmationMsg
+        case .qrCodeNotActive:
+            return .qrCodeNotActiveMsg
+        case .qrCodeLimitReached:
+            return .qrCodeLimitReachedMsg
         case .network:
             return .noInternetForPointsMsg
-        case .notEnoughPoints, .unknown:
+        case .notEnoughPoints, .rewardSoldOut, .unknown:
             return .somethingWentWrongMsg
         }
     }

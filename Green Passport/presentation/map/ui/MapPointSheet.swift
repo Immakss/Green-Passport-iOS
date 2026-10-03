@@ -43,7 +43,7 @@ struct MapPointSheet: View {
                     Label {
                         Text(isSaved ? .saved : .save)
                     } icon: {
-                        Image(systemName: isSaved ? "bookmark.fill" : "bookmark")
+                        Image(systemName: isSaved ? "heart.fill" : "heart")
                             .contentTransition(.symbolEffect(.replace))
                     }
                     .frame(maxWidth: .infinity)

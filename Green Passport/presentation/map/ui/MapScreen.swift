@@ -27,7 +27,9 @@ struct MapScreen: View {
             }
             UserAnnotation()
         }
-        .simultaneousGesture(TapGesture().onEnded(Keyboard.dismiss))
+        .simultaneousGesture(TapGesture().onEnded {
+            Keyboard.dismiss()
+        })
         .mapControls {
             MapUserLocationButton()
             MapCompass()

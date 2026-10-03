@@ -95,7 +95,7 @@ struct ProfileSetupScreen: View {
             VStack(alignment: .leading, spacing: Spacing.small) {
                 FlowLayout {
                     ForEach(SupportedCities.all, id: \.self) { city in
-                        ChoiceCapsule(title: city, isSelected: uiState.city == city) {
+                        ChoiceCapsule(title: CityName.title(city), isSelected: uiState.city == city) {
                             onAction(.citySelected(city))
                         }
                     }

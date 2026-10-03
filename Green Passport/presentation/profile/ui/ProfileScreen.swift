@@ -37,12 +37,8 @@ struct ProfileScreen: View {
                 }
                 Picker(selection: Binding(get: { return uiState.theme }, set: { onAction(.themeSelected($0)) })) {
                     ForEach(AppTheme.allCases, id: \.self) { theme in
-                        Label {
-                            Text(theme.title)
-                        } icon: {
-                            Image(systemName: theme.systemImage)
-                        }
-                        .tag(theme)
+                        Text(theme.title)
+                            .tag(theme)
                     }
                 } label: {
                     HStack(spacing: Spacing.small) {
@@ -84,6 +80,7 @@ struct ProfileScreen: View {
                     } icon: {
                         Image(systemName: "rectangle.portrait.and.arrow.right")
                     }
+                    .foregroundStyle(Palette.error)
                 }
             }
         }
@@ -122,7 +119,7 @@ struct ProfileScreen: View {
         guard let city = uiState.profile?.city, !city.isEmpty else {
             return String(localized: .pointsBalance(uiState.points))
         }
-        return String(localized: .cityAndPoints(city, uiState.points))
+        return String(localized: .cityAndPoints(CityName.title(city), uiState.points))
     }
 
     private func menuButton(

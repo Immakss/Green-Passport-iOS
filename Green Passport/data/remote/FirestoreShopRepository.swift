@@ -4,7 +4,11 @@ import Foundation
 final class FirestoreShopRepository: ShopRepository {
     private static let fieldTitle = "title"
     private static let fieldPartnerName = "partnerName"
+    private static let fieldTitles = "titles"
+    private static let fieldPartnerNames = "partnerNames"
     private static let fieldPointsCost = "pointsCost"
+    private static let fieldImageUrl = "imageUrl"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldRewardId = "rewardId"
     private static let fieldRedeemedAt = "redeemedAtEpochMillis"
@@ -24,12 +28,19 @@ final class FirestoreShopRepository: ShopRepository {
     func observeRewards() -> AsyncThrowingStream<[Reward], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.shopItems(firestore))) { snapshot in
             return snapshot.documents.compactMap { document in
-                guard let title = document.string(Self.fieldTitle),
-                      let partnerName = document.string(Self.fieldPartnerName),
+                guard let title = document.localizedString(Self.fieldTitle, translations: Self.fieldTitles),
+                      let partnerName = document.localizedString(Self.fieldPartnerName, translations: Self.fieldPartnerNames),
                       let pointsCost = document.int(Self.fieldPointsCost) else {
                     return nil
                 }
-                return Reward(id: document.documentID, title: title, partnerName: partnerName, pointsCost: pointsCost)
+                return Reward(
+                    id: document.documentID,
+                    title: title,
+                    partnerName: partnerName,
+                    pointsCost: pointsCost,
+                    imageUrl: document.string(Self.fieldImageUrl),
+                    isActive: document.bool(Self.fieldIsActive) ?? true
+                )
             }
         }
     }
@@ -37,7 +48,7 @@ final class FirestoreShopRepository: ShopRepository {
     func observePurchases(userId: String) -> AsyncThrowingStream<[Coupon], Error> {
         let query = FirestoreCollections.purchases(firestore).whereField(Self.fieldUserId, isEqualTo: userId)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.coupon(from:))
+            return snapshot.documents.compactMap { return Self.coupon(from: $0) }
         }
     }
 

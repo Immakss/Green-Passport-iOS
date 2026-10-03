@@ -17,7 +17,7 @@ final class FirebaseAuthRepository: AuthRepository {
         let auth = auth
         return AsyncStream { continuation in
             let handle = auth.addStateDidChangeListener { _, user in
-                continuation.yield(user.map(Self.session(from:)))
+                continuation.yield(user.map { return Self.session(from: $0) })
             }
             continuation.onTermination = { _ in
                 auth.removeStateDidChangeListener(handle)

@@ -34,4 +34,21 @@ extension AchievementId {
             return .achievementLevelFiveDescription
         }
     }
+
+    var systemImage: String {
+        switch self {
+        case .firstTask:
+            return "leaf.fill"
+        case .taskMaster:
+            return "checkmark.seal.fill"
+        case .eventGoer:
+            return "calendar.badge.checkmark"
+        case .ecoReader:
+            return "book.fill"
+        case .communityMember:
+            return "person.3.fill"
+        case .levelFive:
+            return "star.fill"
+        }
+    }
 }

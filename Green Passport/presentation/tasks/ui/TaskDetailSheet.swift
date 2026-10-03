@@ -8,8 +8,6 @@ extension View {
     ) -> some View {
         return sheet(item: item, onDismiss: onDismiss) { selected in
             TaskDetailRoute(taskId: selected.id, container: container)
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
         }
     }
 }

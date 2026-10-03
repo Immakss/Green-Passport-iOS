@@ -6,6 +6,8 @@ final class ObserveRewardsUseCase {
     }
 
     func execute() -> AsyncThrowingStream<[Reward], Error> {
-        return shopRepository.observeRewards()
+        return StreamCombiner.mapped(shopRepository.observeRewards()) { rewards in
+            return rewards.filter { return $0.isActive }
+        }
     }
 }

@@ -4,10 +4,14 @@ final class FirestoreEventsRepository: EventsRepository {
     private static let fieldTitle = "title"
     private static let fieldDescription = "description"
     private static let fieldLocation = "location"
+    private static let fieldTitles = "titles"
+    private static let fieldDescriptions = "descriptions"
+    private static let fieldLocations = "locations"
     private static let fieldCity = "city"
     private static let fieldStartAt = "startAtEpochMillis"
     private static let fieldImageUrl = "imageUrl"
     private static let fieldRewardPoints = "rewardPoints"
+    private static let fieldIsActive = "isActive"
     private static let fieldUserId = "userId"
     private static let fieldEventId = "eventId"
     private static let fieldRegisteredAt = "registeredAtEpochMillis"
@@ -20,7 +24,7 @@ final class FirestoreEventsRepository: EventsRepository {
 
     func observeEvents() -> AsyncThrowingStream<[EcoEvent], Error> {
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: FirestoreCollections.events(firestore))) { snapshot in
-            return snapshot.documents.compactMap(Self.event(from:))
+            return snapshot.documents.compactMap { return Self.event(from: $0) }
         }
     }
 
@@ -51,9 +55,9 @@ final class FirestoreEventsRepository: EventsRepository {
     }
 
     private static func event(from document: DocumentSnapshot) -> EcoEvent? {
-        guard let title = document.string(fieldTitle),
-              let description = document.string(fieldDescription),
-              let location = document.string(fieldLocation),
+        guard let title = document.localizedString(fieldTitle, translations: fieldTitles),
+              let description = document.localizedString(fieldDescription, translations: fieldDescriptions),
+              let location = document.localizedString(fieldLocation, translations: fieldLocations),
               let city = document.string(fieldCity),
               let startAt = document.date(fieldStartAt) else {
             return nil
@@ -66,7 +70,8 @@ final class FirestoreEventsRepository: EventsRepository {
             city: city,
             startAt: startAt,
             imageUrl: document.string(fieldImageUrl),
-            rewardPoints: document.int(fieldRewardPoints) ?? 0
+            rewardPoints: document.int(fieldRewardPoints) ?? 0,
+            isActive: document.bool(fieldIsActive) ?? true
         )
     }
 }

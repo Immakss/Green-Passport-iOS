@@ -24,7 +24,7 @@ final class FirebaseTaskSubmissionsRepository: TaskSubmissionsRepository {
     func observeUserSubmissions(userId: String) -> AsyncThrowingStream<[TaskSubmission], Error> {
         let query = FirestoreCollections.taskSubmissions(firestore).whereField(Self.fieldUserId, isEqualTo: userId)
         return FirestoreStream.mapped(FirestoreStream.snapshots(of: query)) { snapshot in
-            return snapshot.documents.compactMap(Self.submission(from:))
+            return snapshot.documents.compactMap { return Self.submission(from: $0) }
         }
     }
 

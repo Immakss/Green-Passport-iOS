@@ -60,7 +60,7 @@ struct TaskFiltersSheet: View {
                         Text(TaskCityFilter.all.title(profileCity: profileCity))
                             .tag(TaskCityFilter.all)
                         ForEach(SupportedCities.all.filter { return $0 != profileCity }, id: \.self) { city in
-                            Text(city)
+                            Text(CityName.title(city))
                                 .tag(TaskCityFilter.city(city))
                         }
                     } label: {

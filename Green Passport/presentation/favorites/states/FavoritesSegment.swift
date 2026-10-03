@@ -3,6 +3,7 @@ import Foundation
 enum FavoritesSegment: Hashable, CaseIterable {
     case tasks
     case tips
+    case places
 
     var title: LocalizedStringResource {
         switch self {
@@ -10,6 +11,8 @@ enum FavoritesSegment: Hashable, CaseIterable {
             return .tasks
         case .tips:
             return .tips
+        case .places:
+            return .places
         }
     }
 }

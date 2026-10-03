@@ -3,9 +3,15 @@ import SwiftUI
 struct GroupsScreen: View {
     let uiState: GroupsUiState
     @Binding var draftName: String
+    @Binding var inviteCode: String
     let onCreate: () -> Void
     let onJoin: (CommunityGroup) -> Void
+    let onOpen: (CommunityGroup) -> Void
+    let onJoinByCode: () -> Void
+    let onDismissNotFound: () -> Void
     let onRetry: () -> Void
+
+    @State private var isCodePromptPresented = false
 
     var body: some View {
         List {
@@ -14,16 +20,13 @@ struct GroupsScreen: View {
                     TextField(String(localized: .groupsDraftLabel), text: $draftName)
                         .submitLabel(.done)
                         .onSubmit(onCreate)
-                    if uiState.isCreating {
-                        ProgressView()
-                    } else {
-                        Button(action: onCreate) {
-                            Text(.groupsCreateButton)
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .buttonBorderShape(.capsule)
-                        .disabled(draftName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    Button(action: onCreate) {
+                        Text(.groupsCreateButton)
+                            .loadingOverlay(uiState.isCreating, tint: Palette.onForest)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.capsule)
+                    .disabled(draftName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || uiState.isCreating)
                 }
             } footer: {
                 if uiState.isNameRejected {
@@ -51,6 +54,38 @@ struct GroupsScreen: View {
             }
         }
         .navigationTitle(Text(.communityGroupsTitle))
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    isCodePromptPresented = true
+                } label: {
+                    Label(String(localized: .joinByCode), systemImage: "number")
+                        .loadingOverlay(uiState.isJoiningByCode)
+                }
+                .disabled(uiState.isJoiningByCode)
+            }
+        }
+        .alert(Text(.joinByCode), isPresented: $isCodePromptPresented) {
+            TextField(String(localized: .inviteCode), text: $inviteCode)
+                .textInputAutocapitalization(.characters)
+                .autocorrectionDisabled()
+            Button(role: .cancel) {
+                inviteCode = ""
+            } label: {
+                Text(.cancel)
+            }
+            Button(action: onJoinByCode) {
+                Text(.groupsJoinButton)
+            }
+        }
+        .alert(
+            Text(.groupNotFoundMsg),
+            isPresented: Binding(get: { return uiState.isInviteCodeNotFound }, set: { _ in onDismissNotFound() })
+        ) {
+            Button(role: .cancel, action: onDismissNotFound) {
+                Text(.close)
+            }
+        }
     }
 
     private func groupRow(_ group: CommunityGroup) -> some View {
@@ -62,18 +97,22 @@ struct GroupsScreen: View {
                 Text(.groupsJoinedLabel)
                     .font(.subheadline)
                     .foregroundStyle(Palette.forest)
-            } else if uiState.joiningGroupId == group.id {
-                ProgressView()
             } else {
                 Button {
                     onJoin(group)
                 } label: {
                     Text(.groupsJoinButton)
+                        .loadingOverlay(uiState.joiningGroupId == group.id)
                 }
                 .buttonStyle(.bordered)
                 .buttonBorderShape(.capsule)
+                .disabled(uiState.joiningGroupId == group.id)
             }
         }
+        .onTapGesture {
+            onOpen(group)
+        }
+        .accessibilityAddTraits(.isButton)
     }
 }
 
@@ -82,8 +121,12 @@ struct GroupsScreen: View {
         GroupsScreen(
             uiState: GroupsUiState(groups: [CommunityGroup(id: "1", name: "Эко-Минск", memberIds: ["1", "2"])], isLoading: false),
             draftName: .constant(""),
+            inviteCode: .constant(""),
             onCreate: {},
             onJoin: { _ in },
+            onOpen: { _ in },
+            onJoinByCode: {},
+            onDismissNotFound: {},
             onRetry: {}
         )
     }

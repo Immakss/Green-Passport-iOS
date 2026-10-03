@@ -7,4 +7,7 @@ struct GroupsUiState {
     var isNameRejected = false
     var joiningGroupId: String?
     var currentUserId: String?
+    var inviteCodeDraft = ""
+    var isJoiningByCode = false
+    var isInviteCodeNotFound = false
 }

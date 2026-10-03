@@ -3,13 +3,14 @@ import SwiftUI
 struct HomeScreen: View {
     private static let headerAvatarSize: CGFloat = 44
     private static let quickActionTileSize: CGFloat = 56
-    private static let quickActionSymbolScale: CGFloat = 0.38
+    private static let quickActionSymbolScale: CGFloat = 0.28
     private static let taskMascotSize: CGFloat = 34
     private static let placeholderTaskCount = 3
     private static let labelMinimumScale: CGFloat = 0.8
 
     let uiState: HomeUiState
     let onProfile: () -> Void
+    let onStreak: () -> Void
     let onQuickAction: (HomeQuickAction) -> Void
     let onEvent: (EcoEvent) -> Void
     let onTask: (EcoTask) -> Void
@@ -20,7 +21,7 @@ struct HomeScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Spacing.large) {
                 header
-                ProgressHeroCard(points: uiState.points, level: uiState.level, streakDays: uiState.streakDays)
+                ProgressHeroCard(points: uiState.points, level: uiState.level, streakDays: uiState.streakDays, onTap: onStreak)
                     .redacted(reason: uiState.isLoading ? .placeholder : [])
                 quickActions
                 if let event = uiState.upcomingEvent {
@@ -82,10 +83,10 @@ struct HomeScreen: View {
                     VStack(spacing: Spacing.xSmall) {
                         SymbolTile(systemImage: action.systemImage, size: Self.quickActionTileSize, symbolScale: Self.quickActionSymbolScale)
                         Text(action.title)
-                            .font(.caption.weight(.medium))
+                            .font(.caption2.weight(.medium))
                             .foregroundStyle(Color.primary)
-                            .lineLimit(1)
-                            .minimumScaleFactor(Self.labelMinimumScale)
+                            .lineLimit(2)
+                            .multilineTextAlignment(.center)
                     }
                     .frame(maxWidth: .infinity)
                 }
@@ -120,6 +121,7 @@ struct HomeScreen: View {
                 tasks: EcoTask.placeholders(count: 3)
             ),
             onProfile: {},
+            onStreak: {},
             onQuickAction: { _ in },
             onEvent: { _ in },
             onTask: { _ in },

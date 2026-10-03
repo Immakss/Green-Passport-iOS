@@ -131,7 +131,8 @@ extension AppDIContainer {
             observeCompletedTaskIds: observeCompletedTaskIdsUseCase,
             rankPendingTasks: RankPendingTasksUseCase(),
             observeWallet: observeWalletUseCase,
-            observeUpcomingEvent: ObserveUpcomingEventUseCase(eventsRepository: eventsRepository)
+            observeUpcomingEvent: ObserveUpcomingEventUseCase(eventsRepository: eventsRepository),
+            updateStreakReminder: UpdateStreakReminderUseCase(reminderScheduler: reminderScheduler)
         )
     }
 
@@ -168,7 +169,7 @@ extension AppDIContainer {
         return EventDetailViewModel(
             eventId: eventId,
             observeSession: observeSessionUseCase,
-            observeEvents: observeEventsUseCase,
+            observeEvents: ObserveEventsUseCase(eventsRepository: eventsRepository, includesArchived: true),
             observeRegisteredEventIds: ObserveRegisteredEventIdsUseCase(eventsRepository: eventsRepository),
             registerForEvent: RegisterForEventUseCase(
                 eventsRepository: eventsRepository,
@@ -189,8 +190,10 @@ extension AppDIContainer {
             isNotificationsEnabled: IsNotificationsEnabledUseCase(settingsRepository: settingsRepository),
             setNotificationsEnabled: SetNotificationsEnabledUseCase(
                 settingsRepository: settingsRepository,
-                notificationPermission: notificationPermission
+                notificationPermission: notificationPermission,
+                reminderScheduler: reminderScheduler
             ),
+            notificationPermission: notificationPermission,
             appTheme: AppThemeUseCase(settingsRepository: settingsRepository)
         )
     }
@@ -243,8 +246,11 @@ extension AppDIContainer {
             observeSession: observeSessionUseCase,
             observeTasks: observeTasksUseCase,
             observeEcoTips: observeEcoTipsUseCase,
+            observeMapPoints: ObserveMapPointsUseCase(mapPointsRepository: mapPointsRepository),
             observeFavoriteTaskIds: ObserveFavoriteTaskIdsUseCase(favoritesRepository: favoritesRepository),
-            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository)
+            observeBookmarkedTipIds: ObserveBookmarkedTipIdsUseCase(favoritesRepository: favoritesRepository),
+            savedMapPointIds: SavedMapPointIdsUseCase(savedMapPointsRepository: savedMapPointsRepository),
+            toggleSavedMapPoint: ToggleSavedMapPointUseCase(savedMapPointsRepository: savedMapPointsRepository)
         )
     }
 }
@@ -268,7 +274,25 @@ extension AppDIContainer {
             observeSession: observeSessionUseCase,
             observeGroups: ObserveGroupsUseCase(communityRepository: communityRepository),
             createGroup: CreateGroupUseCase(communityRepository: communityRepository, textModerator: textModerator),
-            joinGroup: JoinGroupUseCase(communityRepository: communityRepository)
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository),
+            joinGroupByCode: JoinGroupByCodeUseCase(communityRepository: communityRepository)
+        )
+    }
+
+    func buildGroupDetailViewModel(groupId: String) -> GroupDetailViewModel {
+        return GroupDetailViewModel(
+            groupId: groupId,
+            observeSession: observeSessionUseCase,
+            observeGroup: ObserveGroupUseCase(communityRepository: communityRepository),
+            observeMessages: ObserveGroupMessagesUseCase(communityRepository: communityRepository),
+            sendMessage: SendGroupMessageUseCase(
+                communityRepository: communityRepository,
+                userProfileRepository: userProfileRepository,
+                textModerator: textModerator
+            ),
+            joinGroup: JoinGroupUseCase(communityRepository: communityRepository),
+            leaveGroup: LeaveGroupUseCase(communityRepository: communityRepository),
+            fetchMembers: FetchGroupMembersUseCase(communityRepository: communityRepository)
         )
     }
 
@@ -286,7 +310,7 @@ extension AppDIContainer {
         return EcoTipDetailViewModel(
             tipId: tipId,
             observeSession: observeSessionUseCase,
-            observeEcoTips: observeEcoTipsUseCase,
+            observeEcoTips: ObserveEcoTipsUseCase(ecoTipsRepository: ecoTipsRepository, includesArchived: true),
             observeReadTipIds: observeReadTipIdsUseCase,
             markTipRead: MarkTipReadUseCase(rewardsRepository: rewardsRepository)
         )
@@ -329,7 +353,7 @@ extension AppDIContainer {
             observeIsModerator: observeIsModeratorUseCase,
             observePendingSubmissions: ObservePendingSubmissionsUseCase(moderationRepository: moderationRepository),
             observeFlaggedPosts: ObserveFlaggedPostsUseCase(moderationRepository: moderationRepository),
-            observeTasks: observeTasksUseCase,
+            observeTasks: ObserveTasksUseCase(tasksRepository: tasksRepository, includesArchived: true),
             fetchSubmissionPhotoUrl: FetchSubmissionPhotoUrlUseCase(taskSubmissionsRepository: taskSubmissionsRepository),
             reviewSubmission: ReviewSubmissionUseCase(moderationRepository: moderationRepository),
             moderatePost: ModeratePostUseCase(moderationRepository: moderationRepository)

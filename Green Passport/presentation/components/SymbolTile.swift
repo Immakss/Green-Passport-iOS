@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SymbolTile: View {
-    static let defaultSymbolScale: CGFloat = 0.5
+    static let defaultSymbolScale: CGFloat = 0.42
     private static let cornerScale: CGFloat = 0.28
 
     let systemImage: String
@@ -15,7 +15,10 @@ struct SymbolTile: View {
             .frame(width: size, height: size)
             .overlay {
                 Image(systemName: systemImage)
-                    .font(.system(size: size * symbolScale, weight: .semibold))
+                    .resizable()
+                    .scaledToFit()
+                    .fontWeight(.semibold)
+                    .frame(width: size * symbolScale, height: size * symbolScale)
                     .foregroundStyle(style.foreground)
             }
             .accessibilityHidden(true)

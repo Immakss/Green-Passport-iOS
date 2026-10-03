@@ -1,6 +1,9 @@
 final class DerivedAchievementsRepository: AchievementsRepository {
+    private static let firstTaskThreshold = 1
     private static let taskMasterThreshold = 5
+    private static let eventGoerThreshold = 1
     private static let ecoReaderThreshold = 3
+    private static let communityMemberThreshold = 1
     private static let levelFiveThreshold = 5
 
     private let tasksRepository: TasksRepository
@@ -30,26 +33,24 @@ final class DerivedAchievementsRepository: AchievementsRepository {
         async let wallet = pointsRepository.observeWallet(userId: userId).firstValue()
         let isGroupMember = try await isMemberOfAnyGroup(userId: userId)
         let completedCount = try await completedTasks?.count ?? 0
-        let hasEvents = try await !(registeredEvents ?? []).isEmpty
+        let registeredCount = try await registeredEvents?.count ?? 0
         let readCount = try await readTips?.count ?? 0
         let level = try await Level(lifetimeXp: wallet?.lifetimeXp ?? 0)
         return AchievementId.allCases.map { id in
-            let isUnlocked: Bool
             switch id {
             case .firstTask:
-                isUnlocked = completedCount >= 1
+                return Achievement(id: id, progress: completedCount, target: Self.firstTaskThreshold)
             case .taskMaster:
-                isUnlocked = completedCount >= Self.taskMasterThreshold
+                return Achievement(id: id, progress: completedCount, target: Self.taskMasterThreshold)
             case .eventGoer:
-                isUnlocked = hasEvents
+                return Achievement(id: id, progress: registeredCount, target: Self.eventGoerThreshold)
             case .ecoReader:
-                isUnlocked = readCount >= Self.ecoReaderThreshold
+                return Achievement(id: id, progress: readCount, target: Self.ecoReaderThreshold)
             case .communityMember:
-                isUnlocked = isGroupMember
+                return Achievement(id: id, progress: isGroupMember ? 1 : 0, target: Self.communityMemberThreshold)
             case .levelFive:
-                isUnlocked = level.number >= Self.levelFiveThreshold
+                return Achievement(id: id, progress: level.number, target: Self.levelFiveThreshold)
             }
-            return Achievement(id: id, isUnlocked: isUnlocked)
         }
     }
 

@@ -12,4 +12,8 @@ extension EcoEvent {
     var scheduleSummary: String {
         return String(localized: .dateTimePlace(dateText, timeText, location))
     }
+
+    var day: DateComponents {
+        return DateComponents.day(containing: startAt)
+    }
 }

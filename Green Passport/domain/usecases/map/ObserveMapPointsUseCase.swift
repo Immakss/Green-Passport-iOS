@@ -6,6 +6,8 @@ final class ObserveMapPointsUseCase {
     }
 
     func execute() -> AsyncThrowingStream<[MapPoint], Error> {
-        return mapPointsRepository.observePoints()
+        return StreamCombiner.mapped(mapPointsRepository.observePoints()) { points in
+            return points.filter { return $0.isActive }
+        }
     }
 }

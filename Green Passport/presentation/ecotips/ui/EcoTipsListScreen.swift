@@ -1,6 +1,10 @@
 import SwiftUI
 
 struct EcoTipsListScreen: View {
+    private static let thumbnailSize: CGFloat = 64
+    private static let previewLineLimit = 2
+    private static let metaSeparator = " · "
+
     let uiState: EcoTipsListUiState
     let onFilter: (EcoTipFilter) -> Void
     let onTip: (EcoTip) -> Void
@@ -59,7 +63,7 @@ struct EcoTipsListScreen: View {
                 Text(tip.title)
                     .font(.headline)
                     .foregroundStyle(Color.primary)
-                Text(tip.body)
+                Text(tip.preview)
                     .font(.subheadline)
                     .foregroundStyle(Palette.secondaryText)
                     .lineLimit(2)
@@ -77,13 +81,35 @@ struct EcoTipsListScreen: View {
         return Button {
             onTip(tip)
         } label: {
-            ListRow(title: tip.title, subtitle: String(localized: tip.category.title)) {
-                SymbolTile(systemImage: isRead ? "checkmark" : "leaf.fill", style: isRead ? .prominent : .accent)
-            } trailing: {
+            HStack(alignment: .top, spacing: Spacing.small) {
+                ArticleCoverImage(tip: tip)
+                    .frame(width: Self.thumbnailSize, height: Self.thumbnailSize)
+                    .clipShape(.rect(cornerRadius: CornerRadius.tile, style: .continuous))
+                VStack(alignment: .leading, spacing: Spacing.xxSmall) {
+                    Text(tip.title)
+                        .font(.headline)
+                        .foregroundStyle(Color.primary)
+                        .lineLimit(Self.previewLineLimit)
+                    Text(tip.preview)
+                        .font(.subheadline)
+                        .foregroundStyle(Palette.secondaryText)
+                        .lineLimit(Self.previewLineLimit)
+                    HStack(spacing: Spacing.xxSmall) {
+                        if isRead {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundStyle(Palette.forest)
+                                .accessibilityLabel(Text(.ecotipDetailReadLabel))
+                        }
+                        Text([String(localized: tip.category.title), String(localized: .ecotipReadMinutesFormat(tip.readMinutes))].joined(separator: Self.metaSeparator))
+                            .foregroundStyle(Palette.secondaryText)
+                    }
+                    .font(.footnote)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
                 Button {
                     onToggleBookmark(tip)
                 } label: {
-                    Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                    Image(systemName: isBookmarked ? "heart.fill" : "heart")
                         .foregroundStyle(isBookmarked ? Palette.forest : Palette.secondaryText)
                         .contentTransition(.symbolEffect(.replace))
                 }
@@ -91,8 +117,9 @@ struct EcoTipsListScreen: View {
                 .accessibilityLabel(Text(.profileBookmarks))
                 .sensoryFeedback(.impact, trigger: isBookmarked)
             }
+            .contentShape(.rect)
             .padding(.horizontal, Spacing.medium)
-            .padding(.vertical, Spacing.xSmall)
+            .padding(.vertical, Spacing.small)
             .background(Palette.cardBackground, in: .rect(cornerRadius: CornerRadius.large, style: .continuous))
         }
         .buttonStyle(.plain)
@@ -103,7 +130,7 @@ struct EcoTipsListScreen: View {
     NavigationStack {
         EcoTipsListScreen(
             uiState: EcoTipsListUiState(
-                tips: [EcoTip(id: "1", category: .article, title: "Как сортировать пластик", body: "Смотрите на маркировку", mediaUrl: nil, isDailyTip: true, rewardPoints: 10, rewardXp: 20)],
+                tips: [EcoTip(id: "1", category: .article, title: "Как сортировать пластик", body: "Смотрите на маркировку на упаковке: цифра в треугольнике подскажет, куда нести пластик.\n\n## Что означают цифры", mediaUrl: nil, isDailyTip: true, rewardPoints: 10, rewardXp: 20)],
                 isLoading: false
             ),
             onFilter: { _ in },

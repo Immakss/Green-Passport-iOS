@@ -7,6 +7,7 @@ struct FavoritesScreen: View {
     @Binding var segment: FavoritesSegment
     let onTask: (EcoTask) -> Void
     let onTip: (EcoTip) -> Void
+    let onPlace: (MapPoint) -> Void
     let onRetry: () -> Void
 
     var body: some View {
@@ -32,6 +33,21 @@ struct FavoritesScreen: View {
                     } label: {
                         ListRow(title: tip.title, subtitle: String(localized: tip.category.title)) {
                             SymbolTile(systemImage: tip.category.systemImage)
+                        } trailing: {
+                            Image(systemName: "chevron.right")
+                                .font(.footnote.weight(.semibold))
+                                .foregroundStyle(Color(.tertiaryLabel))
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            case .places:
+                ForEach(uiState.savedPlaces) { point in
+                    Button {
+                        onPlace(point)
+                    } label: {
+                        ListRow(title: point.name, subtitle: String(localized: point.type.title)) {
+                            SymbolTile(systemImage: point.type.systemImage)
                         } trailing: {
                             Image(systemName: "chevron.right")
                                 .font(.footnote.weight(.semibold))
@@ -71,6 +87,8 @@ struct FavoritesScreen: View {
             StateView(kind: .empty(message: .favoritesEmpty))
         } else if segment == .tips && uiState.bookmarkedTips.isEmpty {
             StateView(kind: .empty(message: .bookmarksEmpty))
+        } else if segment == .places && uiState.savedPlaces.isEmpty {
+            StateView(kind: .empty(message: .savedPlacesEmpty))
         }
     }
 }
@@ -82,6 +100,7 @@ struct FavoritesScreen: View {
             segment: .constant(.tasks),
             onTask: { _ in },
             onTip: { _ in },
+            onPlace: { _ in },
             onRetry: {}
         )
     }

@@ -33,6 +33,7 @@ final class ForumViewModel {
     func updateDraft(_ text: String) {
         uiState.draft = text
         uiState.isTextRejected = false
+        uiState.isSendFailed = false
     }
 
     func post() {
@@ -41,6 +42,7 @@ final class ForumViewModel {
             return
         }
         uiState.isPosting = true
+        uiState.isSendFailed = false
         Task {
             do {
                 try await postToForum.execute(authorId: userId, text: text)
@@ -49,7 +51,7 @@ final class ForumViewModel {
             } catch is ContentRejectedError {
                 uiState.isTextRejected = true
             } catch {
-                uiState.hasError = uiState.posts.isEmpty
+                uiState.isSendFailed = true
             }
             uiState.isPosting = false
         }

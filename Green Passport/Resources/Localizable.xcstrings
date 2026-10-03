@@ -231,6 +231,29 @@
         }
       }
     },
+    "achievement_progress_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld з %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld из %2$lld"
+          }
+        }
+      }
+    },
     "achievement_task_master_description": {
       "extractionState": "manual",
       "localizations": {
@@ -277,6 +300,29 @@
         }
       }
     },
+    "achievement_unlocked_label": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Атрымана"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlocked"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Получено"
+          }
+        }
+      }
+    },
     "achievements_screen_title": {
       "extractionState": "manual",
       "localizations": {
@@ -296,6 +342,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Мои достижения"
+          }
+        }
+      }
+    },
+    "achievements_unlocked_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адкрыта %1$lld з %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld of %2$lld unlocked"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открыто %1$lld из %2$lld"
           }
         }
       }
@@ -484,6 +553,29 @@
         }
       }
     },
+    "apple_sign_in_coming_soon_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Уваход праз Apple ID пакуль недаступны. Скарыстайцеся поштай або Google."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sign in with Apple isn’t available yet. Please use email or Google instead."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вход через Apple ID пока недоступен. Воспользуйтесь почтой или Google."
+          }
+        }
+      }
+    },
     "approve": {
       "extractionState": "manual",
       "localizations": {
@@ -605,19 +697,19 @@
         "be": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пакуль няма закладак — адзначце параду закладкай на экране эка-парад"
+            "value": "Пакуль няма абраных парад — адзначце параду сардэчкам на экране эка-парад"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "No bookmarks yet — bookmark a tip on the eco tips screen"
+            "value": "No favorite tips yet — tap the heart on the eco tips screen"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "translated",
-            "value": "Пока нет закладок — отметьте совет закладкой на экране эко-советов"
+            "value": "Пока нет избранных советов — отметьте совет сердечком на экране эко-советов"
           }
         }
       }
@@ -691,6 +783,29 @@
         }
       }
     },
+    "calendar_no_events_on_day": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "У гэты дзень мерапрыемстваў няма"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No events on this day"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "В этот день событий нет"
+          }
+        }
+      }
+    },
     "calendar_registered_label": {
       "extractionState": "manual",
       "localizations": {
@@ -733,52 +848,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Отмена"
-          }
-        }
-      }
-    },
-    "cards_locked_label": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заблакавана"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Locked"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Заблокировано"
-          }
-        }
-      }
-    },
-    "cards_screen_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мае карткі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My cards"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мои карты"
           }
         }
       }
@@ -1036,6 +1105,282 @@
         }
       }
     },
+    "city_baranovichi": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Баранавічы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Baranovichi"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Барановичи"
+          }
+        }
+      }
+    },
+    "city_bobruisk": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бабруйск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bobruisk"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Бобруйск"
+          }
+        }
+      }
+    },
+    "city_borisov": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Барысаў"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borisov"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Борисов"
+          }
+        }
+      }
+    },
+    "city_brest": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Брэст"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brest"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Брест"
+          }
+        }
+      }
+    },
+    "city_gomel": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гомель"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gomel"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гомель"
+          }
+        }
+      }
+    },
+    "city_grodno": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гродна"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grodno"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гродно"
+          }
+        }
+      }
+    },
+    "city_minsk": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мінск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Minsk"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Минск"
+          }
+        }
+      }
+    },
+    "city_mogilev": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Магілёў"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mogilev"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Могилёв"
+          }
+        }
+      }
+    },
+    "city_mozyr": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мазыр"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mozyr"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Мозырь"
+          }
+        }
+      }
+    },
+    "city_orsha": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Орша"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orsha"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Орша"
+          }
+        }
+      }
+    },
+    "city_pinsk": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пінск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pinsk"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пинск"
+          }
+        }
+      }
+    },
+    "city_vitebsk": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Віцебск"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vitebsk"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Витебск"
+          }
+        }
+      }
+    },
     "cleanups": {
       "extractionState": "manual",
       "localizations": {
@@ -1216,6 +1561,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Подтверждение"
+          }
+        }
+      }
+    },
+    "continue_with_apple": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Працягнуць з Apple"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Continue with Apple"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Продолжить с Apple"
           }
         }
       }
@@ -1795,6 +2163,29 @@
         }
       }
     },
+    "ecotip_read_minutes_format": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld хв чытання"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld min read"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld мин чтения"
+          }
+        }
+      }
+    },
     "ecotips_category_article": {
       "extractionState": "manual",
       "localizations": {
@@ -2136,52 +2527,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Обменять %1$lld баллов на «%2$@»?"
-          }
-        }
-      }
-    },
-    "exchange_screen_title": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен карткамі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Card exchange"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен картами"
-          }
-        }
-      }
-    },
-    "exchange_unavailable_message": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен карткамі з’явіцца, калі ў праграме можна будзе знайсці іншага гульца — пакуль няма спіса або пошуку карыстальнікаў"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Card exchange will become available once the app can find another player — there's no user list or search yet"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен картами появится, когда в приложении будет возможность найти другого игрока — пока нет списка или поиска пользователей"
           }
         }
       }
@@ -2830,6 +3175,98 @@
         }
       }
     },
+    "group_chat_empty_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Паведамленняў пакуль няма. Напішыце першым!"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No messages yet. Be the first to write!"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сообщений пока нет. Напишите первым!"
+          }
+        }
+      }
+    },
+    "group_invite_share_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучайся да групы «%1$@» у Зялёным пашпарце. Код: %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join the “%1$@” group in Green Passport. Code: %2$@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Присоединяйся к группе «%1$@» в Зелёном паспорте. Код: %2$@"
+          }
+        }
+      }
+    },
+    "group_members": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Удзельнікі"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Members"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Участники"
+          }
+        }
+      }
+    },
+    "group_not_found_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Група з такім кодам не знойдзена"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No group found with this code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Группа с таким кодом не найдена"
+          }
+        }
+      }
+    },
     "groups_create_button": {
       "extractionState": "manual",
       "localizations": {
@@ -3382,6 +3819,98 @@
         }
       }
     },
+    "invite": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Запрасіць"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пригласить"
+          }
+        }
+      }
+    },
+    "invite_code": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код запрашэння"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Invite code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Код приглашения"
+          }
+        }
+      }
+    },
+    "join_by_code": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучыцца па кодзе"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join by code"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вступить по коду"
+          }
+        }
+      }
+    },
+    "join_group_to_chat_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Далучыцеся да групы, каб чытаць і пісаць у чат"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Join the group to read and write in the chat"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Вступите в группу, чтобы читать и писать в чат"
+          }
+        }
+      }
+    },
     "language": {
       "extractionState": "manual",
       "localizations": {
@@ -3424,6 +3953,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Фамилия"
+          }
+        }
+      }
+    },
+    "leave_group": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пакінуць групу"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Leave group"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Покинуть группу"
+          }
+        }
+      }
+    },
+    "leave_group_confirm_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чат групы стане недаступны. Вярнуцца можна па кодзе запрашэння."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You will lose access to the group chat. You can come back with the invite code."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Чат группы станет недоступен. Вернуться можно по коду приглашения."
           }
         }
       }
@@ -3750,6 +4325,29 @@
         }
       }
     },
+    "message_not_sent_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не ўдалося адправіць. Праверце інтэрнэт і паспрабуйце яшчэ раз"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't send. Check your connection and try again"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Не удалось отправить. Проверьте интернет и попробуйте ещё раз"
+          }
+        }
+      }
+    },
     "moderation": {
       "extractionState": "manual",
       "localizations": {
@@ -3815,6 +4413,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Этот раздел доступен только модераторам"
+          }
+        }
+      }
+    },
+    "more": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Яшчэ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ещё"
           }
         }
       }
@@ -4647,6 +5268,29 @@
         }
       }
     },
+    "places": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Месцы"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Places"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Места"
+          }
+        }
+      }
+    },
     "point_camera_at_event_qr_code_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -4854,52 +5498,6 @@
         }
       }
     },
-    "profile_cards": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мае карткі"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "My cards"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Мои карты"
-          }
-        }
-      }
-    },
-    "profile_exchange": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Абмен"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Exchange"
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Обмен"
-          }
-        }
-      }
-    },
     "profile_favorites": {
       "extractionState": "manual",
       "localizations": {
@@ -4988,6 +5586,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "Выход"
+          }
+        }
+      }
+    },
+    "qr_code_limit_reached_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Гэты QR-код ужо адсканавалі максімальную колькасць разоў"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This QR code has already been scanned the maximum number of times"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Этот QR-код уже отсканировали максимальное число раз"
+          }
+        }
+      }
+    },
+    "qr_code_not_active_msg": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR-код зараз не дзейнічае. Правер тэрміны задання"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This QR code is not active right now. Check the task dates"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QR-код сейчас не действует. Проверь сроки задания"
           }
         }
       }
@@ -5475,6 +6119,29 @@
         }
       }
     },
+    "reward_sold_out": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Купоны гэтай акцыі скончыліся"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This reward is sold out"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Купоны этой акции закончились"
+          }
+        }
+      }
+    },
     "save": {
       "extractionState": "manual",
       "localizations": {
@@ -5517,6 +6184,29 @@
           "stringUnit": {
             "state": "translated",
             "value": "Сохранено"
+          }
+        }
+      }
+    },
+    "saved_places_empty": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пакуль няма захаваных месцаў — адзначце сардэчкам кропку на карце"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No saved places yet — tap the heart on a point on the map"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Пока нет сохранённых мест — отметьте сердечком точку на карте"
           }
         }
       }
@@ -5935,6 +6625,89 @@
         }
       }
     },
+    "streak_bonus_in_days": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Да бонусу +35 — %lld дні"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Да бонусу +35 — %lld дзён"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Да бонусу +35 — %lld дзень"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Да бонусу +35 — %lld дня"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day until the +35 bonus"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days until the +35 bonus"
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "До бонуса +35 — %lld дня"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "До бонуса +35 — %lld дней"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "До бонуса +35 — %lld день"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "До бонуса +35 — %lld дня"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "streak_bonus_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -5958,6 +6731,29 @@
         }
       }
     },
+    "streak_bonus_today": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сёння — бонус +35 за 7-ы дзень"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today you get +35 for the 7th day"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сегодня — бонус +35 за 7-й день"
+          }
+        }
+      }
+    },
     "streak_days": {
       "extractionState": "manual",
       "localizations": {
@@ -5977,6 +6773,227 @@
           "stringUnit": {
             "state": "translated",
             "value": "%1$lld дн. подряд"
+          }
+        }
+      }
+    },
+    "streak_days_in_row": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дні запар"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дзён запар"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дзень запар"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дня запар"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld day in a row"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld days in a row"
+                }
+              }
+            }
+          }
+        },
+        "ru": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дня подряд"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дней подряд"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld день подряд"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld дня подряд"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "streak_open_hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Адкрывае серыю"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows your streak"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Открывает серию"
+          }
+        }
+      }
+    },
+    "streak_reminder_body": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серыя: %1$lld дз. запар. Зрабіце адно эка-дзеянне да канца дня"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld-day streak. Do one eco action before the day ends"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серия: %1$lld дн. подряд. Сделайте одно эко-действие до конца дня"
+          }
+        }
+      }
+    },
+    "streak_reminder_title": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серыя пад пагрозай 🔥"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your streak is at risk 🔥"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Серия под угрозой 🔥"
+          }
+        }
+      }
+    },
+    "streak_rule": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Першая актыўнасць дня дае +5 ачкоў, кожны 7-ы дзень запар — яшчэ +35"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The first activity of the day gives +5 points, every 7th day in a row gives another +35"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Первая активность дня даёт +5 очков, каждый 7-й день подряд — ещё +35"
+          }
+        }
+      }
+    },
+    "streak_today_counted": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сёння ўжо залічаны"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today already counts"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сегодня уже засчитан"
+          }
+        }
+      }
+    },
+    "streak_today_pending": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Зрабіце адно эка-дзеянне сёння, каб не страціць серыю"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Do one eco action today to keep your streak"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Сделайте одно эко-действие сегодня, чтобы не потерять серию"
           }
         }
       }
@@ -6556,6 +7573,29 @@
         }
       }
     },
+    "watch_video": {
+      "extractionState": "manual",
+      "localizations": {
+        "be": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Глядзець відэа"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Watch video"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Смотреть видео"
+          }
+        }
+      }
+    },
     "we_show_tasks_and_events_nearby_msg": {
       "extractionState": "manual",
       "localizations": {
@@ -6667,29 +7707,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ещё %1$lld оч. до ур. %2$lld"
-          }
-        }
-      }
-    },
-    "xp_progress": {
-      "extractionState": "manual",
-      "localizations": {
-        "be": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld ач."
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld pt."
-          }
-        },
-        "ru": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%1$lld / %2$lld оч."
           }
         }
       }
