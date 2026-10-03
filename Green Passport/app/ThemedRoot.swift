@@ -1,27 +1,50 @@
 import SwiftUI
 import UIKit
 
-struct ThemedRoot<Content: View>: View {
-    private static let darkIconName = "AppIconDark"
+private enum AppIconName {
+    static let dark = "AppIconDark"
+}
 
-    @AppStorage(UserDefaultsSettingsRepository.themeKey) private var themeRawValue = AppTheme.system.rawValue
+struct ThemedRoot<Content: View>: View {
+    @AppStorage(UserDefaultsSettingsRepository.themeKey)
+    private var themeRawValue = AppTheme.system.rawValue
+
     @Environment(\.colorScheme) private var systemColorScheme
+
     @ViewBuilder let content: () -> Content
+
+    private var theme: AppTheme {
+        AppTheme(rawValue: themeRawValue) ?? .system
+    }
+
+    private var wantsDarkIcon: Bool {
+        theme == .dark || (theme == .system && systemColorScheme == .dark)
+    }
 
     var body: some View {
         content()
-            .preferredColorScheme(AppTheme(rawValue: themeRawValue)?.colorScheme)
-            .onChange(of: themeRawValue, initial: true) { applyAppIcon() }
-            .onChange(of: systemColorScheme) { applyAppIcon() }
+            .preferredColorScheme(theme.colorScheme)
+            .task(id: wantsDarkIcon) {
+                try? await Task.sleep(for: .milliseconds(900))
+                guard !Task.isCancelled else { return }
+                await applyAppIcon(dark: wantsDarkIcon)
+            }
     }
 
-    private func applyAppIcon() {
-        let theme = AppTheme(rawValue: themeRawValue) ?? .system
-        let wantsDarkIcon = theme == .dark || (theme == .system && systemColorScheme == .dark)
-        let desiredIconName = wantsDarkIcon ? Self.darkIconName : nil
-        guard UIApplication.shared.supportsAlternateIcons, UIApplication.shared.alternateIconName != desiredIconName else {
+    @MainActor
+    private func applyAppIcon(dark: Bool) async {
+        let desiredIconName: String? = dark ? AppIconName.dark : nil
+        let application = UIApplication.shared
+
+        guard application.supportsAlternateIcons,
+              application.alternateIconName != desiredIconName else {
             return
         }
-        UIApplication.shared.setAlternateIconName(desiredIconName)
+
+        do {
+            try await application.setAlternateIconName(desiredIconName)
+        } catch {
+            print("Не удалось сменить иконку: \(error.localizedDescription)")
+        }
     }
 }

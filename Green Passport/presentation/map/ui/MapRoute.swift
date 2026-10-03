@@ -27,7 +27,7 @@ struct MapRoute: View {
                 onToggleSaved: { viewModel.toggleSaved(point) },
                 onRoute: { openDirections(to: point) }
             )
-            .presentationDetents([.height(MapPointSheet.height), .medium])
+            .presentationDetents([.height(MapPointSheet.height)])
             .presentationDragIndicator(.visible)
             .presentationBackgroundInteraction(.enabled(upThrough: .height(MapPointSheet.height)))
         }

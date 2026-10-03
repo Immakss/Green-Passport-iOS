@@ -3,7 +3,7 @@ import SwiftUI
 struct HomeScreen: View {
     private static let headerAvatarSize: CGFloat = 44
     private static let quickActionTileSize: CGFloat = 56
-    private static let quickActionSymbolScale: CGFloat = 0.28
+    private static let quickActionSymbolScale: CGFloat = 0.4
     private static let taskMascotSize: CGFloat = 34
     private static let placeholderTaskCount = 3
     private static let labelMinimumScale: CGFloat = 0.8
